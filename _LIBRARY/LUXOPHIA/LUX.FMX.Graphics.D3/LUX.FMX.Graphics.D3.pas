@@ -17,6 +17,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      TF3DObject = class( TControl3D )
      private
      protected
+       upModel :Boolean;
        ///// A C C E S S O R
        function GetAbsoPose :TSingleM4;
        procedure SetAbsoPose( const AbsoPose_:TSingleM4 );
@@ -32,6 +33,9 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        procedure SetAbsoPos( const AbsoPos_:TSingle3D );
        function GetLocaPos :TSingle3D;
        procedure SetLocaPos( const LocaPos_:TSingle3D );
+       ///// M E T H O D
+       procedure BeforeRender; override;
+       procedure MakeModel; virtual;
      public
        constructor Create( Owner_:TComponent ); override;
        destructor Destroy; override;
@@ -267,6 +271,25 @@ begin
      RecalcAbsolute;
      RebuildRenderingList;
      Repaint;
+end;
+
+//////////////////////////////////////////////////////////////////// M E T H O D
+
+procedure TF3DObject.BeforeRender;
+begin
+     inherited;
+
+     if upModel then
+     begin
+          MakeModel;
+
+          upModel := False;
+     end;
+end;
+
+procedure TF3DObject.MakeModel;
+begin
+
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
