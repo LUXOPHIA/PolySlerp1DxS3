@@ -1,14 +1,14 @@
-﻿unit Scene;
+﻿unit LUX.S3.FMX;
 
 interface //#################################################################### ■
 
 uses System.Types, System.SysUtils, System.RTLConsts, System.Classes,
      System.UITypes, System.Math, System.Math.Vectors,
      FMX.Types3D, FMX.Controls3D, FMX.MaterialSources,
-     LUX, LUX.D3, LUX.D4x4,
+     LUX, LUX.D3, LUX.Quaternion, LUX.D4x4,
      LUX.FMX.Graphics.D3,
      LUX.FMX.Graphics.D3.Shaper,
-     LIB.Poins.S2;
+     LIB.Poins.S3;
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 T Y P E 】
 
@@ -81,7 +81,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      private
      protected
        _Sphere :TSphere3D;
-       _Direct :TSingle3D;
+       _Direct :TSingleQ;
        _Radius :Single;
        ///// A C C E S S O R
        function GetRadius :Single;
@@ -90,8 +90,8 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        procedure SetSize( const Size_:Single );
        function GetColor :TAlphaColorF;
        procedure SetColor( const Color_:TAlphaColorF );
-       function GetDirect :TSingle3D;
-       procedure SetDirect( const Direct_:TSingle3D );
+       function GetDirect :TSingleQ;
+       procedure SetDirect( const Direct_:TSingleQ );
        ///// M E T H O D
        procedure MakeModel; override;
      public
@@ -101,7 +101,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        property Radius :Single       read GetRadius write SetRadius;
        property Size   :Single       read GetSize   write SetSize  ;
        property Color  :TAlphaColorF read GetColor  write SetColor ;
-       property Direct :TSingle3D    read GetDirect write SetDirect;
+       property Direct :TSingleQ     read GetDirect write SetDirect;
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPoins3D
@@ -109,14 +109,14 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      TPoins3D = class( TF3DObject )
      private
      protected
-       _Poins  :TPoins2S;
+       _Poins  :TPoins3S;
        _Radius :Single;
        _Size   :Single;
        _Color  :TAlphaColorF;
        ///// A C C E S S O R
        procedure UpPoins( Sender_:TObject );
-       function GetPoins :TPoins2S;
-       procedure SetPoins( const Poins_:TPoins2S );
+       function GetPoins :TPoins3S;
+       procedure SetPoins( const Poins_:TPoins3S );
        function GetRadius :Single;
        procedure SetRadius( const Radius_:Single );
        function GetColor :TAlphaColorF;
@@ -127,7 +127,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        constructor Create( Owner_:TComponent ); override;
        destructor Destroy; override;
        ///// P R O P E R T Y
-       property Poins  :TPoins2S     read GetPoins  write SetPoins ;
+       property Poins  :TPoins3S     read GetPoins  write SetPoins ;
        property Radius :Single       read GetRadius write SetRadius;
        property Size   :Single       read   _Size   write   _Size  ;
        property Color  :TAlphaColorF read GetColor  write SetColor ;
@@ -343,18 +343,18 @@ begin
      D := 0.8 * Color_;
      A := 0.2 * Color_;
 
-     _Sphere.Material.Diffuse := D.ToAlphaColor;
-     _Sphere.Material.Ambient := A.ToAlphaColor;
+     //_Sphere.Material.Diffuse := D.ToAlphaColor;
+     //_Sphere.Material.Ambient := A.ToAlphaColor;
 end;
 
 //------------------------------------------------------------------------------
 
-function TPoin3D.GetDirect :TSingle3D;
+function TPoin3D.GetDirect :TSingleQ;
 begin
      Result := _Direct;
 end;
 
-procedure TPoin3D.SetDirect( const Direct_:TSingle3D );
+procedure TPoin3D.SetDirect( const Direct_:TSingleQ );
 begin
      _Direct := Direct_;  upModel := True;
 end;
@@ -363,7 +363,7 @@ end;
 
 procedure TPoin3D.MakeModel;
 begin
-     _Sphere.Pos := _Direct * _Radius;
+     _Sphere.Pose := TSingleM4( _Direct ) * TSingleM4.Translate( 0, _Radius, 0 );
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
@@ -374,6 +374,8 @@ begin
 
      _Sphere := TSphere3D.Create( Self );
 
+     _Sphere.Material.Texture.LoadFromFile( '..\..\_DATA\Poin0 180x90.png' );
+
      with _Sphere do
      begin
           Parent := Self;
@@ -382,7 +384,7 @@ begin
      end;
 
      Size   := 0.4;
-     Direct := TSingle3D.Create( 1, 0, 0 );
+     Direct := 1;
      Radius := 5;
 end;
 
@@ -407,12 +409,12 @@ begin
      Repaint;
 end;
 
-function TPoins3D.GetPoins :TPoins2S;
+function TPoins3D.GetPoins :TPoins3S;
 begin
      Result := _Poins;
 end;
 
-procedure TPoins3D.SetPoins( const Poins_:TPoins2S );
+procedure TPoins3D.SetPoins( const Poins_:TPoins3S );
 begin
      if Assigned( _Poins ) then _Poins.OnChange.Del( UpPoins );
 
@@ -463,7 +465,7 @@ begin
           begin
                Size   := _Size;
                Color  := _Color;
-               Direct := _Poins[ I ];
+               Direct := TSingleQ( _Poins[ I ] );
           end;
      end;
 end;
@@ -502,16 +504,16 @@ begin
           _Sphere3D.Material.Texture.LoadFromFile( '..\..\_DATA\Sphere 1800x900.png' );
 
           _Poins3D := TPoins3D.Create( _World3D );
-          _Poins3D.Poins := _Poins2S;
+          _Poins3D.Poins := _Poins3S;
           _Poins3D.Color := TAlphaColorF.Create( 1, 0, 0 );
 
           _Plots3D0 := TPoins3D.Create( _World3D );
-          _Plots3D0.Poins := _Plots2S0;
+          _Plots3D0.Poins := _Plots3S0;
           _Plots3D0.Size := 0.2;
           _Plots3D0.Color := TAlphaColorF.Create( 0, 1, 0 );
 
           _Plots3D1 := TPoins3D.Create( _World3D );
-          _Plots3D1.Poins := _Plots2S1;
+          _Plots3D1.Poins := _Plots3S1;
           _Plots3D1.Size := 0.2;
           _Plots3D1.Color := TAlphaColorF.Create( 0, 0, 1 );
      end;

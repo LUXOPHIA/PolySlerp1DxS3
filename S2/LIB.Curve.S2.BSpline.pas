@@ -17,14 +17,14 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      TCurveBSpline = class( TCurve2S )
      private
      protected
-       _DegreeN :Integer;
+       _DegN :Integer;
        ///// A C C E S S O R
-       function GetDegreeN :Integer; virtual;
-       procedure SetDegreeN( const DegreeN_:Integer ); virtual;
+       function GetDegN :Integer; virtual;
+       procedure SetDegN( const DegN_:Integer ); virtual;
      public
        constructor Create( const Poins_:TPoins2S );
        ///// P R O P E R T Y
-       property DegreeN :Integer read GetDegreeN write SetDegreeN;
+       property DegN :Integer read GetDegN write SetDegN;
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveBSplineREC
@@ -73,14 +73,14 @@ uses LUX;
 
 //////////////////////////////////////////////////////////////// A C C E S S O R
 
-function TCurveBSpline.GetDegreeN :Integer;
+function TCurveBSpline.GetDegN :Integer;
 begin
-     Result := _DegreeN;
+     Result := _DegN;
 end;
 
-procedure TCurveBSpline.SetDegreeN( const DegreeN_:Integer );
+procedure TCurveBSpline.SetDegN( const DegN_:Integer );
 begin
-     _DegreeN := DegreeN_;  _OnChange.Run( Self );
+     _DegN := DegN_;  _OnChange.Run( Self );
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
@@ -89,7 +89,7 @@ constructor TCurveBSpline.Create( const Poins_:TPoins2S );
 begin
      inherited;
 
-     DegreeN := 3;
+     DegN := 3;
 end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveBSplineREC
@@ -104,10 +104,10 @@ var
    N, L :Integer;
    S :Double;
 begin
-     SetLength( Ps, DegreeN+1 );
-     for N := 0 to DegreeN do Ps[ N ] := _Poins[ i + N ];
+     SetLength( Ps, DegN+1 );
+     for N := 0 to DegN do Ps[ N ] := _Poins[ i + N ];
 
-     for L := DegreeN-1 downto 0 do
+     for L := DegN-1 downto 0 do
      begin
           for N := 0 to L do
           begin
@@ -131,13 +131,13 @@ var
    N :Integer;
    Ps :TArray<TDouble2Sw>;
 begin
-     SetLength( Ps, DegreeN+1 );
-     for N := 0 to DegreeN do
+     SetLength( Ps, DegN+1 );
+     for N := 0 to DegN do
      begin
           with Ps[ N ] do
           begin
                v := _Poins[ i+N ];
-               w := BSpline( DegreeN, N, t );
+               w := BSpline( DegN, N, t );
           end;
      end;
 
@@ -146,11 +146,11 @@ end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
 
-//  0    1    2    3    4    5    6    7 = i
-//  +----+----+----+====+----+----+----+
-// -3   -2   -1    0    1    2    3    4 = Ks[ i ]
-//  |                                  |
-// -N                                  N+1
+//  0     1     2     3     4     5     6     7 = i
+//  +-----+-----+-----+=====+-----+-----+-----+
+// -3    -2    -1     0     1     2     3     4 = Ks[ i ]
+//  |                                         |
+// -N                                         N+1
 
 function BSplineREC( const N,I:Integer; const T:Double; const Ks:TArray<Double> ) :Double;
 begin
@@ -165,19 +165,19 @@ end;
 
 function BSplineREC( const N,I:Integer; const T:Double ) :Double;
 // - - - - - - - - - - - - - - - - - - -
-     function BSplineREC( const N,L,I:Integer; const T:Double ) :Double;
+     function BSplineREC( const L,I:Integer ) :Double;
      begin
           if L = 0 then
           begin
                if ( I-N <= T ) and ( T < I-N+1 ) then Result := 1
                                                  else Result := 0;
           end
-          else Result := ( ( T - (I-N    )     ) * BSplineREC( N, L-1, I  , T )
-                         + (     (I-N+L+1) - T ) * BSplineREC( N, L-1, I+1, T ) ) / N;
+          else Result := ( ( T - (I-N    )     ) * BSplineREC( L-1, I   )
+                         + (     (I-N+L+1) - T ) * BSplineREC( L-1, I+1 ) ) / N;
      end;
 // - - - - - - - - - - - - - - - - - - -
 begin
-     Result := BSplineREC( N, N, I, T );
+     Result := BSplineREC( N, I );
 end;
 
 //------------------------------------------------------------------------------
