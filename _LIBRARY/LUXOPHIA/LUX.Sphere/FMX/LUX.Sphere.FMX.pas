@@ -189,12 +189,12 @@ end;
 
 function TSphere3D.GetRadius :Single;
 begin
-     Result := SizeX / 2;
+     Result := SizeX;
 end;
 
 procedure TSphere3D.SetRadius( const Radius_:Single );
 begin
-     SizeX := Radius_ * 2;
+     SizeX := Radius_;
      SizeY := SizeX;
      SizeZ := SizeX;
 end;
