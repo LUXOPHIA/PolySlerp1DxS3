@@ -259,7 +259,7 @@ var
 begin
      C := DotProduct( P1_, P2_ );
 
-     if 1 < C + SINGLE_EPS3 then Result := GLerp( P1_, P2_, T_ )
+     if 1-SINGLE_EPS3 < C then Result := GLerp( P1_, P2_, T_ )
      else
      begin
           A := ArcCos( C );
@@ -276,7 +276,7 @@ var
 begin
      C := DotProduct( P1_, P2_ );
 
-     if 1 < C + DOUBLE_EPS3 then Result := GLerp( P1_, P2_, T_ )
+     if 1-DOUBLE_EPS3 < C then Result := GLerp( P1_, P2_, T_ )
      else
      begin
           A := ArcCos( C );
@@ -300,7 +300,7 @@ begin
      begin
           C := DotProduct( P1_, P2_ );
 
-          if 1 < C + SINGLE_EPS3 then Result := GLerp( P1_, P2_, W1_, W2_ )
+          if 1-SINGLE_EPS3 < C then Result := GLerp( P1_, P2_, W1_, W2_ )
           else
           begin
                A := ArcCos( C ) / W;
@@ -323,7 +323,7 @@ begin
      begin
           C := DotProduct( P1_, P2_ );
 
-          if 1 < C + DOUBLE_EPS3 then Result := GLerp( P1_, P2_, W1_, W2_ )
+          if 1-DOUBLE_EPS3 < C then Result := GLerp( P1_, P2_, W1_, W2_ )
           else
           begin
                A := ArcCos( C ) / W;
@@ -348,7 +348,7 @@ begin
      begin
           C := DotProduct( P1_.v, P2_.v );
 
-          if 1 < C + SINGLE_EPS3 then Result.v := GLerp( P1_.v, P2_.v, P1_.w, P2_.w )
+          if 1-SINGLE_EPS3 < C then Result.v := GLerp( P1_.v, P2_.v, P1_.w, P2_.w )
           else
           begin
                A := ArcCos( C ) / Result.w;
@@ -371,7 +371,7 @@ begin
      begin
           C := DotProduct( P1_.v, P2_.v );
 
-          if 1 < C + DOUBLE_EPS3 then Result.v := GLerp( P1_.v, P2_.v, P1_.w, P2_.w )
+          if 1-DOUBLE_EPS3 < C then Result.v := GLerp( P1_.v, P2_.v, P1_.w, P2_.w )
           else
           begin
                A := ArcCos( C ) / Result.w;
