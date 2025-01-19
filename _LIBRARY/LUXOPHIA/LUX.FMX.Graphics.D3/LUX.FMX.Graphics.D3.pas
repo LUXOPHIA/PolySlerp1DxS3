@@ -150,6 +150,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        upGeometry :Boolean;
        upTopology :Boolean;
        ///// M E T H O D
+       procedure BeforeRender; override;
        procedure Render; override;
        procedure MakeGeometry; virtual; abstract;
        procedure MakeTopology; virtual; abstract;
@@ -578,22 +579,30 @@ end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
 
-procedure TF3DShaper.Render;
+procedure TF3DShaper.BeforeRender;
 begin
      inherited;
 
      if upGeometry then
      begin
-          MakeGeometry;  upGeometry := False;
+          upGeometry := False;
+
+          MakeGeometry;
      end;
 
      if upTopology then
      begin
-          MakeTopology;  upTopology := False;
-     end;
+          upTopology := False;
 
-     Context.SetMatrix( TMatrix3D.CreateScaling( TPoint3D.Create( SizeX/2, SizeY/2, SizeZ/2 ) )
-                      * AbsoluteMatrix );
+          MakeTopology;
+     end;
+end;
+
+procedure TF3DShaper.Render;
+begin
+     inherited;
+
+     Context.SetMatrix( TMatrix3D.CreateScaling( TPoint3D.Create( SizeX, SizeY, SizeZ ) ) * AbsoluteMatrix );
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
