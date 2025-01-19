@@ -2,9 +2,8 @@
 
 interface //#################################################################### ■
 
-uses System.Types, System.SysUtils, System.RTLConsts, System.Classes,
-     System.UITypes, System.Math, System.Math.Vectors,
-     FMX.Types3D, FMX.Controls3D, FMX.MaterialSources,
+uses System.Types, System.SysUtils, System.RTLConsts, System.Classes, System.Math,
+     FMX.MaterialSources,
      LUX, LUX.D3, LUX.D4x4,
      LUX.FMX.Graphics.D3,
      LUX.FMX.Graphics.D3.Shaper;
