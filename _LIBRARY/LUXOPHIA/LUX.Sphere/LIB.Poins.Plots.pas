@@ -164,11 +164,11 @@ procedure TPlots0<_TPoin_>.InitEdges;
 begin
      if upEdges then
      begin
+          upEdges := False;
+
           SetLength( _Edges, EdgesN );
 
           MakeEdges;
-
-          upEdges := False;
      end;
 end;
 
