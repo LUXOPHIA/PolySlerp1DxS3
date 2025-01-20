@@ -18,7 +18,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      TPoins3D = class( TF3DShaper )
      private
        ///// M E T H O D
-       function XYtoI( const I_,X_,Y_:Integer ) :Integer; inline;
+       function XYtoI( const X_,Y_:Integer ) :Integer; inline;
      protected
        _Polygons :TMeshData;
        _Material :TLightMaterialSource;
@@ -44,6 +44,8 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        procedure Render; override;
        procedure MakeGeometry; override;
        procedure MakeTopology; override;
+       procedure AddSphereG( var J_:Integer; const M_:TSingleM4 );
+       procedure AddSphereT( var J_,I_:Integer );
      public
        constructor Create( Owner_:TComponent ); override;
        destructor Destroy; override;
@@ -66,9 +68,9 @@ uses System.Math;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
-function TPoins3D.XYtoI( const I_,X_,Y_:Integer ) :Integer;
+function TPoins3D.XYtoI( const X_,Y_:Integer ) :Integer;
 begin
-     Result := ( ( _DivY + 1 ) * I_ + Y_ ) * ( _DivX + 1 ) + X_;
+     Result := ( _DivX + 1 ) * Y_ + X_;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
@@ -173,89 +175,108 @@ begin
      _Polygons.Render( Context, TMaterialSource.ValidMaterial( _Material ), AbsoluteOpacity );
 end;
 
+//------------------------------------------------------------------------------
+
 procedure TPoins3D.MakeGeometry;
 var
-   M, M0, M1 :TMatrix3D;
-   N, X, Y, I :Integer;
-   T :TPointF;
-   P :TPoint3D;
-   R :Single;
+   M :TSingleM4;
+   I, N :Integer;
 begin
-     M := TMatrix3D( TSingleM4.Translate( 0, Radius, 0 )
-                   * TSingleM4.Scale( _PlotR, _PlotR, _PlotR ) );
+     _Polygons.VertexBuffer.Length := (DivY+1)*(DivX+1){Vert/Poin} * Poins.PoinsN{Poin};
 
-     with _Polygons.VertexBuffer do
-     begin
-          Length := (DivY+1)*(DivX+1){Vert/Poin} * Poins.PoinsN{Poin};
+     M := TSingleM4.Translate( 0, Radius, 0 ) * TSingleM4.Scale( _PlotR, _PlotR, _PlotR );
 
-          for N := 0 to Poins.PoinsN{Cube}-1 do
-          begin
-               M0 := TMatrix3D( TDoubleM4( Poins[ N ] ) );
-               M1 := M * M0;
-
-               for Y := 0 to DivY do
-               begin
-                    T.Y := Pi / DivY * Y;
-
-                    P.Y := Cos( T.Y );
-                    R   := Sin( T.Y );
-
-                    for X := 0 to DivX do
-                    begin
-                         T.X := Pi2 / DivX * X;
-
-                         P.X := +R * Cos( T.X );
-                         P.Z := -R * Sin( T.X );
-
-                         I := XYtoI( N, X, Y );
-
-                         Vertices [ I ] := P * M1;
-                         Normals  [ I ] := P * M0;
-                         TexCoord0[ I ] := TPointF.Create( X / DivX, Y / DivY );
-                    end;
-               end;
-          end;
-     end;
+     I := 0;
+     for N := 0 to Poins.PoinsN-1 do AddSphereG( I, TSingleM4( TSingleQ( Poins[ N ] ) ) * M );
 end;
 
 procedure TPoins3D.MakeTopology;
 var
-   I, N, X0, X1, Y0, Y1 :Integer;
+   J, I, N :Integer;
 begin
-     with _Polygons.IndexBuffer do
+     _Polygons.IndexBuffer.Length := 3{Vert/Tria} * 2{Tria/Face} * DivY*DivX{Face/Poin} * _Poins.PoinsN{Poin};
+
+     J := 0;  I := 0;
+     for N := 0 to _Poins.PoinsN-1 do AddSphereT( J, I );
+end;
+
+//------------------------------------------------------------------------------
+
+procedure TPoins3D.AddSphereG( var J_:Integer; const M_:TSingleM4 );
+var
+   Mv, Mn :TMatrix3D;
+   X, Y, I :Integer;
+   T, A :TPointF;
+   P :TPoint3D;
+   R :Single;
+begin
+     Mv := TMatrix3D( M_ );
+     Mn := Mv.Inverse.Transpose;
+
+     for Y := 0 to DivY do
      begin
-          Length := 3{Vert/Tria} * 2{Tria/Face} * DivY*DivX{Face/Poin} * _Poins.PoinsN{Poin};
+          T.Y := Y / DivY;
+          A.Y := Pi * T.Y;
 
-          I := 0;
-          for N := 0 to _Poins.PoinsN-1 do
+          P.Y := Cos( A.Y );
+          R   := Sin( A.Y );
+
+          for X := 0 to DivX do
           begin
-               Y0 := 0;
-               for Y1 := 1 to _DivY do
+               T.X := X / DivX;
+               A.X := Pi2 * T.X;
+
+               P.X := +R * Cos( A.X );
+               P.Z := -R * Sin( A.X );
+
+               I := J_ + XYtoI( X, Y );
+
+               with _Polygons.VertexBuffer do
                begin
-                    X0 := 0;
-                    for X1 := 1 to _DivX do
-                    begin
-                         //     X0     X1
-                         //  Y0 +------+
-                         //     |＼    |
-                         //     |  ＼  |
-                         //     |    ＼|
-                         //  Y1 +------+
-
-                         Indices[ I ] := XYtoI( N, X0, Y0 );  Inc( I );
-                         Indices[ I ] := XYtoI( N, X1, Y0 );  Inc( I );
-                         Indices[ I ] := XYtoI( N, X1, Y1 );  Inc( I );
-
-                         Indices[ I ] := XYtoI( N, X1, Y1 );  Inc( I );
-                         Indices[ I ] := XYtoI( N, X0, Y1 );  Inc( I );
-                         Indices[ I ] := XYtoI( N, X0, Y0 );  Inc( I );
-
-                         X0 := X1;
-                    end;
-                    Y0 := Y1;
+                    Vertices [ I ] :=   P * Mv            ;
+                    Normals  [ I ] := ( P * Mn ).Normalize;
+                    TexCoord0[ I ] :=   T                 ;
                end;
           end;
      end;
+
+     Inc( J_, (DivY+1)*(DivX+1) );
+end;
+
+procedure TPoins3D.AddSphereT( var J_,I_:Integer );
+var
+   X0, X1, Y0, Y1 :Integer;
+begin
+     Y0 := 0;
+     for Y1 := 1 to _DivY do
+     begin
+          X0 := 0;
+          for X1 := 1 to _DivX do
+          begin
+               //     X0     X1
+               //  Y0 +------+
+               //     |＼    |
+               //     |  ＼  |
+               //     |    ＼|
+               //  Y1 +------+
+
+               with _Polygons.IndexBuffer do
+               begin
+                    Indices[ I_ ] := J_ + XYtoI( X0, Y0 );  Inc( I_ );
+                    Indices[ I_ ] := J_ + XYtoI( X1, Y0 );  Inc( I_ );
+                    Indices[ I_ ] := J_ + XYtoI( X1, Y1 );  Inc( I_ );
+
+                    Indices[ I_ ] := J_ + XYtoI( X1, Y1 );  Inc( I_ );
+                    Indices[ I_ ] := J_ + XYtoI( X0, Y1 );  Inc( I_ );
+                    Indices[ I_ ] := J_ + XYtoI( X0, Y0 );  Inc( I_ );
+               end;
+
+               X0 := X1;
+          end;
+          Y0 := Y1;
+     end;
+
+     Inc( J_, (DivY+1)*(DivX+1) );
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
