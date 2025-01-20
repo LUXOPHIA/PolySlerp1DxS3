@@ -11,9 +11,9 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C L A S S 】
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPlots0<_TPoin_>
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPlots<_TPoin_>
 
-     TPlots0<_TPoin_> = class( TPoins<_TPoin_> )
+     TPlots<_TPoin_> = class( TPoins<_TPoin_> )
      private
      protected
        _Curve   :TCurve<_TPoin_>;
@@ -50,18 +50,6 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        property PlotGap                   :Double          read GetPlotGap write SetPlotGap;
      end;
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPlots1<_TPoin_>
-
-     TPlots1<_TPoin_> = class( TPlots0<_TPoin_> )
-     private
-     protected
-       ///// A C C E S S O R
-       function GetPoinsN :Integer; override;
-       ///// M E T H O D
-       procedure MakePoins; override;
-     public
-     end;
-
 //const //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C O N S T A N T 】
 
 //var //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 V A R I A B L E 】
@@ -84,14 +72,14 @@ uses System.Math;
 
 //////////////////////////////////////////////////////////////// A C C E S S O R
 
-function TPlots0<_TPoin_>.GetPoinsN :Integer;
+function TPlots<_TPoin_>.GetPoinsN :Integer;
 begin
      Result := Ceil( ArcLen / PlotGap ) + 1;
 end;
 
 //------------------------------------------------------------------------------
 
-procedure TPlots0<_TPoin_>.UpCurve( Sender_:TObject );
+procedure TPlots<_TPoin_>.UpCurve( Sender_:TObject );
 begin
      upEdges := True;
      upPoins := True;
@@ -99,12 +87,12 @@ begin
      _OnChange.Run( Self );
 end;
 
-function TPlots0<_TPoin_>.GetCurve :TCurve<_TPoin_>;
+function TPlots<_TPoin_>.GetCurve :TCurve<_TPoin_>;
 begin
      Result := _Curve;
 end;
 
-procedure TPlots0<_TPoin_>.SetCurve( const Curve_:TCurve<_TPoin_> );
+procedure TPlots<_TPoin_>.SetCurve( const Curve_:TCurve<_TPoin_> );
 begin
      if Assigned( _Curve ) then _Curve.OnChange.Del( UpCurve );
 
@@ -117,19 +105,19 @@ end;
 
 //------------------------------------------------------------------------------
 
-function TPlots0<_TPoin_>.GetEdgesN :Integer;
+function TPlots<_TPoin_>.GetEdgesN :Integer;
 begin
      Result := _EdgesN;
 end;
 
-procedure TPlots0<_TPoin_>.SetEdgesN( const EdgesN_:Integer );
+procedure TPlots<_TPoin_>.SetEdgesN( const EdgesN_:Integer );
 begin
      _EdgesN := EdgesN_;  UpCurve( Self );
 end;
 
 //------------------------------------------------------------------------------
 
-function TPlots0<_TPoin_>.GetEdges( const I_:Integer ) :Double;
+function TPlots<_TPoin_>.GetEdges( const I_:Integer ) :Double;
 begin
      InitEdges;
 
@@ -138,7 +126,7 @@ end;
 
 //------------------------------------------------------------------------------
 
-function TPlots0<_TPoin_>.GetArcLen :Double;
+function TPlots<_TPoin_>.GetArcLen :Double;
 var
    I :Integer;
 begin
@@ -148,19 +136,19 @@ end;
 
 //------------------------------------------------------------------------------
 
-function TPlots0<_TPoin_>.GetPlotGap :Double;
+function TPlots<_TPoin_>.GetPlotGap :Double;
 begin
      Result := _PlotGap;
 end;
 
-procedure TPlots0<_TPoin_>.SetPlotGap( const PlotGap_:Double );
+procedure TPlots<_TPoin_>.SetPlotGap( const PlotGap_:Double );
 begin
      _PlotGap := PlotGap_;  upPoins := True;  _OnChange.Run( Self );
 end;
 
 //////////////////////////////////////////////////////////////////// M E T H O D
 
-procedure TPlots0<_TPoin_>.InitEdges;
+procedure TPlots<_TPoin_>.InitEdges;
 begin
      if upEdges then
      begin
@@ -172,7 +160,7 @@ begin
      end;
 end;
 
-procedure TPlots0<_TPoin_>.MakeEdges;
+procedure TPlots<_TPoin_>.MakeEdges;
 var
    T, Td :Double;
    P0, P1 :_TPoin_;
@@ -197,7 +185,7 @@ end;
 //     *   1   *   2   *   3   *   4   *   5   *   6   *    = CellsN
 //     1       2       3       4       5       6       7    = PoinsN
 
-procedure TPlots0<_TPoin_>.MakePoins;
+procedure TPlots<_TPoin_>.MakePoins;
 var
    I, J :Integer;
    A, Ad, T, Td :Double;
@@ -224,7 +212,7 @@ end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-constructor TPlots0<_TPoin_>.Create( const Curve_:TCurve<_TPoin_> );
+constructor TPlots<_TPoin_>.Create( const Curve_:TCurve<_TPoin_> );
 begin
      inherited Create;
 
@@ -233,59 +221,12 @@ begin
      PlotGap := 1;
 end;
 
-destructor TPlots0<_TPoin_>.Destroy;
+destructor TPlots<_TPoin_>.Destroy;
 begin
      Curve := nil;
 
      inherited;
 end;
-
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPlots1<_TPoin_>
-
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
-
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
-
-//////////////////////////////////////////////////////////////// A C C E S S O R
-
-function TPlots1<_TPoin_>.GetPoinsN :Integer;
-begin
-     Result := Ceil( ArcLen / PlotGap );
-end;
-
-//////////////////////////////////////////////////////////////////// M E T H O D
-
-//     1       2       3       4       5       6       7
-//  |--+---|===+===|===+===|===+===|===+===|===+===|---+--| = ArcLen
-//         *   1   *   2   *   3   *   4   *   5   *        = CellsN
-//         1       2       3       4       5       6        = PoinsN
-
-procedure TPlots1<_TPoin_>.MakePoins;
-var
-   I, J :Integer;
-   A, Ad, T, Td :Double;
-begin
-     Td := _Curve.Poins.CellsN / EdgesN;
-     Ad := ArcLen / PoinsN;
-
-     A := 0.5 * Ad;
-     J := 0;
-     for I := 0 to CellsN do
-     begin
-          while ( Edges[ J ] < A ) and ( J < EdgesN-1 )  do
-          begin
-               A := A - Edges[ J ];  Inc( J );
-          end;
-
-          T := A / Edges[ J ];
-
-          _Poins[ I ] := _Curve.Value( Td * ( J + T ) );
-
-          A := A + Ad;
-     end;
-end;
-
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
 
