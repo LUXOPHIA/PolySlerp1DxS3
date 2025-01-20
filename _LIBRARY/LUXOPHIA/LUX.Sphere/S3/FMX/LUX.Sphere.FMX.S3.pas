@@ -24,7 +24,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        _Material :TLightMaterialSource;
        _Poins    :TPoins3S;
        _Radius   :Single;
-       _PlotR    :Single;
+       _DotSize  :TSingle3D;
        _DivX     :Integer;
        _DivY     :Integer;
        ///// A C C E S S O R
@@ -34,8 +34,8 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        procedure SetPoins( const Poins_:TPoins3S );
        function GetRadius :Single;
        procedure SetRadius( const Radius_:Single );
-       function GetPlotR :Single;
-       procedure SetPlotR( const PlotR_:Single );
+       function GetDotSize :TSingle3D;
+       procedure SetDotSize( const DotSize_:TSingle3D );
        function GetDivX :Integer;
        procedure SetDivX( const DivX_:Integer );
        function GetDivY :Integer;
@@ -50,12 +50,12 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        constructor Create( Owner_:TComponent ); override;
        destructor Destroy; override;
        ///// P R O P E R T Y
-       property Material :TLightMaterialSource read GetMaterial                ;
-       property Poins    :TPoins3S             read GetPoins    write SetPoins ;
-       property Radius   :Single               read GetRadius   write SetRadius;
-       property PlotR    :Single               read GetPlotR    write SetPlotR ;
-       property DivX     :Integer              read GetDivX     write SetDivX  ;
-       property DivY     :Integer              read GetDivY     write SetDivY  ;
+       property Material :TLightMaterialSource read GetMaterial                 ;
+       property Poins    :TPoins3S             read GetPoins    write SetPoins  ;
+       property Radius   :Single               read GetRadius   write SetRadius ;
+       property DotSize  :TSingle3D            read GetDotSize  write SetDotSize;
+       property DivX     :Integer              read GetDivX     write SetDivX   ;
+       property DivY     :Integer              read GetDivY     write SetDivY   ;
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% THemiPoins3D
@@ -155,14 +155,14 @@ end;
 
 //------------------------------------------------------------------------------
 
-function TPoins3D.GetPlotR :Single;
+function TPoins3D.GetDotSize :TSingle3D;
 begin
-     Result := _PlotR;
+     Result := _DotSize;
 end;
 
-procedure TPoins3D.SetPlotR( const PlotR_:Single );
+procedure TPoins3D.SetDotSize( const DotSize_:TSingle3D );
 begin
-     _PlotR := PlotR_;
+     _DotSize := DotSize_;
 
      upGeometry := True;
      upTopology := True;
@@ -214,7 +214,7 @@ var
 begin
      _Polygons.VertexBuffer.Length := (DivY+1)*(DivX+1){Vert/Grid} * 1{Grid/Poin} * Poins.PoinsN{Poin};
 
-     M0 := TSingleM4.Translate( 0, Radius, 0 ) * TSingleM4.Scale( _PlotR, _PlotR, _PlotR );
+     M0 := TSingleM4.Translate( 0, Radius, 0 ) * TSingleM4.Scale( _DotSize );
 
      J := 0;
      for N := 0 to Poins.PoinsN-1 do
@@ -327,10 +327,10 @@ begin
      _Material := TLightMaterialSource.Create( Self );
      _Material.Specular := TAlphaColors.Null;
 
-     Radius := 5;
-     PlotR  := 0.3;
-     DivX   := 18;
-     DivY   := 9;
+     Radius  := 5;
+     DotSize := TSingle3D.Create( 0.3 );
+     DivX    := 18;
+     DivY    := 9;
 end;
 
 destructor TPoins3D.Destroy;
@@ -377,7 +377,7 @@ var
 begin
      _Polygons.VertexBuffer.Length := (DivY+1)*(DivX+1){Vert/Grid} * 2{Grid/Poin} * Poins.PoinsN{Poin};
 
-     M0 := TSingleM4.Translate( 0, Radius, 0 ) * TSingleM4.Scale( _PlotR, _PlotR, _PlotR );
+     M0 := TSingleM4.Translate( 0, Radius, 0 ) * TSingleM4.Scale( _DotSize );
 
      I := 0;
      for N := 0 to Poins.PoinsN-1 do
@@ -447,7 +447,7 @@ var
 begin
      _Polygons.VertexBuffer.Length := (DivY+1)*(DivX+1){Vert/Grid} * 2{Grid/Poin} * Poins.PoinsN{Poin};
 
-     M0 := TSingleM4.Translate( 0, Radius, 0 ) * TSingleM4.Scale( _PlotR, _PlotR, _PlotR );
+     M0 := TSingleM4.Translate( 0, Radius, 0 ) * TSingleM4.Scale( _DotSize );
 
      I := 0;
      for N := 0 to Poins.PoinsN-1 do
