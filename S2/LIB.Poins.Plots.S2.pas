@@ -13,17 +13,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPlots2S0
 
-     TPlots2S0 = class( TPlots0<TDouble2S> )
-     private
-     protected
-       ///// M E T H O D
-       function Distance( const P0_,P1_:TDouble2S ) :Double; override;
-     public
-     end;
-
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPlots2S1
-
-     TPlots2S1 = class( TPlots1<TDouble2S> )
+     TPlots2S = class( TPlots<TDouble2S> )
      private
      protected
        ///// M E T H O D
@@ -52,18 +42,7 @@ uses System.Math,
 
 //////////////////////////////////////////////////////////////////// M E T H O D
 
-function TPlots2S0.Distance( const P0_,P1_:TDouble2S ) :Double;
-begin
-     Result := ArcCos( DotProduct( P0_, P1_ ) );
-end;
-
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPlots2S1
-
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
-
-//////////////////////////////////////////////////////////////////// M E T H O D
-
-function TPlots2S1.Distance( const P0_,P1_:TDouble2S ) :Double;
+function TPlots2S.Distance( const P0_,P1_:TDouble2S ) :Double;
 begin
      Result := ArcCos( DotProduct( P0_, P1_ ) );
 end;
