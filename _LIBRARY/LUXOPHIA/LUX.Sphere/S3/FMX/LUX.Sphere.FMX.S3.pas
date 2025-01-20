@@ -68,9 +68,9 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      public
      end;
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% THemiLoPoins3D
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% THemiPoinsLo3D
 
-     THemiLoPoins3D = class( THemiPoins3D )
+     THemiPoinsLo3D = class( THemiPoins3D )
      private
      protected
        ///// M E T H O D
@@ -79,9 +79,9 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      public
      end;
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% THemiUpPoins3D
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% THemiPoinsUp3D
 
-     THemiUpPoins3D = class( THemiPoins3D )
+     THemiPoinsUp3D = class( THemiPoins3D )
      private
      protected
        ///// M E T H O D
@@ -91,8 +91,6 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      end;
 
 implementation //############################################################### ■
-
-uses System.Math;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C L A S S 】
 
@@ -354,7 +352,7 @@ procedure THemiPoins3D.MakeTopology;
 var
    J, I, N :Integer;
 begin
-     _Polygons.IndexBuffer.Length := 3{Vert/Tria} * 2{Tria/Face} * DivY*DivX{Face/Grid} * 2{Grid/Poin} *  _Poins.PoinsN{Poin};
+     _Polygons.IndexBuffer.Length := 3{Vert/Tria} * 2{Tria/Face} * DivY*DivX{Face/Grid} * 2{Grid/Poin} * _Poins.PoinsN{Poin};
 
      J := 0;  I := 0;
      for N := 0 to _Poins.PoinsN-1 do
@@ -366,13 +364,13 @@ end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% THemiLoPoins3D
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% THemiPoinsLo3D
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
 
 //////////////////////////////////////////////////////////////////// M E T H O D
 
-procedure THemiLoPoins3D.MakeGeometry;
+procedure THemiPoinsLo3D.MakeGeometry;
 var
    M0, M :TSingleM4;
    I, N :Integer;
@@ -393,7 +391,7 @@ end;
 
 //------------------------------------------------------------------------------
 
-procedure THemiLoPoins3D.AddDiskG( var J_:Integer; const M_:TSingleM4 );
+procedure THemiPoinsLo3D.AddDiskG( var J_:Integer; const M_:TSingleM4 );
 var
    Mv, Mn :TMatrix3D;
    X, Y :Integer;
@@ -436,13 +434,13 @@ begin
      end;
 end;
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% THemiUpPoins3D
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% THemiPoinsUp3D
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
 
 //////////////////////////////////////////////////////////////////// M E T H O D
 
-procedure THemiUpPoins3D.MakeGeometry;
+procedure THemiPoinsUp3D.MakeGeometry;
 var
    M0, M :TSingleM4;
    I, N :Integer;
@@ -463,7 +461,7 @@ end;
 
 //------------------------------------------------------------------------------
 
-procedure THemiUpPoins3D.AddDiskG( var J_:Integer; const M_:TSingleM4 );
+procedure THemiPoinsUp3D.AddDiskG( var J_:Integer; const M_:TSingleM4 );
 var
    Mv, Mn :TMatrix3D;
    X, Y :Integer;
