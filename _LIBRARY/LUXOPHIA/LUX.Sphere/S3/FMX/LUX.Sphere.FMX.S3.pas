@@ -44,7 +44,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        procedure Render; override;
        procedure MakeGeometry; override;
        procedure MakeTopology; override;
-       procedure AddSphereG( var J_:Integer; const M_:TSingleM4 );
+       procedure AddSphereG( var J_:Integer; const M_:TSingleM4; const T0_,T1_:Single );
        procedure AddSphereT( var J_,I_:Integer );
      public
        constructor Create( Owner_:TComponent ); override;
@@ -56,6 +56,43 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        property PlotR    :Single               read GetPlotR    write SetPlotR ;
        property DivX     :Integer              read GetDivX     write SetDivX  ;
        property DivY     :Integer              read GetDivY     write SetDivY  ;
+     end;
+
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% THemiPoins3D
+
+     THemiPoins3D = class( TPoins3D )
+     private
+     protected
+       _Disks :TMeshData;
+       ///// M E T H O D
+       procedure Render; override;
+       procedure MakeTopology; override;
+       procedure AddDiskT( var J_,I_:Integer );
+     public
+       constructor Create( Owner_:TComponent ); override;
+       destructor Destroy; override;
+     end;
+
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% THemiLoPoins3D
+
+     THemiLoPoins3D = class( THemiPoins3D )
+     private
+     protected
+       ///// M E T H O D
+       procedure MakeGeometry; override;
+       procedure AddDiskG( var J_:Integer; const M_:TSingleM4 );
+     public
+     end;
+
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% THemiUpPoins3D
+
+     THemiUpPoins3D = class( THemiPoins3D )
+     private
+     protected
+       ///// M E T H O D
+       procedure MakeGeometry; override;
+       procedure AddDiskG( var J_:Integer; const M_:TSingleM4 );
+     public
      end;
 
 implementation //############################################################### ■
@@ -187,7 +224,7 @@ begin
      M := TSingleM4.Translate( 0, Radius, 0 ) * TSingleM4.Scale( _PlotR, _PlotR, _PlotR );
 
      I := 0;
-     for N := 0 to Poins.PoinsN-1 do AddSphereG( I, TSingleM4( TSingleQ( Poins[ N ] ) ) * M );
+     for N := 0 to Poins.PoinsN-1 do AddSphereG( I, TSingleM4( TSingleQ( Poins[ N ] ) ) * M, 0, 1 );
 end;
 
 procedure TPoins3D.MakeTopology;
@@ -202,7 +239,7 @@ end;
 
 //------------------------------------------------------------------------------
 
-procedure TPoins3D.AddSphereG( var J_:Integer; const M_:TSingleM4 );
+procedure TPoins3D.AddSphereG( var J_:Integer; const M_:TSingleM4; const T0_,T1_:Single );
 var
    Mv, Mn :TMatrix3D;
    X, Y, I :Integer;
@@ -215,7 +252,7 @@ begin
 
      for Y := 0 to DivY do
      begin
-          T.Y := Y / DivY;
+          T.Y := ( T1_ - T0_ ) * Y / DivY + T0_;
           A.Y := Pi * T.Y;
 
           P.Y := Cos( A.Y );
@@ -303,6 +340,232 @@ begin
      _Polygons.Free;
 
      inherited;
+end;
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% THemiPoins3D
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
+
+//////////////////////////////////////////////////////////////////// M E T H O D
+
+procedure THemiPoins3D.Render;
+begin
+     inherited;
+
+     _Disks.Render( Context, TMaterialSource.ValidMaterial( _Material ), AbsoluteOpacity );
+end;
+
+//------------------------------------------------------------------------------
+
+procedure THemiPoins3D.MakeTopology;
+var
+   J, I, N :Integer;
+begin
+     inherited;
+
+     _Disks.IndexBuffer.Length := 3{Vert/Tria} * DivX{Tria/Poin} * _Poins.PoinsN{Poin};
+
+     J := 0;  I := 0;
+     for N := 0 to _Poins.PoinsN-1 do AddDiskT( J, I );
+end;
+
+//------------------------------------------------------------------------------
+
+procedure THemiPoins3D.AddDiskT( var J_,I_:Integer );
+var
+   X0, X1 :Integer;
+begin
+     X0 := 0;
+     for X1 := 1 to _DivX do
+     begin
+          //  Y0 +
+          //     |＼
+          //     |  ＼
+          //     |    ＼
+          //  Y1 +------+
+          //     X0     X1
+
+          with _Disks.IndexBuffer do
+          begin
+               Indices[ I_ ] := J_ + XYtoI( X1, 1 );  Inc( I_ );
+               Indices[ I_ ] := J_ + XYtoI( X0, 1 );  Inc( I_ );
+               Indices[ I_ ] := J_ + XYtoI( X0, 0 );  Inc( I_ );
+          end;
+
+          X0 := X1;
+     end;
+
+     Inc( J_, 2*(DivX+1) );
+end;
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+
+constructor THemiPoins3D.Create( Owner_:TComponent );
+begin
+     inherited;
+
+     _Disks := TMeshData.Create;
+end;
+
+destructor THemiPoins3D.Destroy;
+begin
+     _Disks.Free;
+
+     inherited;
+end;
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% THemiLoPoins3D
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
+
+//////////////////////////////////////////////////////////////////// M E T H O D
+
+procedure THemiLoPoins3D.MakeGeometry;
+var
+   M0, M :TSingleM4;
+   I0, I1, N :Integer;
+begin
+     M0 := TSingleM4.Translate( 0, Radius, 0 ) * TSingleM4.Scale( _PlotR, _PlotR, _PlotR );
+
+     _Polygons.VertexBuffer.Length := (DivY+1)*(DivX+1){Vert/Poin} * Poins.PoinsN{Poin};
+     _Disks   .VertexBuffer.Length :=        2*(DivX+1){Vert/Poin} * Poins.PoinsN{Poin};
+
+     I0 := 0;  I1 := 0;
+     for N := 0 to Poins.PoinsN-1 do
+     begin
+          M := TSingleM4( TSingleQ( Poins[ N ] ) ) * M0;
+
+          AddSphereG( I0, M, 0.5, 1.0 );
+          AddDiskG  ( I1, M );
+     end;
+end;
+
+//------------------------------------------------------------------------------
+
+procedure THemiLoPoins3D.AddDiskG( var J_:Integer; const M_:TSingleM4 );
+var
+   Mv, Mn :TMatrix3D;
+   X :Integer;
+   T, A :TPointF;
+   P, N :TPoint3D;
+begin
+     Mv := TMatrix3D( M_ );
+     Mn := Mv.Inverse.Transpose;
+
+     N := ( TPoint3D.Create( 0, +1, 0 ) * Mn ).Normalize;
+
+     T.Y := 0;
+     P := TPoint3D.Zero * Mv;
+     for X := 0 to DivX do
+     begin
+          T.X := X / DivX;
+
+          with _Disks.VertexBuffer do
+          begin
+               Vertices [ J_ ] := P;
+               Normals  [ J_ ] := N;
+               TexCoord0[ J_ ] := T;
+          end;
+
+          Inc( J_ );
+     end;
+
+     T.Y := 1/2;
+     P.Y := 0;
+     for X := 0 to DivX do
+     begin
+          T.X := X / DivX;
+          A.X := Pi2 * T.X;
+
+          P.X := +Cos( A.X );
+          P.Z := -Sin( A.X );
+
+          with _Disks.VertexBuffer do
+          begin
+               Vertices [ J_ ] := P * Mv;
+               Normals  [ J_ ] := N;
+               TexCoord0[ J_ ] := T;
+          end;
+
+          Inc( J_ );
+     end;
+end;
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% THemiUpPoins3D
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
+
+//////////////////////////////////////////////////////////////////// M E T H O D
+
+procedure THemiUpPoins3D.MakeGeometry;
+var
+   M0, M :TSingleM4;
+   I0, I1, N :Integer;
+begin
+     M0 := TSingleM4.Translate( 0, Radius, 0 ) * TSingleM4.Scale( _PlotR, _PlotR, _PlotR );
+
+     _Polygons.VertexBuffer.Length := (DivY+1)*(DivX+1){Vert/Poin} * Poins.PoinsN{Poin};
+     _Disks   .VertexBuffer.Length :=        2*(DivX+1){Vert/Poin} * Poins.PoinsN{Poin};
+
+     I0 := 0;  I1 := 0;
+     for N := 0 to Poins.PoinsN-1 do
+     begin
+          M := TSingleM4( TSingleQ( Poins[ N ] ) ) * M0;
+
+          AddSphereG( I0, M, 0.0, 0.5 );
+          AddDiskG  ( I1, M );
+     end;
+end;
+
+//------------------------------------------------------------------------------
+
+procedure THemiUpPoins3D.AddDiskG( var J_:Integer; const M_:TSingleM4 );
+var
+   Mv, Mn :TMatrix3D;
+   X :Integer;
+   T, A :TPointF;
+   P, N :TPoint3D;
+begin
+     Mv := TMatrix3D( M_ );
+     Mn := Mv.Inverse.Transpose;
+
+     N := ( TPoint3D.Create( 0, -1, 0 ) * Mn ).Normalize;
+
+     T.Y := 0;
+     P := TPoint3D.Zero * Mv;
+     for X := 0 to DivX do
+     begin
+          T.X := X / DivX;
+
+          with _Disks.VertexBuffer do
+          begin
+               Vertices [ J_ ] := P;
+               Normals  [ J_ ] := N;
+               TexCoord0[ J_ ] := T;
+          end;
+
+          Inc( J_ );
+     end;
+
+     T.Y := 1/2;
+     P.Y := 0;
+     for X := 0 to DivX do
+     begin
+          T.X := X / DivX;
+          A.X := Pi2 * T.X;
+
+          P.X := +Cos( A.X );
+          P.Z := -Sin( A.X );
+
+          with _Disks.VertexBuffer do
+          begin
+               Vertices [ J_ ] := P * Mv;
+               Normals  [ J_ ] := N;
+               TexCoord0[ J_ ] := T;
+          end;
+
+          Inc( J_ );
+     end;
 end;
 
 end. //######################################################################### ■
