@@ -2,8 +2,9 @@
 
 interface //#################################################################### ■
 
-uses System.Classes, System.UITypes, System.Math.Vectors,
-     FMX.Types3D, FMX.MaterialSources,
+uses System.Types, System.SysUtils, System.RTLConsts, System.Classes,
+     System.UITypes, System.Math.Vectors,
+     FMX.Types3D, FMX.Controls3D, FMX.MaterialSources,
      LUX, LUX.D3, LUX.Quaternion, LUX.D4x4,
      LUX.FMX.Graphics.D3,
      LIB.Poins.S3;
@@ -16,22 +17,29 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      TPoins3D = class( TF3DShaper )
      private
+       ///// M E T H O D
+       function XYtoI( const I_,X_,Y_:Integer ) :Integer; inline;
      protected
-       _PolygonsX :TMeshData;
-       _PolygonsY :TMeshData;
-       _PolygonsZ :TMeshData;
-       _MaterialX :TLightMaterialSource;
-       _MaterialY :TLightMaterialSource;
-       _MaterialZ :TLightMaterialSource;
-       _Poins     :TPoins3S;
-       _Radius    :Single;
-       _PlotR     :Single;
+       _Polygons :TMeshData;
+       _Material :TLightMaterialSource;
+       _Poins    :TPoins3S;
+       _Radius   :Single;
+       _PlotR    :Single;
+       _DivX     :Integer;
+       _DivY     :Integer;
        ///// A C C E S S O R
+       function GetMaterial :TLightMaterialSource;
        procedure UpPoins( Sender_:TObject );
        function GetPoins :TPoins3S;
        procedure SetPoins( const Poins_:TPoins3S );
        function GetRadius :Single;
        procedure SetRadius( const Radius_:Single );
+       function GetPlotR :Single;
+       procedure SetPlotR( const PlotR_:Single );
+       function GetDivX :Integer;
+       procedure SetDivX( const DivX_:Integer );
+       function GetDivY :Integer;
+       procedure SetDivY( const DivY_:Integer );
        ///// M E T H O D
        procedure Render; override;
        procedure MakeGeometry; override;
@@ -40,12 +48,17 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        constructor Create( Owner_:TComponent ); override;
        destructor Destroy; override;
        ///// P R O P E R T Y
-       property Poins  :TPoins3S read GetPoins  write SetPoins ;
-       property Radius :Single   read GetRadius write SetRadius;
-       property PlotR  :Single   read   _PlotR  write   _PlotR ;
+       property Material :TLightMaterialSource read GetMaterial                ;
+       property Poins    :TPoins3S             read GetPoins    write SetPoins ;
+       property Radius   :Single               read GetRadius   write SetRadius;
+       property PlotR    :Single               read GetPlotR    write SetPlotR ;
+       property DivX     :Integer              read GetDivX     write SetDivX  ;
+       property DivY     :Integer              read GetDivY     write SetDivY  ;
      end;
 
 implementation //############################################################### ■
+
+uses System.Math;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C L A S S 】
 
@@ -53,9 +66,21 @@ implementation //###############################################################
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
+function TPoins3D.XYtoI( const I_,X_,Y_:Integer ) :Integer;
+begin
+     Result := ( ( _DivY + 1 ) * I_ + Y_ ) * ( _DivX + 1 ) + X_;
+end;
+
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
 
 //////////////////////////////////////////////////////////////// A C C E S S O R
+
+function TPoins3D.GetMaterial :TLightMaterialSource;
+begin
+     Result := _Material;
+end;
+
+//------------------------------------------------------------------------------
 
 procedure TPoins3D.UpPoins( Sender_:TObject );
 begin
@@ -90,7 +115,53 @@ end;
 
 procedure TPoins3D.SetRadius( const Radius_:Single );
 begin
-     _Radius := Radius_;  upModel := True;
+     _Radius := Radius_;
+
+     upGeometry := True;
+     upTopology := True;
+end;
+
+//------------------------------------------------------------------------------
+
+function TPoins3D.GetPlotR :Single;
+begin
+     Result := _PlotR;
+end;
+
+procedure TPoins3D.SetPlotR( const PlotR_:Single );
+begin
+     _PlotR := PlotR_;
+
+     upGeometry := True;
+     upTopology := True;
+end;
+
+//------------------------------------------------------------------------------
+
+function TPoins3D.GetDivX :Integer;
+begin
+     Result := _DivX;
+end;
+
+procedure TPoins3D.SetDivX( const DivX_:Integer );
+begin
+     _DivX := DivX_;
+
+     upGeometry := True;
+     upTopology := True;
+end;
+
+function TPoins3D.GetDivY :Integer;
+begin
+     Result := _DivY;
+end;
+
+procedure TPoins3D.SetDivY( const DivY_:Integer );
+begin
+     _DivY := DivY_;
+
+     upGeometry := True;
+     upTopology := True;
 end;
 
 //////////////////////////////////////////////////////////////////// M E T H O D
@@ -99,208 +170,90 @@ procedure TPoins3D.Render;
 begin
      inherited;
 
-     _PolygonsX.Render( Context, TMaterialSource.ValidMaterial( _MaterialX ), AbsoluteOpacity );
-     _PolygonsY.Render( Context, TMaterialSource.ValidMaterial( _MaterialY ), AbsoluteOpacity );
-     _PolygonsZ.Render( Context, TMaterialSource.ValidMaterial( _MaterialZ ), AbsoluteOpacity );
+     _Polygons.Render( Context, TMaterialSource.ValidMaterial( _Material ), AbsoluteOpacity );
 end;
 
 procedure TPoins3D.MakeGeometry;
 var
-   FX0, FX1, FY0, FY1, FZ0, FZ1 :TVector3D;
-   P0, P1, P2, P3, P4, P5, P6, P7, V :TPoint3D;
-   M0 :TSingleM4;
-   M :TMatrix3D;
-   N, J, J0, J1, J2, J3 :Integer;
+   M, M0, M1 :TMatrix3D;
+   N, X, Y, I :Integer;
+   T :TPointF;
+   P :TPoint3D;
+   R :Single;
 begin
-     //    2------3
-     //   /|     /|
-     //  6------7 |
-     //  | |    | |
-     //  | 0----|-1
-     //  |/     |/
-     //  4------5
+     M := TMatrix3D( TSingleM4.Translate( 0, Radius, 0 )
+                   * TSingleM4.Scale( _PlotR, _PlotR, _PlotR ) );
 
-     FX0 := TVector3D.Create( -1,  0,  0, 0 );  FX1 := TVector3D.Create( +1,  0,  0, 0 );
-     FY0 := TVector3D.Create(  0, -1,  0, 0 );  FY1 := TVector3D.Create(  0, +1,  0, 0 );
-     FZ0 := TVector3D.Create(  0,  0, -1, 0 );  FZ1 := TVector3D.Create(  0,  0, +1, 0 );
-
-     P0 := TPoint3D.Create( -1, -1, -1 ).Normalize;
-     P1 := TPoint3D.Create( +1, -1, -1 ).Normalize;
-     P2 := TPoint3D.Create( -1, +1, -1 ).Normalize;
-     P3 := TPoint3D.Create( +1, +1, -1 ).Normalize;
-     P4 := TPoint3D.Create( -1, -1, +1 ).Normalize;
-     P5 := TPoint3D.Create( +1, -1, +1 ).Normalize;
-     P6 := TPoint3D.Create( -1, +1, +1 ).Normalize;
-     P7 := TPoint3D.Create( +1, +1, +1 ).Normalize;
-
-     M0 := TSingleM4.Translate( 0, Radius, 0 )
-         * TSingleM4.Scale( _PlotR, _PlotR, _PlotR )
-         * TSingleM4.RotateZ( P4i )
-         * TSingleM4.RotateY( P4i );
-
-     with _PolygonsX.VertexBuffer do
+     with _Polygons.VertexBuffer do
      begin
-          Length := 4{Poin/Face} * 2{Face/Cube} * _Poins.PoinsN{Cube};
+          Length := (DivY+1)*(DivX+1){Vert/Poin} * Poins.PoinsN{Poin};
 
-          J := 0;
-          for N := 0 to _Poins.PoinsN{Cube}-1 do
+          for N := 0 to Poins.PoinsN{Cube}-1 do
           begin
-               J0 := J;  Inc( J );  J1 := J;  Inc( J );
-               J2 := J;  Inc( J );  J3 := J;  Inc( J );
+               M0 := TMatrix3D( TDoubleM4( Poins[ N ] ) );
+               M1 := M * M0;
 
-               M := TMatrix3D( TDoubleM4( _Poins.Poins[ N ] ) * M0 );
+               for Y := 0 to DivY do
+               begin
+                    T.Y := Pi / DivY * Y;
 
-               Vertices[ J0 ] := P2 * M;  Vertices[ J1 ] := P6 * M;
-               Vertices[ J2 ] := P0 * M;  Vertices[ J3 ] := P4 * M;
+                    P.Y := Cos( T.Y );
+                    R   := Sin( T.Y );
 
-               V := TPoint3D( FX0 * M );
-               Normals[ J0 ] := V;  Normals[ J1 ] := V;
-               Normals[ J2 ] := V;  Normals[ J3 ] := V;
+                    for X := 0 to DivX do
+                    begin
+                         T.X := Pi2 / DivX * X;
 
-               J0 := J;  Inc( J );  J1 := J;  Inc( J );
-               J2 := J;  Inc( J );  J3 := J;  Inc( J );
+                         P.X := +R * Cos( T.X );
+                         P.Z := -R * Sin( T.X );
 
-               Vertices[ J0 ] := P7 * M;  Vertices[ J1 ] := P3 * M;
-               Vertices[ J2 ] := P5 * M;  Vertices[ J3 ] := P1 * M;
+                         I := XYtoI( N, X, Y );
 
-               V := TPoint3D( FX1 * M );
-               Normals[ J0 ] := V;  Normals[ J1 ] := V;
-               Normals[ J2 ] := V;  Normals[ J3 ] := V;
-          end;
-     end;
-
-     with _PolygonsY.VertexBuffer do
-     begin
-          Length := 4{Poin/Face} * 2{Face/Cube} * _Poins.PoinsN{Cube};
-
-          J := 0;
-          for N := 0 to _Poins.PoinsN{Cube}-1 do
-          begin
-               J0 := J;  Inc( J );  J1 := J;  Inc( J );
-               J2 := J;  Inc( J );  J3 := J;  Inc( J );
-
-               M := TMatrix3D( TDoubleM4( _Poins.Poins[ N ] ) * M0 );
-
-               Vertices[ J0 ] := P1 * M;  Vertices[ J1 ] := P0 * M;
-               Vertices[ J2 ] := P5 * M;  Vertices[ J3 ] := P4 * M;
-
-               V := TPoint3D( FY0 * M );
-               Normals[ J0 ] := V;  Normals[ J1 ] := V;
-               Normals[ J2 ] := V;  Normals[ J3 ] := V;
-
-               J0 := J;  Inc( J );  J1 := J;  Inc( J );
-               J2 := J;  Inc( J );  J3 := J;  Inc( J );
-
-               Vertices[ J0 ] := P2 * M;  Vertices[ J1 ] := P3 * M;
-               Vertices[ J2 ] := P6 * M;  Vertices[ J3 ] := P7 * M;
-
-               V := TPoint3D( FY1 * M );
-               Normals[ J0 ] := V;  Normals[ J1 ] := V;
-               Normals[ J2 ] := V;  Normals[ J3 ] := V;
-          end;
-     end;
-
-     with _PolygonsZ.VertexBuffer do
-     begin
-          Length := 4{Poin/Face} * 2{Face/Cube} * _Poins.PoinsN{Cube};
-
-          J := 0;
-          for N := 0 to _Poins.PoinsN{Cube}-1 do
-          begin
-               J0 := J;  Inc( J );  J1 := J;  Inc( J );
-               J2 := J;  Inc( J );  J3 := J;  Inc( J );
-
-               M := TMatrix3D( TDoubleM4( _Poins.Poins[ N ] ) * M0 );
-
-               Vertices[ J0 ] := P6 * M;  Vertices[ J1 ] := P7 * M;
-               Vertices[ J2 ] := P4 * M;  Vertices[ J3 ] := P5 * M;
-
-               V := TPoint3D( FZ1 * M );
-               Normals[ J0 ] := V;  Normals[ J1 ] := V;
-               Normals[ J2 ] := V;  Normals[ J3 ] := V;
-
-               J0 := J;  Inc( J );  J1 := J;  Inc( J );
-               J2 := J;  Inc( J );  J3 := J;  Inc( J );
-
-               Vertices[ J0 ] := P3 * M;  Vertices[ J1 ] := P2 * M;
-               Vertices[ J2 ] := P1 * M;  Vertices[ J3 ] := P0 * M;
-
-               V := TPoint3D( FZ0 * M );
-               Normals[ J0 ] := V;  Normals[ J1 ] := V;
-               Normals[ J2 ] := V;  Normals[ J3 ] := V;
+                         Vertices [ I ] := P * M1;
+                         Normals  [ I ] := P * M0;
+                         TexCoord0[ I ] := TPointF.Create( X / DivX, Y / DivY );
+                    end;
+               end;
           end;
      end;
 end;
 
 procedure TPoins3D.MakeTopology;
 var
-   FsN, N, I, J, J0, J1, J2, J3 :Integer;
+   I, N, X0, X1, Y0, Y1 :Integer;
 begin
-     FsN := 2{Face/Cube} * _Poins.PoinsN{Cube};
-
-     //  0------1
-     //  |\\    |
-     //  |  \\  |
-     //  |    \\|
-     //  2------3
-
-     with _PolygonsX.IndexBuffer do
+     with _Polygons.IndexBuffer do
      begin
-          Length := 3{Poin/Tria} * 2{Face/Quad} * FsN;
+          Length := 3{Vert/Tria} * 2{Tria/Face} * DivY*DivX{Face/Poin} * _Poins.PoinsN{Poin};
 
-          I := 0;  J := 0;
-          for N := 1 to FsN do
+          I := 0;
+          for N := 0 to _Poins.PoinsN-1 do
           begin
-               J0 := J;  Inc( J );  J1 := J;  Inc( J );
-               J2 := J;  Inc( J );  J3 := J;  Inc( J );
+               Y0 := 0;
+               for Y1 := 1 to _DivY do
+               begin
+                    X0 := 0;
+                    for X1 := 1 to _DivX do
+                    begin
+                         //     X0     X1
+                         //  Y0 +------+
+                         //     |＼    |
+                         //     |  ＼  |
+                         //     |    ＼|
+                         //  Y1 +------+
 
-               Indices[ I ] := J0;  Inc( I );
-               Indices[ I ] := J1;  Inc( I );
-               Indices[ I ] := J3;  Inc( I );
+                         Indices[ I ] := XYtoI( N, X0, Y0 );  Inc( I );
+                         Indices[ I ] := XYtoI( N, X1, Y0 );  Inc( I );
+                         Indices[ I ] := XYtoI( N, X1, Y1 );  Inc( I );
 
-               Indices[ I ] := J3;  Inc( I );
-               Indices[ I ] := J2;  Inc( I );
-               Indices[ I ] := J0;  Inc( I );
-          end;
-     end;
+                         Indices[ I ] := XYtoI( N, X1, Y1 );  Inc( I );
+                         Indices[ I ] := XYtoI( N, X0, Y1 );  Inc( I );
+                         Indices[ I ] := XYtoI( N, X0, Y0 );  Inc( I );
 
-     with _PolygonsY.IndexBuffer do
-     begin
-          Length := 3{Poin/Tria} * 2{Tria/Face} * FsN;
-
-          I := 0;  J := 0;
-          for N := 1 to FsN do
-          begin
-               J0 := J;  Inc( J );  J1 := J;  Inc( J );
-               J2 := J;  Inc( J );  J3 := J;  Inc( J );
-
-               Indices[ I ] := J0;  Inc( I );
-               Indices[ I ] := J1;  Inc( I );
-               Indices[ I ] := J3;  Inc( I );
-
-               Indices[ I ] := J3;  Inc( I );
-               Indices[ I ] := J2;  Inc( I );
-               Indices[ I ] := J0;  Inc( I );
-          end;
-     end;
-
-     with _PolygonsZ.IndexBuffer do
-     begin
-          Length := 3{Poin/Tria} * 2{Tria/Face} * FsN;
-
-          I := 0;  J := 0;
-          for N := 1 to FsN do
-          begin
-               J0 := J;  Inc( J );  J1 := J;  Inc( J );
-               J2 := J;  Inc( J );  J3 := J;  Inc( J );
-
-               Indices[ I ] := J0;  Inc( I );
-               Indices[ I ] := J1;  Inc( I );
-               Indices[ I ] := J3;  Inc( I );
-
-               Indices[ I ] := J3;  Inc( I );
-               Indices[ I ] := J2;  Inc( I );
-               Indices[ I ] := J0;  Inc( I );
+                         X0 := X1;
+                    end;
+                    Y0 := Y1;
+               end;
           end;
      end;
 end;
@@ -308,44 +261,25 @@ end;
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
 constructor TPoins3D.Create( Owner_:TComponent );
-var
-   C :TAlphaColorF;
 begin
      inherited;
 
-     _PolygonsX := TMeshData.Create;
-     _PolygonsY := TMeshData.Create;
-     _PolygonsZ := TMeshData.Create;
+     _Polygons := TMeshData.Create;
 
-     C := TAlphaColorF.Create( 196,  79,  79 ) / 255;
-     _MaterialX := TLightMaterialSource.Create( Self );
-     _MaterialX.Ambient  := ( 0.2 * C ).ToAlphaColor;
-     _MaterialX.Diffuse  := ( 0.8 * C ).ToAlphaColor;
-     _MaterialX.Specular := TAlphaColors.Null;
-
-     C := TAlphaColorF.Create(  54, 135,  54 ) / 255;
-     _MaterialY := TLightMaterialSource.Create( Self );
-     _MaterialY.Ambient  := ( 0.2 * C ).ToAlphaColor;
-     _MaterialY.Diffuse  := ( 0.8 * C ).ToAlphaColor;
-     _MaterialY.Specular := TAlphaColors.Null;
-
-     C := TAlphaColorF.Create( 103, 103, 255 ) / 255;
-     _MaterialZ := TLightMaterialSource.Create( Self );
-     _MaterialZ.Ambient  := ( 0.2 * C ).ToAlphaColor;
-     _MaterialZ.Diffuse  := ( 0.8 * C ).ToAlphaColor;
-     _MaterialZ.Specular := TAlphaColors.Null;
+     _Material := TLightMaterialSource.Create( Self );
+     _Material.Specular := TAlphaColors.Null;
 
      Radius := 5;
-     PlotR  := 0.5;
+     PlotR  := 0.3;
+     DivX   := 18;
+     DivY   := 9;
 end;
 
 destructor TPoins3D.Destroy;
 begin
      Poins := nil;
 
-     _PolygonsX.Free;
-     _PolygonsY.Free;
-     _PolygonsZ.Free;
+     _Polygons.Free;
 
      inherited;
 end;
