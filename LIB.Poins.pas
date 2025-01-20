@@ -109,7 +109,7 @@ end;
 
 procedure TPoins<_TPoin_>.SetPoins( const I_:Integer; const Point_:_TPoin_ );
 begin
-     _Poins[ I_ ] := Point_;  _OnChange.Run( Self );
+     _Poins[ I_ ] := Point_;  upPoins := True;  _OnChange.Run( Self );
 end;
 
 //////////////////////////////////////////////////////////////////// M E T H O D
@@ -118,13 +118,12 @@ procedure TPoins<_TPoin_>.InitPoins;
 begin
      if upPoins then
      begin
+          upPoins := False;
+
           SetLength( _Poins, PoinsN );
 
           MakePoins;
-
-          upPoins := False;
      end;
-
 end;
 
 procedure TPoins<_TPoin_>.MakePoins;
@@ -177,12 +176,14 @@ end;
 
 function TLoopPoins<_TPoin_>.GetPoins( const I_:Integer ) :_TPoin_;
 begin
+     InitPoins;
+
      Result := _Poins[ XtoI( I_ ) ];
 end;
 
 procedure TLoopPoins<_TPoin_>.SetPoins( const I_:Integer; const Point_:_TPoin_ );
 begin
-     _Poins[ XtoI( I_ ) ] := Point_;  _OnChange.Run( Self );
+     _Poins[ XtoI( I_ ) ] := Point_;  upPoins := True;  _OnChange.Run( Self );
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public

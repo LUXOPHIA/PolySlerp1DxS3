@@ -1,10 +1,10 @@
-﻿unit LIB.Curve.S2.BSpline;
+﻿unit LIB.Curve.S3.BSpline;
 
 interface //#################################################################### ■
 
-uses LIB.S2,
-     LIB.Poins.S2,
-     LIB.Curve.S2;
+uses LIB.S3,
+     LIB.Poins.S3,
+     LIB.Curve.S3;
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 T Y P E 】
 
@@ -14,7 +14,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveBSpline
 
-     TCurveBSpline = class( TCurve2S )
+     TCurveBSpline = class( TCurve3S )
      private
      protected
        _DegN :Integer;
@@ -22,7 +22,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        function GetDegN :Integer; virtual;
        procedure SetDegN( const DegN_:Integer ); virtual;
      public
-       constructor Create( const Poins_:TPoins2S );
+       constructor Create( const Poins_:TPoins3S );
        ///// P R O P E R T Y
        property DegN :Integer read GetDegN write SetDegN;
      end;
@@ -33,7 +33,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      private
      protected
        ///// M E T H O D
-       function Segment( const i:Integer; const t:Double ) :TDouble2S; override;
+       function Segment( const i:Integer; const t:Double ) :TDouble3S; override;
      public
      end;
 
@@ -43,7 +43,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      private
      protected
        ///// M E T H O D
-       function Segment( const i:Integer; const t:Double ) :TDouble2S; override;
+       function Segment( const i:Integer; const t:Double ) :TDouble3S; override;
      public
      end;
 
@@ -85,7 +85,7 @@ end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
 
-constructor TCurveBSpline.Create( const Poins_:TPoins2S );
+constructor TCurveBSpline.Create( const Poins_:TPoins3S );
 begin
      inherited;
 
@@ -98,9 +98,9 @@ end;
 
 //////////////////////////////////////////////////////////////////// M E T H O D
 
-function TCurveBSplineREC.Segment( const i:Integer; const t:Double ) :TDouble2S;
+function TCurveBSplineREC.Segment( const i:Integer; const t:Double ) :TDouble3S;
 var
-   Ps :TArray<TDouble2S>;
+   Ps :TArray<TDouble3S>;
    N, L :Integer;
    S :Double;
 begin
@@ -126,10 +126,10 @@ end;
 
 //////////////////////////////////////////////////////////////////// M E T H O D
 
-function TCurveBSplinePOL.Segment( const i:Integer; const t:Double ) :TDouble2S;
+function TCurveBSplinePOL.Segment( const i:Integer; const t:Double ) :TDouble3S;
 var
    N :Integer;
-   Ps :TArray<TDouble2Sw>;
+   Ps :TArray<TDouble3Sw>;
 begin
      SetLength( Ps, DegN+1 );
      for N := 0 to DegN do
