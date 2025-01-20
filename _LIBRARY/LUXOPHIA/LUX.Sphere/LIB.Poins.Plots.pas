@@ -16,10 +16,10 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      TPlots0<_TPoin_> = class( TPoins<_TPoin_> )
      private
      protected
-       _Curve    :TCurve<_TPoin_>;
-       _EdgesN   :Integer;
-       _Edges    :TArray<Double>;  upEdges :Boolean;
-       _PlotSize :Double;
+       _Curve   :TCurve<_TPoin_>;
+       _EdgesN  :Integer;
+       _Edges   :TArray<Double>;  upEdges :Boolean;
+       _PlotGap :Double;
        ///// A C C E S S O R
        function GetPoinsN :Integer; override;
        procedure UpCurve( Sender_:TObject );
@@ -29,8 +29,8 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        procedure SetEdgesN( const EdgesN_:Integer ); virtual;
        function GetEdges( const I_:Integer ) :Double; virtual;
        function GetArcLen :Double; virtual;
-       function GetPlotSize :Double; virtual;
-       procedure SetPlotSize( const PlotSize_:Double ); virtual;
+       function GetPlotGap :Double; virtual;
+       procedure SetPlotGap( const PlotGap_:Double ); virtual;
        ///// M E T H O D
        function Distance( const P0_,P1_:_TPoin_ ) :Double; virtual; abstract;
        procedure InitEdges; virtual;
@@ -40,14 +40,14 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        constructor Create( const Curve_:TCurve<_TPoin_> );
        destructor Destroy; Override;
        ///// P R O P E R T Y
-       property CellsN                    :Integer         read GetCellsN                    ;
-       property PoinsN                    :Integer         read GetPoinsN                    ;
-       property Poins[ const I_:Integer ] :_TPoin_         read GetPoins                     ; default;
-       property Curve                     :TCurve<_TPoin_> read GetCurve    write SetCurve   ;
-       property EdgesN                    :Integer         read GetEdgesN   write SetEdgesN  ;
-       property Edges[ const I_:Integer ] :Double          read GetEdges                     ;
-       property ArcLen                    :Double          read GetArcLen                    ;
-       property PlotSize                  :Double          read GetPlotSize write SetPlotSize;
+       property CellsN                    :Integer         read GetCellsN                  ;
+       property PoinsN                    :Integer         read GetPoinsN                  ;
+       property Poins[ const I_:Integer ] :_TPoin_         read GetPoins                   ; default;
+       property Curve                     :TCurve<_TPoin_> read GetCurve   write SetCurve  ;
+       property EdgesN                    :Integer         read GetEdgesN  write SetEdgesN ;
+       property Edges[ const I_:Integer ] :Double          read GetEdges                   ;
+       property ArcLen                    :Double          read GetArcLen                  ;
+       property PlotGap                   :Double          read GetPlotGap write SetPlotGap;
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPlots1<_TPoin_>
@@ -86,7 +86,7 @@ uses System.Math;
 
 function TPlots0<_TPoin_>.GetPoinsN :Integer;
 begin
-     Result := Round( ArcLen / PlotSize );
+     Result := Ceil( ArcLen / PlotGap ) + 1;
 end;
 
 //------------------------------------------------------------------------------
@@ -148,14 +148,14 @@ end;
 
 //------------------------------------------------------------------------------
 
-function TPlots0<_TPoin_>.GetPlotSize :Double;
+function TPlots0<_TPoin_>.GetPlotGap :Double;
 begin
-     Result := _PlotSize;
+     Result := _PlotGap;
 end;
 
-procedure TPlots0<_TPoin_>.SetPlotSize( const PlotSize_:Double );
+procedure TPlots0<_TPoin_>.SetPlotGap( const PlotGap_:Double );
 begin
-     _PlotSize := PlotSize_;  upPoins := True;  _OnChange.Run( Self );
+     _PlotGap := PlotGap_;  upPoins := True;  _OnChange.Run( Self );
 end;
 
 //////////////////////////////////////////////////////////////////// M E T H O D
@@ -200,11 +200,12 @@ end;
 procedure TPlots0<_TPoin_>.MakePoins;
 var
    I, J :Integer;
-   A, T, Td :Double;
+   A, Ad, T, Td :Double;
 begin
      Td := _Curve.Poins.CellsN / EdgesN;
+     Ad := ArcLen / CellsN;
 
-     A := ( ArcLen - PlotSize * CellsN ) / 2;
+     A := 0;
      J := 0;
      for I := 0 to CellsN do
      begin
@@ -217,7 +218,7 @@ begin
 
           _Poins[ I ] := _Curve.Value( Td * ( J + T ) );
 
-          A := A + PlotSize;
+          A := A + Ad;
      end;
 end;
 
@@ -227,9 +228,9 @@ constructor TPlots0<_TPoin_>.Create( const Curve_:TCurve<_TPoin_> );
 begin
      inherited Create;
 
-     Curve    := Curve_;
-     EdgesN   := 1000;
-     PlotSize := 1;
+     Curve   := Curve_;
+     EdgesN  := 1000;
+     PlotGap := 1;
 end;
 
 destructor TPlots0<_TPoin_>.Destroy;
@@ -249,7 +250,7 @@ end;
 
 function TPlots1<_TPoin_>.GetPoinsN :Integer;
 begin
-     Result := Round( ArcLen / PlotSize ) - 1;
+     Result := Ceil( ArcLen / PlotGap );
 end;
 
 //////////////////////////////////////////////////////////////////// M E T H O D
@@ -262,11 +263,12 @@ end;
 procedure TPlots1<_TPoin_>.MakePoins;
 var
    I, J :Integer;
-   A, T, Td :Double;
+   A, Ad, T, Td :Double;
 begin
      Td := _Curve.Poins.CellsN / EdgesN;
+     Ad := ArcLen / PoinsN;
 
-     A := ( ArcLen - PlotSize * CellsN ) / 2;
+     A := 0.5 * Ad;
      J := 0;
      for I := 0 to CellsN do
      begin
@@ -279,7 +281,7 @@ begin
 
           _Poins[ I ] := _Curve.Value( Td * ( J + T ) );
 
-          A := A + PlotSize;
+          A := A + Ad;
      end;
 end;
 
