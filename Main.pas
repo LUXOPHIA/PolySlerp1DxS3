@@ -174,7 +174,7 @@ procedure TForm1.ComboBoxCUAChange(Sender: TObject);
 begin
      TabControlCU.TabIndex := ComboBoxCUA.ItemIndex;
 
-     _Plots3S0.Curve := _Curve3S0[ ComboBoxCUA.ItemIndex ];
+     _Plots3S1.Curve := _Curve3S1[ ComboBoxCUA.ItemIndex ];
 end;
 
 //------------------------------------------------------------------------------
@@ -183,31 +183,31 @@ procedure TForm1.ComboBoxCLAChange(Sender: TObject);
 begin
      TabControlCL.TabIndex := ComboBoxCLA.ItemIndex;
 
-     _Plots3S1.Curve := _Curve3S1[ ComboBoxCLA.ItemIndex ];
+     _Plots3S0.Curve := _Curve3S0[ ComboBoxCLA.ItemIndex ];
 end;
 
 //------------------------------------------------------------------------------
 
 procedure TForm1.SpinBoxCU1DChange(Sender: TObject);
 begin
-     TCurveBezier ( _Curve3S0[ 1 ] ).DegN := Round( SpinBoxCU1D.Value );
+     TCurveBezier ( _Curve3S1[ 1 ] ).DegN := Round( SpinBoxCU1D.Value );
 end;
 
 procedure TForm1.SpinBoxCU2DChange(Sender: TObject);
 begin
-     TCurveBSpline( _Curve3S0[ 2 ] ).DegN := Round( SpinBoxCU2D.Value );
+     TCurveBSpline( _Curve3S1[ 2 ] ).DegN := Round( SpinBoxCU2D.Value );
 end;
 
 //------------------------------------------------------------------------------
 
 procedure TForm1.SpinBoxCL1DChange(Sender: TObject);
 begin
-     TCurveBezier ( _Curve3S1[ 1 ] ).DegN := Round( SpinBoxCL1D.Value );
+     TCurveBezier ( _Curve3S0[ 1 ] ).DegN := Round( SpinBoxCL1D.Value );
 end;
 
 procedure TForm1.SpinBoxCL2DChange(Sender: TObject);
 begin
-     TCurveBSpline( _Curve3S1[ 2 ] ).DegN := Round( SpinBoxCL2D.Value );
+     TCurveBSpline( _Curve3S0[ 2 ] ).DegN := Round( SpinBoxCL2D.Value );
 end;
 
 end. //######################################################################### Å°
