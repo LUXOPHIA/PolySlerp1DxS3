@@ -59,10 +59,10 @@ uses LUX, LUX.D3, LUX.Quaternion, LUX.Curve.S3.BSpline;
 
 //////////////////////////////////////////////////////////////////// M E T H O D
 
+//    |-----+-----+--|--+-----+-----| :Basis Function
 //                0     1
-//       |-----+--===+===--+-----|
-// +-----+=====+=====+=====+=====+-----+-----+
-// 0     1     2     3     4     5     6     7
+// +-----+-----+--===+===--+-----+-----+-----+ :Poins
+// 0    [1]   [2]   [3]   [4]   [5]    6     7
 
 function TPolyPoins3S<_TPoins_>.BSpline4( P1,P2,P3,P4,P5:TDouble3S ) :TDouble3S;  // DegN = 4, t = 1/2
 begin
@@ -83,10 +83,10 @@ begin
      Result := P1;
 end;
 
+// |-----+-----+-----|-----+-----+-----| :Basis Function
 //                   0     1
-//       |-----+-----+=====+-----+-----|
-// +-----+=====+=====+=====+=====+-----+-----+
-// 0     1     2     3     4     5     6     7
+// +-----+-----+-----+=====+-----+-----+-----+ :Poins
+// 0    [1]   [2]   [3]   [4]   [5]    6     7
 
 function TPolyPoins3S<_TPoins_>.BSpline5( P1,P2,P3,P4,P5:TDouble3S ): TDouble3S;  // DegN = 5, t = 0
 begin
@@ -131,7 +131,7 @@ begin
      begin
           for I := 0 to PoinsN-1 do
           begin
-               P := BSpline5( Poins[ I-2 ], Poins[ I-1 ], Poins[ I ], Poins[ I+1 ], Poins[ I+2 ] );
+               P := BSpline4( Poins[ I-2 ], Poins[ I-1 ], Poins[ I ], Poins[ I+1 ], Poins[ I+2 ] );
 
                Ps[ I ] := TDouble3S.Rotate( P.Trans( TDouble3D.IdentityY ), _Poins2S.Poins[ I ] ) * P;
           end;
@@ -139,7 +139,7 @@ begin
           B := True;
           for I := 0 to PoinsN-1 do
           begin
-               B := B and ( 1-DOUBLE_EPS4 < DotProduct( _Poins[ I ], Ps[ I ] ) );
+               B := B and ( 1-DOUBLE_EPS3 < DotProduct( _Poins[ I ], Ps[ I ] ) );
 
                _Poins[ I ] := Ps[ I ];
           end;
