@@ -14,45 +14,45 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C L A S S 】
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPolyhedron4
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPolyPoins2S04
 
-     TPolyhedron4 = class( TLoopPoins2S )
+     TPolyPoins2S04 = class( TLoopPoins2S )
      private
      protected
      public
        constructor Create;
      end;
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPolyhedron6
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPolyPoins2S06
 
-     TPolyhedron6 = class( TLoopPoins2S )
+     TPolyPoins2S06 = class( TLoopPoins2S )
      private
      protected
      public
        constructor Create;
      end;
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPolyhedron8
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPolyPoins2S08
 
-     TPolyhedron8 = class( TLoopPoins2S )
+     TPolyPoins2S08 = class( TLoopPoins2S )
      private
      protected
      public
        constructor Create;
      end;
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPolyhedron12
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPolyPoins2S12
 
-     TPolyhedron12 = class( TLoopPoins2S )
+     TPolyPoins2S12 = class( TLoopPoins2S )
      private
      protected
      public
        constructor Create;
      end;
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPolyhedron20
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPolyPoins2S20
 
-     TPolyhedron20 = class( TLoopPoins2S )
+     TPolyPoins2S20 = class( TLoopPoins2S )
      private
      protected
      public
@@ -71,7 +71,7 @@ implementation //###############################################################
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C L A S S 】
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPolyhedron4
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPolyPoins2S04
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
@@ -79,7 +79,7 @@ implementation //###############################################################
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-constructor TPolyhedron4.Create;
+constructor TPolyPoins2S04.Create;
 begin
      inherited;
 
@@ -90,7 +90,7 @@ begin
      Poins[ 3 ] := TDouble2S.Create(  +1, +1, +1 ).Unitor;
 end;
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPolyhedron6
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPolyPoins2S06
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
@@ -98,7 +98,28 @@ end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-constructor TPolyhedron6.Create;
+constructor TPolyPoins2S06.Create;
+begin
+     inherited;
+
+     PoinsN := 6;
+     Poins[ 0 ] := TDouble2S.Create(  -1,  0,  0 ).Unitor;
+     Poins[ 1 ] := TDouble2S.Create(   0, -1,  0 ).Unitor;
+     Poins[ 2 ] := TDouble2S.Create(   0,  0, -1 ).Unitor;
+     Poins[ 3 ] := TDouble2S.Create(  +1,  0,  0 ).Unitor;
+     Poins[ 4 ] := TDouble2S.Create(   0, +1,  0 ).Unitor;
+     Poins[ 5 ] := TDouble2S.Create(   0,  0, +1 ).Unitor;
+end;
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPolyPoins2S08
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+
+constructor TPolyPoins2S08.Create;
 begin
      inherited;
 
@@ -113,7 +134,7 @@ begin
      Poins[ 7 ] := TDouble2S.Create(  -1, -1, +1 ).Unitor;
 end;
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPolyhedron8
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPolyPoins2S12
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
@@ -121,20 +142,30 @@ end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-constructor TPolyhedron8.Create;
+constructor TPolyPoins2S12.Create;
+var
+   G :Double;
 begin
      inherited;
 
-     PoinsN := 6;
-     Poins[ 0 ] := TDouble2S.Create(  -1,  0,  0 ).Unitor;
-     Poins[ 1 ] := TDouble2S.Create(   0, -1,  0 ).Unitor;
-     Poins[ 2 ] := TDouble2S.Create(   0,  0, -1 ).Unitor;
-     Poins[ 3 ] := TDouble2S.Create(  +1,  0,  0 ).Unitor;
-     Poins[ 4 ] := TDouble2S.Create(   0, +1,  0 ).Unitor;
-     Poins[ 5 ] := TDouble2S.Create(   0,  0, +1 ).Unitor;
+     G := (Sqrt(5)+1)/2;
+
+     PoinsN := 12;
+     Poins[ 00 ] := TDouble2S.Create(  0, -G, -1 ).Unitor;
+     Poins[ 01 ] := TDouble2S.Create(  0, -G, +1 ).Unitor;
+     Poins[ 02 ] := TDouble2S.Create( +1,  0, +G ).Unitor;
+     Poins[ 03 ] := TDouble2S.Create( -1,  0, +G ).Unitor;
+     Poins[ 04 ] := TDouble2S.Create( -G, -1,  0 ).Unitor;
+     Poins[ 05 ] := TDouble2S.Create( -G, +1,  0 ).Unitor;
+     Poins[ 06 ] := TDouble2S.Create(  0, +G, +1 ).Unitor;
+     Poins[ 07 ] := TDouble2S.Create(  0, +G, -1 ).Unitor;
+     Poins[ 08 ] := TDouble2S.Create( -1,  0, -G ).Unitor;
+     Poins[ 09 ] := TDouble2S.Create( +1,  0, -G ).Unitor;
+     Poins[ 10 ] := TDouble2S.Create( +G, +1,  0 ).Unitor;
+     Poins[ 11 ] := TDouble2S.Create( +G, -1,  0 ).Unitor;
 end;
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPolyhedron12
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPolyPoins2S20
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
@@ -142,7 +173,7 @@ end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-constructor TPolyhedron12.Create;
+constructor TPolyPoins2S20.Create;
 var
    G, R :Double;
 begin
@@ -172,37 +203,6 @@ begin
      Poins[ 17 ] := TDouble2S.Create( +1, +1, -1 ).Unitor;
      Poins[ 18 ] := TDouble2S.Create(  0, +R, -G ).Unitor;
      Poins[ 19 ] := TDouble2S.Create(  0, -R, -G ).Unitor;
-end;
-
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPolyhedron20
-
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
-
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
-
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
-
-constructor TPolyhedron20.Create;
-var
-   G :Double;
-begin
-     inherited;
-
-     G := (Sqrt(5)+1)/2;
-
-     PoinsN := 12;
-     Poins[ 00 ] := TDouble2S.Create(  0, -G, -1 ).Unitor;
-     Poins[ 01 ] := TDouble2S.Create(  0, -G, +1 ).Unitor;
-     Poins[ 02 ] := TDouble2S.Create( +1,  0, +G ).Unitor;
-     Poins[ 03 ] := TDouble2S.Create( -1,  0, +G ).Unitor;
-     Poins[ 04 ] := TDouble2S.Create( -G, -1,  0 ).Unitor;
-     Poins[ 05 ] := TDouble2S.Create( -G, +1,  0 ).Unitor;
-     Poins[ 06 ] := TDouble2S.Create(  0, +G, +1 ).Unitor;
-     Poins[ 07 ] := TDouble2S.Create(  0, +G, -1 ).Unitor;
-     Poins[ 08 ] := TDouble2S.Create( -1,  0, -G ).Unitor;
-     Poins[ 09 ] := TDouble2S.Create( +1,  0, -G ).Unitor;
-     Poins[ 10 ] := TDouble2S.Create( +G, +1,  0 ).Unitor;
-     Poins[ 11 ] := TDouble2S.Create( +G, -1,  0 ).Unitor;
 end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】

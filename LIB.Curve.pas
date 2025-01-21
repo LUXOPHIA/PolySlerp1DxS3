@@ -93,8 +93,6 @@ end;
 
 destructor TCurve<_TPoin_>.Destroy;
 begin
-     _OnChange.Free;
-
      Poins := nil;
 
      inherited;
