@@ -142,7 +142,6 @@ end;
 
 destructor TPoins<_TPoin_>.Destroy;
 begin
-     _OnChange.Free;
 
      inherited;
 end;
