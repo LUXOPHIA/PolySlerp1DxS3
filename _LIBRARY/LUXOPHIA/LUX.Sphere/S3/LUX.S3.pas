@@ -1,52 +1,52 @@
-﻿unit LIB.S2;
+﻿unit LUX.S3;
 
 interface //#################################################################### ■
 
-uses LUX.D3;
+uses LUX.Quaternion;
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 T Y P E 】
 
-     TSingle2S = TSingle3D;
-     TDouble2S = TDouble3D;
+     TSingle3S = TSingleQ;
+     TDouble3S = TDoubleQ;
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R E C O R D 】
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TSingle2Sw
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TSingle3Sw
 
-     TSingle2Sw = record
+     TSingle3Sw = record
      private
      public
-       v :TSingle2S;
+       v :TSingle3S;
        w :Single;
        /////
-       constructor Create( const P_:TSingle2S; const W_:Single );
+       constructor Create( const P_:TSingle3S; const W_:Single );
        ///// O P E R A T O R
-       class operator Positive( const P_:TSingle2Sw ) :TSingle2Sw;
-       class operator Negative( const P_:TSingle2Sw ) :TSingle2Sw;
-       class operator Add( const A_,B_:TSingle2Sw ) :TSingle2Sw;
-       class operator Subtract( const A_,B_:TSingle2Sw ) :TSingle2Sw;
-       class operator Multiply( const A_:Single; const B_:TSingle2Sw ) :TSingle2Sw;
-       class operator Multiply( const A_:TSingle2Sw; const B_:Single ) :TSingle2Sw;
-       class operator Divide( const A_:TSingle2Sw; const B_:Single ) :TSingle2Sw;
+       class operator Positive( const P_:TSingle3Sw ) :TSingle3Sw;
+       class operator Negative( const P_:TSingle3Sw ) :TSingle3Sw;
+       class operator Add( const A_,B_:TSingle3Sw ) :TSingle3Sw;
+       class operator Subtract( const A_,B_:TSingle3Sw ) :TSingle3Sw;
+       class operator Multiply( const A_:Single; const B_:TSingle3Sw ) :TSingle3Sw;
+       class operator Multiply( const A_:TSingle3Sw; const B_:Single ) :TSingle3Sw;
+       class operator Divide( const A_:TSingle3Sw; const B_:Single ) :TSingle3Sw;
      end;
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TDouble2Sw
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TDouble3Sw
 
-     TDouble2Sw = record
+     TDouble3Sw = record
      private
      public
-       v :TDouble2S;
+       v :TDouble3S;
        w :Double;
        /////
-       constructor Create( const P_:TDouble2S; const W_:Double );
+       constructor Create( const P_:TDouble3S; const W_:Double );
        ///// O P E R A T O R
-       class operator Positive( const P_:TDouble2Sw ) :TDouble2Sw;
-       class operator Negative( const P_:TDouble2Sw ) :TDouble2Sw;
-       class operator Add( const A_,B_:TDouble2Sw ) :TDouble2Sw;
-       class operator Subtract( const A_,B_:TDouble2Sw ) :TDouble2Sw;
-       class operator Multiply( const A_:Double; const B_:TDouble2Sw ) :TDouble2Sw;
-       class operator Multiply( const A_:TDouble2Sw; const B_:Double ) :TDouble2Sw;
-       class operator Divide( const A_:TDouble2Sw; const B_:Double ) :TDouble2Sw;
+       class operator Positive( const P_:TDouble3Sw ) :TDouble3Sw;
+       class operator Negative( const P_:TDouble3Sw ) :TDouble3Sw;
+       class operator Add( const A_,B_:TDouble3Sw ) :TDouble3Sw;
+       class operator Subtract( const A_,B_:TDouble3Sw ) :TDouble3Sw;
+       class operator Multiply( const A_:Double; const B_:TDouble3Sw ) :TDouble3Sw;
+       class operator Multiply( const A_:TDouble3Sw; const B_:Double ) :TDouble3Sw;
+       class operator Divide( const A_:TDouble3Sw; const B_:Double ) :TDouble3Sw;
      end;
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C L A S S 】
@@ -59,45 +59,50 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Glerp :Gnomonic Linear Interpolation
 
-function Glerp( const P1_,P2_:TSingle2S ) :TSingle2S; overload;
-function Glerp( const P1_,P2_:TDouble2S ) :TDouble2S; overload;
+function Glerp( const P1_,P2_:TSingle3S ) :TSingle3S; overload;
+function Glerp( const P1_,P2_:TDouble3S ) :TDouble3S; overload;
 
-function Glerp( const P1_,P2_:TSingle2S; const T_:Single ) :TSingle2S; overload;
-function Glerp( const P1_,P2_:TDouble2S; const T_:Double ) :TDouble2S; overload;
+function Glerp( const P1_,P2_:TSingle3S; const T_:Single ) :TSingle3S; overload;
+function Glerp( const P1_,P2_:TDouble3S; const T_:Double ) :TDouble3S; overload;
 
-function Glerp( const P1_,P2_:TSingle2S; const W1_,W2_:Single ) :TSingle2S; overload;
-function Glerp( const P1_,P2_:TDouble2S; const W1_,W2_:Double ) :TDouble2S; overload;
+function Glerp( const P1_,P2_:TSingle3S; const W1_,W2_:Single ) :TSingle3S; overload;
+function Glerp( const P1_,P2_:TDouble3S; const W1_,W2_:Double ) :TDouble3S; overload;
 
-function Glerp( const P1_,P2_:TSingle2Sw ) :TSingle2Sw; overload;
-function Glerp( const P1_,P2_:TDouble2Sw ) :TDouble2Sw; overload;
+function Glerp( const P1_,P2_:TSingle3Sw ) :TSingle3Sw; overload;
+function Glerp( const P1_,P2_:TDouble3Sw ) :TDouble3Sw; overload;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Slerp :Sherical Linear Interpolation
 
-function Slerp( const P1_,P2_:TSingle2S; const T_:Single ) :TSingle2S; overload;
-function Slerp( const P1_,P2_:TDouble2S; const T_:Double ) :TDouble2S; overload;
+function Slerp( const P1_,P2_:TSingle3S; const T_:Single ) :TSingle3S; overload;
+function Slerp( const P1_,P2_:TDouble3S; const T_:Double ) :TDouble3S; overload;
 
-function Slerp( const P1_,P2_:TSingle2S; const W1_,W2_:Single ) :TSingle2S; overload;
-function Slerp( const P1_,P2_:TDouble2S; const W1_,W2_:Double ) :TDouble2S; overload;
+function Slerp( const P1_,P2_:TSingle3S; const W1_,W2_:Single ) :TSingle3S; overload;
+function Slerp( const P1_,P2_:TDouble3S; const W1_,W2_:Double ) :TDouble3S; overload;
 
-function Slerp( const P1_,P2_:TSingle2Sw ) :TSingle2Sw; overload;
-function Slerp( const P1_,P2_:TDouble2Sw ) :TDouble2Sw; overload;
+function Slerp( const P1_,P2_:TSingle3Sw ) :TSingle3Sw; overload;
+function Slerp( const P1_,P2_:TDouble3Sw ) :TDouble3Sw; overload;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Sum1D
 
-function Sum1D( Ps_:TArray<TSingle2Sw> ) :TSingle2Sw; overload;
-function Sum1D( Ps_:TArray<TDouble2Sw> ) :TDouble2Sw; overload;
+function Sum1D( Ps_:TArray<TSingle3Sw> ) :TSingle3Sw; overload;
+function Sum1D( Ps_:TArray<TDouble3Sw> ) :TDouble3Sw; overload;
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% PowSum1D
+
+function PowSum1D( const Qs_:TArray<TSingle3Sw> ) :TSingle3Sw; overload;
+function PowSum1D( const Qs_:TArray<TDouble3Sw> ) :TDouble3Sw; overload;
 
 implementation //############################################################### ■
 
 uses System.Math,
      LUX,
-     LIB.D3;
+     LIB.D4;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R E C O R D 】
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TSingle2Sw
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TSingle3Sw
 
-constructor TSingle2Sw.Create( const P_:TSingle2S; const W_:Single );
+constructor TSingle3Sw.Create( const P_:TSingle3S; const W_:Single );
 begin
      v := P_;
      w := W_;
@@ -105,51 +110,51 @@ end;
 
 //////////////////////////////////////////////////////////////// O P E R A T O R
 
-class operator TSingle2Sw.Positive( const P_:TSingle2Sw ) :TSingle2Sw;
+class operator TSingle3Sw.Positive( const P_:TSingle3Sw ) :TSingle3Sw;
 begin
      Result.v :=  P_.v;
      Result.w := +P_.w;
 end;
 
-class operator TSingle2Sw.Negative( const P_:TSingle2Sw ) :TSingle2Sw;
+class operator TSingle3Sw.Negative( const P_:TSingle3Sw ) :TSingle3Sw;
 begin
      Result.v :=  P_.v;
      Result.w := -P_.w;
 end;
 
-class operator TSingle2Sw.Add( const A_,B_:TSingle2Sw ) :TSingle2Sw;
+class operator TSingle3Sw.Add( const A_,B_:TSingle3Sw ) :TSingle3Sw;
 begin
      Result := Slerp( A_, +B_ );
 end;
 
-class operator TSingle2Sw.Subtract( const A_,B_:TSingle2Sw ) :TSingle2Sw;
+class operator TSingle3Sw.Subtract( const A_,B_:TSingle3Sw ) :TSingle3Sw;
 begin
      Result := Slerp( A_, -B_ );
 end;
 
-class operator TSingle2Sw.Multiply( const A_:Single; const B_:TSingle2Sw ) :TSingle2Sw;
+class operator TSingle3Sw.Multiply( const A_:Single; const B_:TSingle3Sw ) :TSingle3Sw;
 begin
      Result.v :=      B_.v;
      Result.w := A_ * B_.w;
 end;
 
-class operator TSingle2Sw.Multiply( const A_:TSingle2Sw; const B_:Single ) :TSingle2Sw;
+class operator TSingle3Sw.Multiply( const A_:TSingle3Sw; const B_:Single ) :TSingle3Sw;
 begin
      Result.v := A_.v     ;
      Result.w := A_.w * B_;
 end;
 
-class operator TSingle2Sw.Divide( const A_:TSingle2Sw; const B_:Single ) :TSingle2Sw;
+class operator TSingle3Sw.Divide( const A_:TSingle3Sw; const B_:Single ) :TSingle3Sw;
 begin
      Result.v := A_.v     ;
      Result.w := A_.w / B_;
 end;
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TDouble2Sw
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TDouble3Sw
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-constructor TDouble2Sw.Create( const P_:TDouble2S; const W_:Double );
+constructor TDouble3Sw.Create( const P_:TDouble3S; const W_:Double );
 begin
      v := P_;
      w := W_;
@@ -157,41 +162,41 @@ end;
 
 //////////////////////////////////////////////////////////////// O P E R A T O R
 
-class operator TDouble2Sw.Positive( const P_:TDouble2Sw ) :TDouble2Sw;
+class operator TDouble3Sw.Positive( const P_:TDouble3Sw ) :TDouble3Sw;
 begin
      Result.v :=  P_.v;
      Result.w := +P_.w;
 end;
 
-class operator TDouble2Sw.Negative( const P_:TDouble2Sw ) :TDouble2Sw;
+class operator TDouble3Sw.Negative( const P_:TDouble3Sw ) :TDouble3Sw;
 begin
      Result.v :=  P_.v;
      Result.w := -P_.w;
 end;
 
-class operator TDouble2Sw.Add( const A_,B_:TDouble2Sw ) :TDouble2Sw;
+class operator TDouble3Sw.Add( const A_,B_:TDouble3Sw ) :TDouble3Sw;
 begin
      Result := Slerp( A_, +B_ );
 end;
 
-class operator TDouble2Sw.Subtract( const A_,B_:TDouble2Sw ) :TDouble2Sw;
+class operator TDouble3Sw.Subtract( const A_,B_:TDouble3Sw ) :TDouble3Sw;
 begin
      Result := Slerp( A_, -B_ );
 end;
 
-class operator TDouble2Sw.Multiply( const A_:Double; const B_:TDouble2Sw ) :TDouble2Sw;
+class operator TDouble3Sw.Multiply( const A_:Double; const B_:TDouble3Sw ) :TDouble3Sw;
 begin
      Result.v :=      B_.v;
      Result.w := A_ * B_.w;
 end;
 
-class operator TDouble2Sw.Multiply( const A_:TDouble2Sw; const B_:Double ) :TDouble2Sw;
+class operator TDouble3Sw.Multiply( const A_:TDouble3Sw; const B_:Double ) :TDouble3Sw;
 begin
      Result.v := A_.v     ;
      Result.w := A_.w * B_;
 end;
 
-class operator TDouble2Sw.Divide( const A_:TDouble2Sw; const B_:Double ) :TDouble2Sw;
+class operator TDouble3Sw.Divide( const A_:TDouble3Sw; const B_:Double ) :TDouble3Sw;
 begin
      Result.v := A_.v     ;
      Result.w := A_.w / B_;
@@ -203,49 +208,49 @@ end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% SlerpG
 
-function Glerp( const P1_,P2_:TSingle2S ) :TSingle2S;
+function Glerp( const P1_,P2_:TSingle3S ) :TSingle3S;
 begin
      Result := Lerp( P1_, P2_ ).Unitor;
 end;
 
-function Glerp( const P1_,P2_:TDouble2S ) :TDouble2S;
+function Glerp( const P1_,P2_:TDouble3S ) :TDouble3S;
 begin
      Result := Lerp( P1_, P2_ ).Unitor;
 end;
 
 //------------------------------------------------------------------------------
 
-function Glerp( const P1_,P2_:TSingle2S; const T_:Single ) :TSingle2S;
+function Glerp( const P1_,P2_:TSingle3S; const T_:Single ) :TSingle3S;
 begin
      Result := Lerp( P1_, P2_, T_ ).Unitor;
 end;
 
-function Glerp( const P1_,P2_:TDouble2S; const T_:Double ) :TDouble2S;
+function Glerp( const P1_,P2_:TDouble3S; const T_:Double ) :TDouble3S;
 begin
      Result := Lerp( P1_, P2_, T_ ).Unitor;
 end;
 
 //------------------------------------------------------------------------------
 
-function Glerp( const P1_,P2_:TSingle2S; const W1_,W2_:Single ) :TSingle2S;
+function Glerp( const P1_,P2_:TSingle3S; const W1_,W2_:Single ) :TSingle3S;
 begin
      Result := Lerp( P1_, P2_, W1_, W2_ ).Unitor;
 end;
 
-function Glerp( const P1_,P2_:TDouble2S; const W1_,W2_:Double ) :TDouble2S;
+function Glerp( const P1_,P2_:TDouble3S; const W1_,W2_:Double ) :TDouble3S;
 begin
      Result := Lerp( P1_, P2_, W1_, W2_ ).Unitor;
 end;
 
 //------------------------------------------------------------------------------
 
-function Glerp( const P1_,P2_:TSingle2Sw ) :TSingle2Sw;
+function Glerp( const P1_,P2_:TSingle3Sw ) :TSingle3Sw;
 begin
      Result.v := Lerp( P1_.v, P2_.v, P1_.w, P2_.w ).Unitor;
      Result.w := P1_.w + P2_.w;
 end;
 
-function Glerp( const P1_,P2_:TDouble2Sw ) :TDouble2Sw;
+function Glerp( const P1_,P2_:TDouble3Sw ) :TDouble3Sw;
 begin
      Result.v := Lerp( P1_.v, P2_.v, P1_.w, P2_.w ).Unitor;
      Result.w := P1_.w + P2_.w;
@@ -253,7 +258,7 @@ end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Slerp
 
-function Slerp( const P1_,P2_:TSingle2S; const T_:Single ) :TSingle2S;
+function Slerp( const P1_,P2_:TSingle3S; const T_:Single ) :TSingle3S;
 var
    C, A, S :Single;
 begin
@@ -270,7 +275,7 @@ begin
      end;
 end;
 
-function Slerp( const P1_,P2_:TDouble2S; const T_:Double ) :TDouble2S;
+function Slerp( const P1_,P2_:TDouble3S; const T_:Double ) :TDouble3S;
 var
    C, A, S :Double;
 begin
@@ -289,7 +294,7 @@ end;
 
 //------------------------------------------------------------------------------
 
-function Slerp( const P1_,P2_:TSingle2S; const W1_,W2_:Single ) :TSingle2S;
+function Slerp( const P1_,P2_:TSingle3S; const W1_,W2_:Single ) :TSingle3S;
 var
    W, C, A, S :Single;
 begin
@@ -312,7 +317,7 @@ begin
      end;
 end;
 
-function Slerp( const P1_,P2_:TDouble2S; const W1_,W2_:Double ) :TDouble2S;
+function Slerp( const P1_,P2_:TDouble3S; const W1_,W2_:Double ) :TDouble3S;
 var
    W, C, A, S :Double;
 begin
@@ -337,7 +342,7 @@ end;
 
 //------------------------------------------------------------------------------
 
-function Slerp( const P1_,P2_:TSingle2Sw ) :TSingle2Sw;
+function Slerp( const P1_,P2_:TSingle3Sw ) :TSingle3Sw;
 var
    C, A, S :Single;
 begin
@@ -360,7 +365,7 @@ begin
      end;
 end;
 
-function Slerp( const P1_,P2_:TDouble2Sw ) :TDouble2Sw;
+function Slerp( const P1_,P2_:TDouble3Sw ) :TDouble3Sw;
 var
    C, A, S :Double;
 begin
@@ -385,7 +390,7 @@ end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Sum1D
 
-function Sum1D( Ps_:TArray<TSingle2Sw> ) :TSingle2Sw;
+function Sum1D( Ps_:TArray<TSingle3Sw> ) :TSingle3Sw;
 var
    N, I, L :Integer;
 begin
@@ -399,7 +404,7 @@ begin
      Result := Ps_[ 0 ];
 end;
 
-function Sum1D( Ps_:TArray<TDouble2Sw> ) :TDouble2Sw;
+function Sum1D( Ps_:TArray<TDouble3Sw> ) :TDouble3Sw;
 var
    N, I, L :Integer;
 begin
@@ -411,6 +416,36 @@ begin
      for I := 0 to L do Ps_[ I ] := Ps_[ I ] + Ps_[ I+1 ];
 
      Result := Ps_[ 0 ];
+end;
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% PowSum1D
+
+function PowSum1D( const Qs_:TArray<TSingle3Sw> ) :TSingle3Sw;
+var
+   Q :TSingle3Sw;
+begin
+     Result.v := 0;
+     Result.w := 0;
+     for Q in Qs_ do
+     begin
+          Result.v := Result.v + Q.w * Ln( Q.v );
+          Result.w := Result.w + Q.w;
+     end;
+     Result.v := Exp( Result.v / Result.w );
+end;
+
+function PowSum1D( const Qs_:TArray<TDouble3Sw> ) :TDouble3Sw;
+var
+   Q :TDouble3Sw;
+begin
+     Result.v := 0;
+     Result.w := 0;
+     for Q in Qs_ do
+     begin
+          Result.v := Result.v + Q.w * Ln( Q.v );
+          Result.w := Result.w + Q.w;
+     end;
+     Result.v := Exp( Result.v / Result.w );
 end;
 
 end. //######################################################################### ■

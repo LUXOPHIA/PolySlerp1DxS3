@@ -7,7 +7,7 @@ uses System.Types, System.SysUtils, System.RTLConsts, System.Classes,
      FMX.Types3D, FMX.Controls3D, FMX.MaterialSources,
      LUX, LUX.D3, LUX.Quaternion, LUX.D4x4,
      LUX.FMX.Graphics.D3,
-     LIB.Poins.S2;
+     LUX.Poins.S2;
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 T Y P E 】
 

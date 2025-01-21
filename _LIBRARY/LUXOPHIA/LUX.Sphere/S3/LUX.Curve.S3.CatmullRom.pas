@@ -1,9 +1,9 @@
-﻿unit LIB.Curve.S2.CatmullRom;
+﻿unit LUX.Curve.S3.CatmullRom;
 
 interface //#################################################################### ■
 
-uses LIB.S2,
-     LIB.Curve.S2;
+uses LUX.S3,
+     LUX.Curve.S3;
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 T Y P E 】
 
@@ -13,7 +13,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveCatmullRom
 
-     TCurveCatmullRom = class( TCurve2S )
+     TCurveCatmullRom = class( TCurve3S )
      private
      protected
      public
@@ -25,7 +25,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      private
      protected
        ///// M E T H O D
-       function Segment( const i:Integer; const t:Double ) :TDouble2S; override;
+       function Segment( const i:Integer; const t:Double ) :TDouble3S; override;
      public
      end;
 
@@ -35,7 +35,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      private
      protected
        ///// M E T H O D
-       function Segment( const i:Integer; const t:Double ) :TDouble2S; override;
+       function Segment( const i:Integer; const t:Double ) :TDouble3S; override;
      public
      end;
 
@@ -43,7 +43,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 implementation //############################################################### ■
 
-uses LUX.Curve.CatmullRom;
+uses LIB.Curve.CatmullRom;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R E C O R D 】
 
@@ -57,11 +57,11 @@ uses LUX.Curve.CatmullRom;
 
 //////////////////////////////////////////////////////////////////// M E T H O D
 
-function TCurveCatmullRomREC.Segment( const i:Integer; const t:Double ) :TDouble2S;
+function TCurveCatmullRomREC.Segment( const i:Integer; const t:Double ) :TDouble3S;
 var
    P0, P1, P2, P3,
    P01, P12, P23,
-   P012, P123 :TDouble2S;
+   P012, P123 :TDouble3S;
 begin
      P0 := _Poins[ i-1 ];
      P1 := _Poins[ i   ];
@@ -84,9 +84,9 @@ end;
 
 //////////////////////////////////////////////////////////////////// M E T H O D
 
-function TCurveCatmullRomPOL.Segment( const i:Integer; const t:Double ) :TDouble2S;
+function TCurveCatmullRomPOL.Segment( const i:Integer; const t:Double ) :TDouble3S;
 var
-   P0, P1, P2, P3 :TDouble2S;
+   P0, P1, P2, P3 :TDouble3S;
    W0, W1, W2, W3 :Double;
 begin
      P0 := _Poins[ i-1 ];
@@ -99,10 +99,10 @@ begin
      W2 := ( ( -1.5 * t + 2.0 ) * t + 0.5 ) * t      ;
      W3 := ( ( +0.5 * t - 0.5 ) * t       ) * t      ;
 
-     Result := Sum1D( [ TDouble2Sw.Create( P0, W0 ),
-                        TDouble2Sw.Create( P1, W1 ),
-                        TDouble2Sw.Create( P2, W2 ),
-                        TDouble2Sw.Create( P3, W3 ) ] ).v;
+     Result := Sum1D( [ TDouble3Sw.Create( P0, W0 ),
+                        TDouble3Sw.Create( P1, W1 ),
+                        TDouble3Sw.Create( P2, W2 ),
+                        TDouble3Sw.Create( P3, W3 ) ] ).v;
 end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
