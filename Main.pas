@@ -20,8 +20,8 @@ type
   TForm1 = class(TForm)
     Viewport3D1: TViewport3D;
     Panel1: TPanel;
-      Label1: TLabel;
-        ComboBox1: TComboBox;
+      LabelP: TLabel;
+        ComboBoxP: TComboBox;
       GroupBoxCU: TGroupBox;
         LabelCUA: TLabel;
           ComboBoxCUA: TComboBox;
@@ -51,7 +51,7 @@ type
     procedure Viewport3D1MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Single);
     procedure Viewport3D1MouseMove(Sender: TObject; Shift: TShiftState; X, Y: Single);
     procedure Viewport3D1MouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Single);
-    procedure ComboBox1Change(Sender: TObject);
+    procedure ComboBoxPChange(Sender: TObject);
     procedure ComboBoxCUAChange(Sender: TObject);
     procedure ComboBoxCLAChange(Sender: TObject);
     procedure SpinBoxCU1DChange(Sender: TObject);
@@ -155,12 +155,12 @@ end;
 
 //------------------------------------------------------------------------------
 
-procedure TForm1.ComboBox1Change(Sender: TObject);
+procedure TForm1.ComboBoxPChange(Sender: TObject);
 var
    Ps :TPoins3S;
    C :TCurve3S;
 begin
-     Ps := _Poins3S[ ComboBox1.ItemIndex ];
+     Ps := _Poins3S[ ComboBoxP.ItemIndex ];
 
      for C in _Curve3S0 do C.Poins := Ps;
      for C in _Curve3S1 do C.Poins := Ps;
