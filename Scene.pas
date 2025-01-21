@@ -45,7 +45,7 @@ begin
           _Sphere3D.Radius := 4.7;
 
           _Poins3D := TPoins3D.Create( _World3D );
-          _Poins3D.Poins   := _Poins3S[ Form1.ComboBox1.ItemIndex ];
+          _Poins3D.Poins   := _Poins3S[ Form1.ComboBoxP.ItemIndex ];
           _Poins3D.Radius  := 5;
           _Poins3D.DotSize := TSingle3D.Create( 0.3 );
           _Poins3D.DivX    := 20;
