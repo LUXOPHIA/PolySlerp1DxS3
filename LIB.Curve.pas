@@ -7,6 +7,9 @@ uses LUX,
 
 type //$$$$$$$$$&&$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 T Y P E 】
 
+     TSingleLerp<_TValue_> = reference to function ( const P0_,P1_:_TValue_; const T_:Single ) :_TValue_;
+     TDoubleLerp<_TValue_> = reference to function ( const P0_,P1_:_TValue_; const T_:Double ) :_TValue_;
+
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R E C O R D 】
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C L A S S 】

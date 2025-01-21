@@ -1,8 +1,8 @@
-﻿unit LIB.Poins.Plots.S2;
+﻿unit LUX.Poins.Plots.S2;
 
 interface //#################################################################### ■
 
-uses LIB.S2,
+uses LUX.S2,
      LIB.Poins.Plots;
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 T Y P E 】
@@ -44,7 +44,7 @@ uses System.Math,
 
 function TPlots2S.Distance( const P0_,P1_:TDouble2S ) :Double;
 begin
-     Result := ArcCos( DotProduct( P0_, P1_ ) );
+     Result := Angle( P0_, P1_ );
 end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】

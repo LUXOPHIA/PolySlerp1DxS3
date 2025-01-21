@@ -1,10 +1,10 @@
-﻿unit LIB.Poins.S3;
+﻿unit LUX.Poins.S3;
 
 interface //#################################################################### ■
 
-uses LIB.S3,
+uses LUX.S3,
      LIB.Poins,
-     LIB.Poins.S2;
+     LUX.Poins.S2;
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 T Y P E 】
 
@@ -33,11 +33,11 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        destructor Destroy; override;
      end;
 
-     TPolyhedron4 = TPolyPoins3S<LIB.Poins.S2.TPolyhedron4>;
-     TPolyhedron6 = TPolyPoins3S<LIB.Poins.S2.TPolyhedron6>;
-     TPolyhedron8 = TPolyPoins3S<LIB.Poins.S2.TPolyhedron8>;
-     TPolyhedron12 = TPolyPoins3S<LIB.Poins.S2.TPolyhedron12>;
-     TPolyhedron20 = TPolyPoins3S<LIB.Poins.S2.TPolyhedron20>;
+     TPolyhedron4  = TPolyPoins3S<LUX.Poins.S2.TPolyhedron4>;
+     TPolyhedron6  = TPolyPoins3S<LUX.Poins.S2.TPolyhedron6>;
+     TPolyhedron8  = TPolyPoins3S<LUX.Poins.S2.TPolyhedron8>;
+     TPolyhedron12 = TPolyPoins3S<LUX.Poins.S2.TPolyhedron12>;
+     TPolyhedron20 = TPolyPoins3S<LUX.Poins.S2.TPolyhedron20>;
 
 //const //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C O N S T A N T 】
 
@@ -47,7 +47,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 implementation //############################################################### ■
 
-uses LUX, LUX.D3, LIB.Curve.S3.BSpline;
+uses LUX, LUX.D3, LUX.Curve.S3.BSpline;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R E C O R D 】
 
