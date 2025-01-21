@@ -47,7 +47,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 implementation //############################################################### ■
 
-uses LUX, LUX.D3, LUX.Curve.S3.BSpline;
+uses LUX, LUX.D3, LUX.Quaternion, LUX.Curve.S3.BSpline;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R E C O R D 】
 
@@ -121,11 +121,13 @@ var
    Ps :TArray<TDouble3S>;
    I, N :Integer;
    P :TDouble3S;
+   B :Boolean;
 begin
      SetLength( Ps, PoinsN );
-     for I := 0 to PoinsN-1 do _Poins[ I ] := TDouble3S.Rotate( TDouble3D.IdentityY, _Poins2S.Poins[ I ] );
+     for I := 0 to PoinsN-1 do _Poins[ I ] := TDouble3S.Rotate( TDouble3D.IdentityY, _Poins2S.Poins[ I ] )
+                                            * TDouble3S.Rotate( TDouble3D.IdentityY, Pi2 * Random );
 
-     for N := 1 to 100 do
+     for N := 1 to 1000000 do
      begin
           for I := 0 to PoinsN-1 do
           begin
@@ -134,7 +136,14 @@ begin
                Ps[ I ] := TDouble3S.Rotate( P.Trans( TDouble3D.IdentityY ), _Poins2S.Poins[ I ] ) * P;
           end;
 
-          for I := 0 to PoinsN-1 do _Poins[ I ] := Ps[ I ];
+          B := True;
+          for I := 0 to PoinsN-1 do
+          begin
+               B := B and ( 1-DOUBLE_EPS4 < DotProduct( _Poins[ I ], Ps[ I ] ) );
+
+               _Poins[ I ] := Ps[ I ];
+          end;
+          if B then Break;
      end;
 end;
 
