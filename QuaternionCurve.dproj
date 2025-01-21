@@ -309,6 +309,7 @@
         <DCCReference Include="_LIBRARY\LUXOPHIA\LUX.Sphere\LIB.Curve.BSpline.pas"/>
         <DCCReference Include="_LIBRARY\LUXOPHIA\LUX.Sphere\LIB.Curve.CatmullRom.pas"/>
         <DCCReference Include="_LIBRARY\LUXOPHIA\LUX.Sphere\S2\FMX\LUX.FMX.S2.pas"/>
+        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX.Sphere\S3\LUX.Curve.S3.Linear.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

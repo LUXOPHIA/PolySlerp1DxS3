@@ -40,7 +40,8 @@ uses
   LIB.Curve.Bezier in '_LIBRARY\LUXOPHIA\LUX.Sphere\LIB.Curve.Bezier.pas',
   LIB.Curve.BSpline in '_LIBRARY\LUXOPHIA\LUX.Sphere\LIB.Curve.BSpline.pas',
   LIB.Curve.CatmullRom in '_LIBRARY\LUXOPHIA\LUX.Sphere\LIB.Curve.CatmullRom.pas',
-  LUX.FMX.S2 in '_LIBRARY\LUXOPHIA\LUX.Sphere\S2\FMX\LUX.FMX.S2.pas';
+  LUX.FMX.S2 in '_LIBRARY\LUXOPHIA\LUX.Sphere\S2\FMX\LUX.FMX.S2.pas',
+  LUX.Curve.S3.Linear in '_LIBRARY\LUXOPHIA\LUX.Sphere\S3\LUX.Curve.S3.Linear.pas';
 
 {$R *.res}
 

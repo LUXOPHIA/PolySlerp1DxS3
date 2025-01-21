@@ -3,7 +3,7 @@ object Form1: TForm1
   Top = 0
   Caption = 'Quaternion Curve'
   ClientHeight = 520
-  ClientWidth = 630
+  ClientWidth = 750
   Position = ScreenCenter
   FormFactor.Width = 320
   FormFactor.Height = 480
@@ -30,36 +30,11 @@ object Form1: TForm1
     Align = Right
     Margins.Left = -10.000000000000000000
     Position.X = 510.000000000000000000
-    Size.Width = 120.000000000000000000
+    Size.Width = 240.000000000000000000
     Size.Height = 520.000000000000000000
     Size.PlatformDefault = False
     StyleLookup = 'pushpanel'
     TabOrder = 2
-    object Button1: TButton
-      Position.X = 10.000000000000000000
-      Position.Y = 40.000000000000000000
-      Size.Width = 100.000000000000000000
-      Size.Height = 50.000000000000000000
-      Size.PlatformDefault = False
-      TabOrder = 1
-      Text = 'Random'
-      TextSettings.Trimming = None
-    end
-    object Memo1: TMemo
-      Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
-      DataDetectorTypes = []
-      Align = Vertical
-      Margins.Top = 100.000000000000000000
-      Margins.Bottom = 10.000000000000000000
-      Position.X = 10.000000000000000000
-      Position.Y = 100.000000000000000000
-      Size.Width = 100.000000000000000000
-      Size.Height = 410.000000000000000000
-      Size.PlatformDefault = False
-      TabOrder = 2
-      Viewport.Width = 96.000000000000000000
-      Viewport.Height = 406.000000000000000000
-    end
     object ComboBox1: TComboBox
       Items.Strings = (
         '04'
@@ -68,12 +43,12 @@ object Form1: TForm1
         '12'
         '20')
       ItemIndex = 4
-      Position.X = 60.000000000000000000
+      Position.X = 55.000000000000000000
       Position.Y = 10.000000000000000000
       Size.Width = 50.000000000000000000
       Size.Height = 20.000000000000000000
       Size.PlatformDefault = False
-      TabOrder = 3
+      TabOrder = 1
       OnChange = ComboBox1Change
     end
     object Label1: TLabel
@@ -84,7 +59,329 @@ object Form1: TForm1
       Size.PlatformDefault = False
       TextSettings.HorzAlign = Trailing
       Text = 'Points: '
+      TabOrder = 2
+    end
+    object GroupBoxCU: TGroupBox
+      Position.X = 10.000000000000000000
+      Position.Y = 40.000000000000000000
+      Size.Width = 220.000000000000000000
+      Size.Height = 230.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Upper Curve'
       TabOrder = 4
+      object TabControlCU: TTabControl
+        Position.X = 15.000000000000000000
+        Position.Y = 60.000000000000000000
+        Size.Width = 190.000000000000000000
+        Size.Height = 155.000000000000000000
+        Size.PlatformDefault = False
+        TabIndex = 0
+        TabOrder = 38
+        TabPosition = None
+        Sizes = (
+          190s
+          155s
+          190s
+          155s
+          190s
+          155s
+          190s
+          155s)
+        object TabItemCU0: TTabItem
+          CustomIcon = <
+            item
+            end>
+          TextSettings.Trimming = None
+          IsSelected = True
+          Size.Width = 8.000000000000000000
+          Size.Height = 8.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = ''
+          TabOrder = 0
+          Text = 'Linear'
+          ExplicitSize.cx = 8.000000000000000000
+          ExplicitSize.cy = 8.000000000000000000
+        end
+        object TabItemCU1: TTabItem
+          CustomIcon = <
+            item
+            end>
+          TextSettings.Trimming = None
+          IsSelected = False
+          Size.Width = 8.000000000000000000
+          Size.Height = 8.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = ''
+          TabOrder = 0
+          Text = 'Bezier'
+          ExplicitSize.cx = 8.000000000000000000
+          ExplicitSize.cy = 8.000000000000000000
+          object LabelCU1D: TLabel
+            Position.X = 15.000000000000000000
+            Position.Y = 15.000000000000000000
+            Size.Width = 45.000000000000000000
+            Size.Height = 20.000000000000000000
+            Size.PlatformDefault = False
+            TextSettings.HorzAlign = Trailing
+            Text = 'Degree: '
+            TabOrder = 2
+          end
+          object SpinBoxCU1D: TSpinBox
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            TabOrder = 3
+            Cursor = crIBeam
+            Min = 1.000000000000000000
+            Max = 10.000000000000000000
+            Value = 3.000000000000000000
+            Position.X = 65.000000000000000000
+            Position.Y = 15.000000000000000000
+            Size.Width = 100.000000000000000000
+            Size.Height = 20.000000000000000000
+            Size.PlatformDefault = False
+            OnChange = SpinBoxCU1DChange
+          end
+        end
+        object TabItemCU2: TTabItem
+          CustomIcon = <
+            item
+            end>
+          TextSettings.Trimming = None
+          IsSelected = False
+          Size.Width = 8.000000000000000000
+          Size.Height = 8.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = ''
+          TabOrder = 0
+          Text = 'B-Spline'
+          ExplicitSize.cx = 8.000000000000000000
+          ExplicitSize.cy = 8.000000000000000000
+          object LabelCU2D: TLabel
+            Position.X = 15.000000000000000000
+            Position.Y = 15.000000000000000000
+            Size.Width = 45.000000000000000000
+            Size.Height = 20.000000000000000000
+            Size.PlatformDefault = False
+            TextSettings.HorzAlign = Trailing
+            Text = 'Degree: '
+            TabOrder = 2
+          end
+          object SpinBoxCU2D: TSpinBox
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            TabOrder = 3
+            Cursor = crIBeam
+            Min = 1.000000000000000000
+            Max = 10.000000000000000000
+            Value = 3.000000000000000000
+            Position.X = 65.000000000000000000
+            Position.Y = 15.000000000000000000
+            Size.Width = 100.000000000000000000
+            Size.Height = 20.000000000000000000
+            Size.PlatformDefault = False
+            OnChange = SpinBoxCU2DChange
+          end
+        end
+        object TabItemCU3: TTabItem
+          CustomIcon = <
+            item
+            end>
+          TextSettings.Trimming = None
+          IsSelected = False
+          Size.Width = 8.000000000000000000
+          Size.Height = 8.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = ''
+          TabOrder = 0
+          Text = 'Catmull-Rom'
+          ExplicitSize.cx = 8.000000000000000000
+          ExplicitSize.cy = 8.000000000000000000
+        end
+      end
+      object LabelCUA: TLabel
+        Position.X = 10.000000000000000000
+        Position.Y = 25.000000000000000000
+        Size.Width = 60.000000000000000000
+        Size.Height = 20.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.HorzAlign = Trailing
+        Text = 'Algorithm: '
+        TabOrder = 2
+      end
+      object ComboBoxCUA: TComboBox
+        Items.Strings = (
+          'Linear'
+          'Bezier'
+          'B-Spline'
+          'Catmull-Rom')
+        ItemIndex = 0
+        Position.X = 75.000000000000000000
+        Position.Y = 25.000000000000000000
+        Size.Width = 130.000000000000000000
+        Size.Height = 20.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+        OnChange = ComboBoxCUAChange
+      end
+    end
+    object GroupBoxCL: TGroupBox
+      Position.X = 10.000000000000000000
+      Position.Y = 280.000000000000000000
+      Size.Width = 220.000000000000000000
+      Size.Height = 230.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Lower Curve'
+      TabOrder = 3
+      object TabControlCL: TTabControl
+        Position.X = 15.000000000000000000
+        Position.Y = 60.000000000000000000
+        Size.Width = 190.000000000000000000
+        Size.Height = 155.000000000000000000
+        Size.PlatformDefault = False
+        TabIndex = 0
+        TabOrder = 38
+        TabPosition = None
+        Sizes = (
+          190s
+          155s
+          190s
+          155s
+          190s
+          155s
+          190s
+          155s)
+        object TabItemCL0: TTabItem
+          CustomIcon = <
+            item
+            end>
+          TextSettings.Trimming = None
+          IsSelected = True
+          Size.Width = 8.000000000000000000
+          Size.Height = 8.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = ''
+          TabOrder = 0
+          Text = 'Linear'
+          ExplicitSize.cx = 8.000000000000000000
+          ExplicitSize.cy = 8.000000000000000000
+        end
+        object TabItemCL1: TTabItem
+          CustomIcon = <
+            item
+            end>
+          TextSettings.Trimming = None
+          IsSelected = False
+          Size.Width = 8.000000000000000000
+          Size.Height = 8.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = ''
+          TabOrder = 0
+          Text = 'Bezier'
+          ExplicitSize.cx = 8.000000000000000000
+          ExplicitSize.cy = 8.000000000000000000
+          object LabelCL1D: TLabel
+            Position.X = 15.000000000000000000
+            Position.Y = 15.000000000000000000
+            Size.Width = 45.000000000000000000
+            Size.Height = 20.000000000000000000
+            Size.PlatformDefault = False
+            TextSettings.HorzAlign = Trailing
+            Text = 'Degree: '
+            TabOrder = 2
+          end
+          object SpinBoxCL1D: TSpinBox
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            TabOrder = 3
+            Cursor = crIBeam
+            Min = 1.000000000000000000
+            Max = 10.000000000000000000
+            Value = 3.000000000000000000
+            Position.X = 65.000000000000000000
+            Position.Y = 15.000000000000000000
+            Size.Width = 100.000000000000000000
+            Size.Height = 20.000000000000000000
+            Size.PlatformDefault = False
+            OnChange = SpinBoxCL1DChange
+          end
+        end
+        object TabItemCL2: TTabItem
+          CustomIcon = <
+            item
+            end>
+          TextSettings.Trimming = None
+          IsSelected = False
+          Size.Width = 8.000000000000000000
+          Size.Height = 8.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = ''
+          TabOrder = 0
+          Text = 'B-Spline'
+          ExplicitSize.cx = 8.000000000000000000
+          ExplicitSize.cy = 8.000000000000000000
+          object LabelCL2D: TLabel
+            Position.X = 15.000000000000000000
+            Position.Y = 15.000000000000000000
+            Size.Width = 45.000000000000000000
+            Size.Height = 20.000000000000000000
+            Size.PlatformDefault = False
+            TextSettings.HorzAlign = Trailing
+            Text = 'Degree: '
+            TabOrder = 2
+          end
+          object SpinBoxCL2D: TSpinBox
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            TabOrder = 3
+            Cursor = crIBeam
+            Min = 1.000000000000000000
+            Max = 10.000000000000000000
+            Value = 3.000000000000000000
+            Position.X = 65.000000000000000000
+            Position.Y = 15.000000000000000000
+            Size.Width = 100.000000000000000000
+            Size.Height = 20.000000000000000000
+            Size.PlatformDefault = False
+            OnChange = SpinBoxCL2DChange
+          end
+        end
+        object TabItemCL3: TTabItem
+          CustomIcon = <
+            item
+            end>
+          TextSettings.Trimming = None
+          IsSelected = False
+          Size.Width = 8.000000000000000000
+          Size.Height = 8.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = ''
+          TabOrder = 0
+          Text = 'Catmull-Rom'
+          ExplicitSize.cx = 8.000000000000000000
+          ExplicitSize.cy = 8.000000000000000000
+        end
+      end
+      object LabelCLA: TLabel
+        Position.X = 10.000000000000000000
+        Position.Y = 25.000000000000000000
+        Size.Width = 60.000000000000000000
+        Size.Height = 20.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.HorzAlign = Trailing
+        Text = 'Algorithm: '
+        TabOrder = 2
+      end
+      object ComboBoxCLA: TComboBox
+        Items.Strings = (
+          'Linear'
+          'Bezier'
+          'B-Spline'
+          'Catmull-Rom')
+        ItemIndex = 0
+        Position.X = 75.000000000000000000
+        Position.Y = 25.000000000000000000
+        Size.Width = 130.000000000000000000
+        Size.Height = 20.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+        OnChange = ComboBoxCLAChange
+      end
     end
   end
 end

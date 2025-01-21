@@ -4,7 +4,7 @@ interface //####################################################################
 
 uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
-  System.Math, System.Math.Vectors,
+  System.Math, System.Math.Vectors, System.Generics.Collections,
   FMX.Forms, FMX.Memo.Types, FMX.ScrollBox, FMX.Memo, FMX.StdCtrls,
   FMX.Controls, FMX.Controls.Presentation, FMX.Types, FMX.Viewport3D,
   FMX.ExtCtrls, FMX.ListBox,
@@ -12,10 +12,11 @@ uses
   LUX.Poins.S3,
   LUX.Poins.Plots.S3,
   LUX.Curve.S3,
+  LUX.Curve.S3.Linear,
   LUX.Curve.S3.Bezier,
   LUX.Curve.S3.BSpline,
   LUX.Curve.S3.CatmullRom,
-  Scene;
+  Scene, FMX.TabControl, FMX.Edit, FMX.EditBox, FMX.SpinBox;
 
 type
   TForm1 = class(TForm)
@@ -23,23 +24,51 @@ type
     Panel1: TPanel;
       Label1: TLabel;
         ComboBox1: TComboBox;
-      Button1: TButton;
-        Memo1: TMemo;
+      GroupBoxCU: TGroupBox;
+        LabelCUA: TLabel;
+          ComboBoxCUA: TComboBox;
+        TabControlCU: TTabControl;
+          TabItemCU0: TTabItem;
+          TabItemCU1: TTabItem;
+            LabelCU1D: TLabel;
+              SpinBoxCU1D: TSpinBox;
+          TabItemCU2: TTabItem;
+            LabelCU2D: TLabel;
+              SpinBoxCU2D: TSpinBox;
+          TabItemCU3: TTabItem;
+      GroupBoxCL: TGroupBox;
+        LabelCLA: TLabel;
+          ComboBoxCLA: TComboBox;
+        TabControlCL: TTabControl;
+          TabItemCL0: TTabItem;
+          TabItemCL1: TTabItem;
+            LabelCL1D: TLabel;
+              SpinBoxCL1D: TSpinBox;
+          TabItemCL2: TTabItem;
+            LabelCL2D: TLabel;
+              SpinBoxCL2D: TSpinBox;
+          TabItemCL3: TTabItem;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure Viewport3D1MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Single);
     procedure Viewport3D1MouseMove(Sender: TObject; Shift: TShiftState; X, Y: Single);
     procedure Viewport3D1MouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Single);
     procedure ComboBox1Change(Sender: TObject);
+    procedure ComboBoxCUAChange(Sender: TObject);
+    procedure ComboBoxCLAChange(Sender: TObject);
+    procedure SpinBoxCU1DChange(Sender: TObject);
+    procedure SpinBoxCL1DChange(Sender: TObject);
+    procedure SpinBoxCU2DChange(Sender: TObject);
+    procedure SpinBoxCL2DChange(Sender: TObject);
   private
     { private êÈåæ }
     _MouseS :TShiftState;
     _MouseP :TPointF;
   public
     { public êÈåæ }
-    _Poins3S  :TPoins3S;
-    _Curve3S0 :TCurve3S;
-    _Curve3S1 :TCurve3S;
+    _Poins3S  :TObjectList<TPoins3S>;
+    _Curve3S0 :TObjectList<TCurve3S>;
+    _Curve3S1 :TObjectList<TCurve3S>;
     _Plots3S0 :TPlots3S;
     _Plots3S1 :TPlots3S;
   end;
@@ -55,13 +84,30 @@ implementation //###############################################################
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
-     _Poins3S := TPolyPoins3S20.Create;
+     _Poins3S := TObjectList<TPoins3S>.Create;
+     ///// Points
+     _Poins3S.Add( TPolyPoins3S04.Create );
+     _Poins3S.Add( TPolyPoins3S06.Create );
+     _Poins3S.Add( TPolyPoins3S08.Create );
+     _Poins3S.Add( TPolyPoins3S12.Create );
+     _Poins3S.Add( TPolyPoins3S20.Create );
 
-     _Curve3S0 := TCurveBSplineREC.Create( _Poins3S );
-     _Curve3S1 := TCurveBSplinePOL.Create( _Poins3S );
+     _Curve3S0 := TObjectList<TCurve3S>.Create;
+     ///// Recursive Algorithm Curve
+     _Curve3S0.Add( TCurveLinearREC    .Create( _Poins3S[4] ) );
+     _Curve3S0.Add( TCurveBezierREC    .Create( _Poins3S[4] ) );
+     _Curve3S0.Add( TCurveBSplineREC   .Create( _Poins3S[4] ) );
+     _Curve3S0.Add( TCurveCatmullRomREC.Create( _Poins3S[4] ) );
 
-     _Plots3S0 := TPlots3S.Create( _Curve3S0 );
-     _Plots3S1 := TPlots3S.Create( _Curve3S1 );
+     _Curve3S1 := TObjectList<TCurve3S>.Create;
+     ///// Polynomial Curve
+     _Curve3S1.Add( TCurveLinearPOL    .Create( _Poins3S[4] ) );
+     _Curve3S1.Add( TCurveBezierPOL    .Create( _Poins3S[4] ) );
+     _Curve3S1.Add( TCurveBSplinePOL   .Create( _Poins3S[4] ) );
+     _Curve3S1.Add( TCurveCatmullRomPOL.Create( _Poins3S[4] ) );
+
+     _Plots3S0 := TPlots3S.Create( _Curve3S0[ 0 ] );
+     _Plots3S1 := TPlots3S.Create( _Curve3S1[ 0 ] );
 
      _Plots3S0.PlotGap := 2 * ArcSin( 0.15 / 5 );
      _Plots3S1.PlotGap := 2 * ArcSin( 0.15 / 5 );
@@ -71,7 +117,9 @@ end;
 
 procedure TForm1.FormDestroy(Sender: TObject);
 begin
-     _Poins3S.Free;
+     _Curve3S0.Free;
+     _Curve3S1.Free;
+     _Poins3S .Free;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -110,24 +158,58 @@ end;
 //------------------------------------------------------------------------------
 
 procedure TForm1.ComboBox1Change(Sender: TObject);
+var
+   Ps :TPoins3S;
+   C :TCurve3S;
 begin
-     _Poins3D .Poins := nil;
-     _Curve3S0.Poins := nil;
-     _Curve3S1.Poins := nil;
+     Ps := _Poins3S[ ComboBox1.ItemIndex ];
 
-     _Poins3S.Free;
+     for C in _Curve3S0 do C.Poins := Ps;
+     for C in _Curve3S1 do C.Poins := Ps;
 
-     case ComboBox1.ItemIndex of
-       0: _Poins3S := TPolyPoins3S04.Create;
-       1: _Poins3S := TPolyPoins3S06.Create;
-       2: _Poins3S := TPolyPoins3S08.Create;
-       3: _Poins3S := TPolyPoins3S12.Create;
-       4: _Poins3S := TPolyPoins3S20.Create;
-     end;
+     _Poins3D.Poins := Ps;
+end;
 
-     _Poins3D .Poins := _Poins3S;
-     _Curve3S0.Poins := _Poins3S;
-     _Curve3S1.Poins := _Poins3S;
+//------------------------------------------------------------------------------
+
+procedure TForm1.ComboBoxCUAChange(Sender: TObject);
+begin
+     TabControlCU.TabIndex := ComboBoxCUA.ItemIndex;
+
+     _Plots3S0.Curve := _Curve3S0[ ComboBoxCUA.ItemIndex ];
+end;
+
+//------------------------------------------------------------------------------
+
+procedure TForm1.ComboBoxCLAChange(Sender: TObject);
+begin
+     TabControlCL.TabIndex := ComboBoxCLA.ItemIndex;
+
+     _Plots3S1.Curve := _Curve3S1[ ComboBoxCLA.ItemIndex ];
+end;
+
+//------------------------------------------------------------------------------
+
+procedure TForm1.SpinBoxCU1DChange(Sender: TObject);
+begin
+     TCurveBezier ( _Curve3S0[ 1 ] ).DegN := Round( SpinBoxCU1D.Value );
+end;
+
+procedure TForm1.SpinBoxCU2DChange(Sender: TObject);
+begin
+     TCurveBSpline( _Curve3S0[ 2 ] ).DegN := Round( SpinBoxCU2D.Value );
+end;
+
+//------------------------------------------------------------------------------
+
+procedure TForm1.SpinBoxCL1DChange(Sender: TObject);
+begin
+     TCurveBezier ( _Curve3S1[ 1 ] ).DegN := Round( SpinBoxCL1D.Value );
+end;
+
+procedure TForm1.SpinBoxCL2DChange(Sender: TObject);
+begin
+     TCurveBSpline( _Curve3S1[ 2 ] ).DegN := Round( SpinBoxCL2D.Value );
 end;
 
 end. //######################################################################### Å°
