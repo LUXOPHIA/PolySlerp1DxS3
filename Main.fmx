@@ -1,0 +1,90 @@
+object Form1: TForm1
+  Left = 0
+  Top = 0
+  Caption = 'Quaternion Curve'
+  ClientHeight = 520
+  ClientWidth = 630
+  Position = ScreenCenter
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  DesignerMasterStyle = 0
+  object Viewport3D1: TViewport3D
+    Align = Client
+    Color = claBlack
+    Margins.Left = 10.000000000000000000
+    Margins.Top = 10.000000000000000000
+    Margins.Right = 10.000000000000000000
+    Margins.Bottom = 10.000000000000000000
+    Size.Width = 500.000000000000000000
+    Size.Height = 500.000000000000000000
+    Size.PlatformDefault = False
+    UsingDesignCamera = False
+    OnMouseDown = Viewport3D1MouseDown
+    OnMouseMove = Viewport3D1MouseMove
+    OnMouseUp = Viewport3D1MouseUp
+  end
+  object Panel1: TPanel
+    Align = Right
+    Margins.Left = -10.000000000000000000
+    Position.X = 510.000000000000000000
+    Size.Width = 120.000000000000000000
+    Size.Height = 520.000000000000000000
+    Size.PlatformDefault = False
+    StyleLookup = 'pushpanel'
+    TabOrder = 2
+    object Button1: TButton
+      Position.X = 10.000000000000000000
+      Position.Y = 40.000000000000000000
+      Size.Width = 100.000000000000000000
+      Size.Height = 50.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      Text = 'Random'
+      TextSettings.Trimming = None
+    end
+    object Memo1: TMemo
+      Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+      DataDetectorTypes = []
+      Align = Vertical
+      Margins.Top = 100.000000000000000000
+      Margins.Bottom = 10.000000000000000000
+      Position.X = 10.000000000000000000
+      Position.Y = 100.000000000000000000
+      Size.Width = 100.000000000000000000
+      Size.Height = 410.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 2
+      Viewport.Width = 96.000000000000000000
+      Viewport.Height = 406.000000000000000000
+    end
+    object ComboBox1: TComboBox
+      Items.Strings = (
+        '04'
+        '06'
+        '08'
+        '12'
+        '20')
+      ItemIndex = 4
+      Position.X = 60.000000000000000000
+      Position.Y = 10.000000000000000000
+      Size.Width = 50.000000000000000000
+      Size.Height = 20.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 3
+      OnChange = ComboBox1Change
+    end
+    object Label1: TLabel
+      Position.X = 10.000000000000000000
+      Position.Y = 10.000000000000000000
+      Size.Width = 40.000000000000000000
+      Size.Height = 20.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.HorzAlign = Trailing
+      Text = 'Points: '
+      TabOrder = 4
+    end
+  end
+end
