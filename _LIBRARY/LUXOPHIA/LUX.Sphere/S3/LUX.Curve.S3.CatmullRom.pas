@@ -43,7 +43,8 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 implementation //############################################################### ■
 
-uses LIB.Curve.CatmullRom;
+uses LUX.D4,
+     LIB.Curve.CatmullRom;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R E C O R D 】
 
@@ -59,23 +60,14 @@ uses LIB.Curve.CatmullRom;
 
 function TCurveCatmullRomREC.Segment( const i:Integer; const t:Double ) :TDouble3S;
 var
-   P0, P1, P2, P3,
-   P01, P12, P23,
-   P012, P123 :TDouble3S;
+   P0, P1, P2, P3 :TDouble3S;
 begin
      P0 := _Poins[ i-1 ];
      P1 := _Poins[ i   ];
      P2 := _Poins[ i+1 ];
      P3 := _Poins[ i+2 ];
 
-     P01 := Slerp( P0, P1, t + 1 );
-     P12 := Slerp( P1, P2, t     );
-     P23 := Slerp( P2, P3, t - 1 );
-
-     P012 := Slerp( P01, P12, ( t + 1 ) / 2 );
-     P123 := Slerp( P12, P23,   t       / 2 );
-
-     Result := Slerp( P012, P123, t );
+     Result := TDoubleCatmullRom<TDouble3S>.CurveREC( P0,P1,P2,P3, t, Slerp );
 end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveCatmullRomPOL
@@ -86,23 +78,17 @@ end;
 
 function TCurveCatmullRomPOL.Segment( const i:Integer; const t:Double ) :TDouble3S;
 var
-   P0, P1, P2, P3 :TDouble3S;
-   W0, W1, W2, W3 :Double;
+   Ws :TDouble4D;
+   P1, P2, P3, P4 :TDouble3Sw;
 begin
-     P0 := _Poins[ i-1 ];
-     P1 := _Poins[ i   ];
-     P2 := _Poins[ i+1 ];
-     P3 := _Poins[ i+2 ];
+     Ws := CatmullRom( t );
 
-     W0 := ( ( -0.5 * t + 1.0 ) * t - 0.5 ) * t      ;
-     W1 := ( ( +1.5 * t - 2.5 ) * t       ) * t + 1.0;
-     W2 := ( ( -1.5 * t + 2.0 ) * t + 0.5 ) * t      ;
-     W3 := ( ( +0.5 * t - 0.5 ) * t       ) * t      ;
+     P1 := TDouble3Sw.Create( _Poins[ i-1 ], Ws[1] );
+     P2 := TDouble3Sw.Create( _Poins[ i   ], Ws[2] );
+     P3 := TDouble3Sw.Create( _Poins[ i+1 ], Ws[3] );
+     P4 := TDouble3Sw.Create( _Poins[ i+2 ], Ws[4] );
 
-     Result := Sum1D( [ TDouble3Sw.Create( P0, W0 ),
-                        TDouble3Sw.Create( P1, W1 ),
-                        TDouble3Sw.Create( P2, W2 ),
-                        TDouble3Sw.Create( P3, W3 ) ] ).v;
+     Result := TDouble3S( Sum1D( [ P1, P2, P3, P4 ] ) );
 end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
