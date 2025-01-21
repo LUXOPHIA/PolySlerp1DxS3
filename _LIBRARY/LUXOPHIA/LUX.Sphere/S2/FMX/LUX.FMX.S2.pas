@@ -1,4 +1,4 @@
-﻿unit LUX.Sphere.FMX.S3;
+﻿unit LUX.FMX.S2;
 
 interface //#################################################################### ■
 
@@ -7,7 +7,7 @@ uses System.Types, System.SysUtils, System.RTLConsts, System.Classes,
      FMX.Types3D, FMX.Controls3D, FMX.MaterialSources,
      LUX, LUX.D3, LUX.Quaternion, LUX.D4x4,
      LUX.FMX.Graphics.D3,
-     LIB.Poins.S3;
+     LIB.Poins.S2;
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 T Y P E 】
 
@@ -22,7 +22,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      protected
        _Polygons :TMeshData;
        _Material :TLightMaterialSource;
-       _Poins    :TPoins3S;
+       _Poins    :TPoins2S;
        _Radius   :Single;
        _DotSize  :TSingle3D;
        _DivX     :Integer;
@@ -30,8 +30,8 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        ///// A C C E S S O R
        function GetMaterial :TLightMaterialSource;
        procedure UpPoins( Sender_:TObject );
-       function GetPoins :TPoins3S;
-       procedure SetPoins( const Poins_:TPoins3S );
+       function GetPoins :TPoins2S;
+       procedure SetPoins( const Poins_:TPoins2S );
        function GetRadius :Single;
        procedure SetRadius( const Radius_:Single );
        function GetDotSize :TSingle3D;
@@ -51,7 +51,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        destructor Destroy; override;
        ///// P R O P E R T Y
        property Material :TLightMaterialSource read GetMaterial                 ;
-       property Poins    :TPoins3S             read GetPoins    write SetPoins  ;
+       property Poins    :TPoins2S             read GetPoins    write SetPoins  ;
        property Radius   :Single               read GetRadius   write SetRadius ;
        property DotSize  :TSingle3D            read GetDotSize  write SetDotSize;
        property DivX     :Integer              read GetDivX     write SetDivX   ;
@@ -122,12 +122,12 @@ begin
      Repaint;
 end;
 
-function TPoins3D.GetPoins :TPoins3S;
+function TPoins3D.GetPoins :TPoins2S;
 begin
      Result := _Poins;
 end;
 
-procedure TPoins3D.SetPoins( const Poins_:TPoins3S );
+procedure TPoins3D.SetPoins( const Poins_:TPoins2S );
 begin
      if Assigned( _Poins ) then _Poins.OnChange.Del( UpPoins );
 
@@ -219,7 +219,7 @@ begin
      J := 0;
      for N := 0 to Poins.PoinsN-1 do
      begin
-          M := TSingleM4( TSingleQ( Poins[ N ] ) ) * M0;
+          M := TSingleM4( TSingleQ.Rotate( TSingle3D.IdentityY, Poins[ N ] ) ) * M0;
 
           AddSphereG( J, M, 0, 1 );
      end;
@@ -382,7 +382,7 @@ begin
      I := 0;
      for N := 0 to Poins.PoinsN-1 do
      begin
-          M := TSingleM4( TSingleQ( Poins[ N ] ) ) * M0;
+          M := TSingleM4( TSingleQ.Rotate( TSingle3D.IdentityY, Poins[ N ] ) ) * M0;
 
           AddSphereG( I, M, 0.5, 1 );
           AddDiskG( I, M );
@@ -452,7 +452,7 @@ begin
      I := 0;
      for N := 0 to Poins.PoinsN-1 do
      begin
-          M := TSingleM4( TSingleQ( Poins[ N ] ) ) * M0;
+          M := TSingleM4( TSingleQ.Rotate( TSingle3D.IdentityY, Poins[ N ] ) ) * M0;
 
           AddSphereG( I, M, 0.0, 0.5 );
           AddDiskG( I, M );
