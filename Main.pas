@@ -55,8 +55,8 @@ type
     procedure ComboBoxCUAChange(Sender: TObject);
     procedure ComboBoxCLAChange(Sender: TObject);
     procedure SpinBoxCU1DChange(Sender: TObject);
-    procedure SpinBoxCL1DChange(Sender: TObject);
     procedure SpinBoxCU2DChange(Sender: TObject);
+    procedure SpinBoxCL1DChange(Sender: TObject);
     procedure SpinBoxCL2DChange(Sender: TObject);
   private
     { private êÈåæ }
