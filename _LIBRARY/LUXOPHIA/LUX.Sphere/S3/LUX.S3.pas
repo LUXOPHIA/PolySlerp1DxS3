@@ -19,7 +19,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        v :TSingle3S;
        w :Single;
        /////
-       constructor Create( const P_:TSingle3S; const W_:Single );
+       constructor Create( const V_:TSingle3S; const W_:Single );
        ///// O P E R A T O R
        class operator Positive( const P_:TSingle3Sw ) :TSingle3Sw;
        class operator Negative( const P_:TSingle3Sw ) :TSingle3Sw;
@@ -28,6 +28,9 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        class operator Multiply( const A_:Single; const B_:TSingle3Sw ) :TSingle3Sw;
        class operator Multiply( const A_:TSingle3Sw; const B_:Single ) :TSingle3Sw;
        class operator Divide( const A_:TSingle3Sw; const B_:Single ) :TSingle3Sw;
+       ///// C A S T
+       class operator Implicit( const V_:TSingle3S ) :TSingle3Sw;
+       class operator Explicit( const S_:TSingle3Sw ) :TSingle3S;
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TDouble3Sw
@@ -38,7 +41,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        v :TDouble3S;
        w :Double;
        /////
-       constructor Create( const P_:TDouble3S; const W_:Double );
+       constructor Create( const V_:TDouble3S; const W_:Double );
        ///// O P E R A T O R
        class operator Positive( const P_:TDouble3Sw ) :TDouble3Sw;
        class operator Negative( const P_:TDouble3Sw ) :TDouble3Sw;
@@ -47,6 +50,9 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        class operator Multiply( const A_:Double; const B_:TDouble3Sw ) :TDouble3Sw;
        class operator Multiply( const A_:TDouble3Sw; const B_:Double ) :TDouble3Sw;
        class operator Divide( const A_:TDouble3Sw; const B_:Double ) :TDouble3Sw;
+       ///// C A S T
+       class operator Implicit( const V_:TDouble3S ) :TDouble3Sw;
+       class operator Explicit( const S_:TDouble3Sw ) :TDouble3S;
      end;
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C L A S S 】
@@ -102,9 +108,9 @@ uses System.Math,
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TSingle3Sw
 
-constructor TSingle3Sw.Create( const P_:TSingle3S; const W_:Single );
+constructor TSingle3Sw.Create( const V_:TSingle3S; const W_:Single );
 begin
-     v := P_;
+     v := V_;
      w := W_;
 end;
 
@@ -150,13 +156,26 @@ begin
      Result.w := A_.w / B_;
 end;
 
+//////////////////////////////////////////////////////////////////////// C A S T
+
+class operator TSingle3Sw.Implicit( const V_:TSingle3S ) :TSingle3Sw;
+begin
+     Result.v := V_;
+     Result.w := 1 ;
+end;
+
+class operator TSingle3Sw.Explicit( const S_:TSingle3Sw ) :TSingle3S;
+begin
+     Result := S_.v;
+end;
+
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TDouble3Sw
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-constructor TDouble3Sw.Create( const P_:TDouble3S; const W_:Double );
+constructor TDouble3Sw.Create( const V_:TDouble3S; const W_:Double );
 begin
-     v := P_;
+     v := V_;
      w := W_;
 end;
 
@@ -200,6 +219,19 @@ class operator TDouble3Sw.Divide( const A_:TDouble3Sw; const B_:Double ) :TDoubl
 begin
      Result.v := A_.v     ;
      Result.w := A_.w / B_;
+end;
+
+//////////////////////////////////////////////////////////////////////// C A S T
+
+class operator TDouble3Sw.Implicit( const V_:TDouble3S ) :TDouble3Sw;
+begin
+     Result.v := V_;
+     Result.w := 1 ;
+end;
+
+class operator TDouble3Sw.Explicit( const S_:TDouble3Sw ) :TDouble3S;
+begin
+     Result := S_.v;
 end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C L A S S 】
