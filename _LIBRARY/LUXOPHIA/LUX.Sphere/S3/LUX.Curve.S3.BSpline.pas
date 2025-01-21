@@ -91,23 +91,13 @@ end;
 function TCurveBSplineREC.Segment( const i:Integer; const t:Double ) :TDouble3S;
 var
    Ps :TArray<TDouble3S>;
-   N, L :Integer;
-   S :Double;
+   J :Integer;
 begin
      SetLength( Ps, DegN+1 );
-     for N := 0 to DegN do Ps[ N ] := _Poins[ i + N ];
 
-     for L := DegN-1 downto 0 do
-     begin
-          for N := 0 to L do
-          begin
-               S := ( t + L - N ) / ( L + 1 );
+     for J := 0 to DegN do Ps[ J ] := _Poins[ i + J ];
 
-               Ps[ N ] := Slerp( Ps[ N ], Ps[ N+1 ], S );
-          end;
-     end;
-
-     Result := Ps[ 0 ];
+     Result := TDoubleBSpline<TDouble3S>.CurveREC( Ps, t, DegN, Slerp );
 end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveBSplinePOL
@@ -118,20 +108,14 @@ end;
 
 function TCurveBSplinePOL.Segment( const i:Integer; const t:Double ) :TDouble3S;
 var
-   N :Integer;
    Ps :TArray<TDouble3Sw>;
+   J :Integer;
 begin
      SetLength( Ps, DegN+1 );
-     for N := 0 to DegN do
-     begin
-          with Ps[ N ] do
-          begin
-               v := _Poins[ i+N ];
-               w := BSpline( DegN, N, t );
-          end;
-     end;
 
-     Result := Sum1D( Ps ).v;
+     for J := 0 to DegN do Ps[ J ] := TDouble3Sw.Create( _Poins[ i+J ], BSpline( DegN, J, t ) );
+
+     Result := TDouble3S( Sum1D( Ps ) );
 end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】

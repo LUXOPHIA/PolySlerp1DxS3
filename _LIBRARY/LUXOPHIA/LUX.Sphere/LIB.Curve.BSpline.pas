@@ -2,11 +2,29 @@
 
 interface //#################################################################### ■
 
-//type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 T Y P E 】
+uses LIB.Curve;
+
+type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 T Y P E 】
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R E C O R D 】
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C L A S S 】
+
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TSingleBSpline<_TValue_>
+
+     TSingleBSpline<_TValue_> = class
+     public
+       ///// M E T H O D
+       class function CurveREC( Ps:TArray<_TValue_>; const t:Single; const DegN_:Integer; const Lerp_:TSingleLerp<_TValue_> ) :_TValue_;
+     end;
+
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TDoubleBSpline<_TValue_>
+
+     TDoubleBSpline<_TValue_> = class
+     public
+       ///// M E T H O D
+       class function CurveREC( Ps:TArray<_TValue_>; const t:Double; const DegN_:Integer; const Lerp_:TDoubleLerp<_TValue_> ) :_TValue_;
+     end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
 
@@ -21,6 +39,54 @@ implementation //###############################################################
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R E C O R D 】
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C L A S S 】
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TSingleBSpline<_TValue_>
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+
+//////////////////////////////////////////////////////////////////// M E T H O D
+
+class function TSingleBSpline<_TValue_>.CurveREC( Ps:TArray<_TValue_>; const t:Single; const DegN_:Integer; const Lerp_:TSingleLerp<_TValue_> ) :_TValue_;
+var
+   N, I :Integer;
+   S :Single;
+begin
+     for N := DegN_-1 downto 0 do
+     begin
+          for I := 0 to N do
+          begin
+               S := ( t + N - I ) / ( N + 1 );
+
+               Ps[ I ] := Lerp_( Ps[ I ], Ps[ I+1 ], S );
+          end;
+     end;
+
+     Result := Ps[ 0 ];
+end;
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TDoubleBSpline<_TValue_>
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+
+//////////////////////////////////////////////////////////////////// M E T H O D
+
+class function TDoubleBSpline<_TValue_>.CurveREC( Ps:TArray<_TValue_>; const t:Double; const DegN_:Integer; const Lerp_:TDoubleLerp<_TValue_> ) :_TValue_;
+var
+   N, I :Integer;
+   S :Double;
+begin
+     for N := DegN_-1 downto 0 do
+     begin
+          for I := 0 to N do
+          begin
+               S := ( t + N - I ) / ( N + 1 );
+
+               Ps[ I ] := Lerp_( Ps[ I ], Ps[ I+1 ], S );
+          end;
+     end;
+
+     Result := Ps[ 0 ];
+end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
 
