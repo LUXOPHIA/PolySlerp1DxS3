@@ -1,4 +1,4 @@
-﻿unit LUX.Curve.BSpline;
+﻿unit LIB.Curve.BSpline;
 
 interface //#################################################################### ■
 
