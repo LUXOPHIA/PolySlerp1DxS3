@@ -33,11 +33,11 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        destructor Destroy; override;
      end;
 
-     TPolyhedron4  = TPolyPoins3S<LUX.Poins.S2.TPolyhedron4>;
-     TPolyhedron6  = TPolyPoins3S<LUX.Poins.S2.TPolyhedron6>;
-     TPolyhedron8  = TPolyPoins3S<LUX.Poins.S2.TPolyhedron8>;
-     TPolyhedron12 = TPolyPoins3S<LUX.Poins.S2.TPolyhedron12>;
-     TPolyhedron20 = TPolyPoins3S<LUX.Poins.S2.TPolyhedron20>;
+     TPolyPoins3S04 = TPolyPoins3S<TPolyPoins2S04>;
+     TPolyPoins3S06 = TPolyPoins3S<TPolyPoins2S06>;
+     TPolyPoins3S08 = TPolyPoins3S<TPolyPoins2S08>;
+     TPolyPoins3S12 = TPolyPoins3S<TPolyPoins2S12>;
+     TPolyPoins3S20 = TPolyPoins3S<TPolyPoins2S20>;
 
 //const //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C O N S T A N T 】
 
