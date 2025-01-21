@@ -55,7 +55,7 @@ implementation //###############################################################
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
-     _Poins3S := TPolyhedron12.Create;
+     _Poins3S := TPolyPoins3S20.Create;
 
      _Curve3S0 := TCurveBSplineREC.Create( _Poins3S );
      _Curve3S1 := TCurveBSplinePOL.Create( _Poins3S );
@@ -118,11 +118,11 @@ begin
      _Poins3S.Free;
 
      case ComboBox1.ItemIndex of
-       0: _Poins3S := TPolyhedron4 .Create;
-       1: _Poins3S := TPolyhedron8 .Create;
-       2: _Poins3S := TPolyhedron6 .Create;
-       3: _Poins3S := TPolyhedron20.Create;
-       4: _Poins3S := TPolyhedron12.Create;
+       0: _Poins3S := TPolyPoins3S04.Create;
+       1: _Poins3S := TPolyPoins3S06.Create;
+       2: _Poins3S := TPolyPoins3S08.Create;
+       3: _Poins3S := TPolyPoins3S12.Create;
+       4: _Poins3S := TPolyPoins3S20.Create;
      end;
 
      _Poins3D .Poins := _Poins3S;
