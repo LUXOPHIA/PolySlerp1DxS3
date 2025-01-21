@@ -44,7 +44,7 @@ uses System.Math,
 
 function TPlots2S.Distance( const P0_,P1_:TDouble2S ) :Double;
 begin
-     Result := ArcCos( DotProduct( P0_, P1_ ) );
+     Result := Angle( P0_, P1_ );
 end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
