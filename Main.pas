@@ -5,10 +5,8 @@ interface //####################################################################
 uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   System.Math, System.Math.Vectors, System.Generics.Collections,
-  FMX.Forms, FMX.Memo.Types, FMX.ScrollBox, FMX.Memo, FMX.StdCtrls,
-  FMX.Controls, FMX.Controls.Presentation, FMX.Types, FMX.Viewport3D,
-  FMX.ExtCtrls, FMX.ListBox,
-  LUX.S3,
+  FMX.Forms, FMX.Edit, FMX.EditBox, FMX.SpinBox, FMX.Controls, FMX.TabControl,
+  FMX.StdCtrls, FMX.ListBox, FMX.Controls.Presentation, FMX.Types, FMX.Viewport3D,
   LUX.Poins.S3,
   LUX.Poins.Plots.S3,
   LUX.Curve.S3,
@@ -16,7 +14,7 @@ uses
   LUX.Curve.S3.Bezier,
   LUX.Curve.S3.BSpline,
   LUX.Curve.S3.CatmullRom,
-  Scene, FMX.TabControl, FMX.Edit, FMX.EditBox, FMX.SpinBox;
+  Scene;
 
 type
   TForm1 = class(TForm)
