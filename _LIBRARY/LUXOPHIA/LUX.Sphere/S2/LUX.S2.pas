@@ -28,6 +28,9 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        class operator Multiply( const A_:Single; const B_:TSingle2Sw ) :TSingle2Sw;
        class operator Multiply( const A_:TSingle2Sw; const B_:Single ) :TSingle2Sw;
        class operator Divide( const A_:TSingle2Sw; const B_:Single ) :TSingle2Sw;
+       ///// C A S T
+       class operator Implicit( const V_:TSingle2S ) :TSingle2Sw;
+       class operator Explicit( const S_:TSingle2Sw ) :TSingle2S;
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TDouble2Sw
@@ -47,6 +50,9 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        class operator Multiply( const A_:Double; const B_:TDouble2Sw ) :TDouble2Sw;
        class operator Multiply( const A_:TDouble2Sw; const B_:Double ) :TDouble2Sw;
        class operator Divide( const A_:TDouble2Sw; const B_:Double ) :TDouble2Sw;
+       ///// C A S T
+       class operator Implicit( const V_:TDouble2S ) :TDouble2Sw;
+       class operator Explicit( const S_:TDouble2Sw ) :TDouble2S;
      end;
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C L A S S 】
@@ -145,7 +151,20 @@ begin
      Result.w := A_.w / B_;
 end;
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TDouble2Sw
+//////////////////////////////////////////////////////////////////////// C A S T
+
+class operator TSingle2Sw.Implicit( const V_:TSingle2S ) :TSingle2Sw;
+begin
+     Result.v := V_;
+     Result.w := 1 ;
+end;
+
+class operator TSingle2Sw.Explicit( const S_:TSingle2Sw ) :TSingle2S;
+begin
+     Result := S_.v;
+end;
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TDouble3Sw
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
@@ -195,6 +214,19 @@ class operator TDouble2Sw.Divide( const A_:TDouble2Sw; const B_:Double ) :TDoubl
 begin
      Result.v := A_.v     ;
      Result.w := A_.w / B_;
+end;
+
+//////////////////////////////////////////////////////////////////////// C A S T
+
+class operator TDouble2Sw.Implicit( const V_:TDouble2S ) :TDouble2Sw;
+begin
+     Result.v := V_;
+     Result.w := 1 ;
+end;
+
+class operator TDouble2Sw.Explicit( const S_:TDouble2Sw ) :TDouble2S;
+begin
+     Result := S_.v;
 end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C L A S S 】
