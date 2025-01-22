@@ -34,7 +34,7 @@ type //$$$$$$$$$&&$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        ///// P R O P E R T Y
        property Poins :TPoins<_TPoin_> read GetPoins write SetPoins;
        ///// M E T H O D
-       function Value( const X_:Double ) :_TPoin_;
+       function Value( const X_:Double ) :_TPoin_; virtual;
        ///// E V E N T
        property OnChange :TDelegates read _OnChange;
      end;

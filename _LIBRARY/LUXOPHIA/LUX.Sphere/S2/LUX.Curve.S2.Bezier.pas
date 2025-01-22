@@ -21,7 +21,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      private
      protected
        ///// M E T H O D
-       function Segment2( const i:Integer; const t:Double ) :TDouble2S; override;
+       function Segment( const i:Integer; const t:Double ) :TDouble2S; override;
      public
      end;
 
@@ -31,7 +31,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      private
      protected
        ///// M E T H O D
-       function Segment2( const i:Integer; const t:Double ) :TDouble2S; override;
+       function Segment( const i:Integer; const t:Double ) :TDouble2S; override;
      public
      end;
 
@@ -49,7 +49,7 @@ implementation //###############################################################
 
 //////////////////////////////////////////////////////////////////// M E T H O D
 
-function TCurveBezierREC.Segment2( const i:Integer; const t:Double ) :TDouble2S;
+function TCurveBezierREC.Segment( const i:Integer; const t:Double ) :TDouble2S;
 var
    Ps :TArray<TDouble2S>;
    J :Integer;
@@ -67,7 +67,7 @@ end;
 
 //////////////////////////////////////////////////////////////////// M E T H O D
 
-function TCurveBezierAVE.Segment2( const i:Integer; const t:Double ) :TDouble2S;
+function TCurveBezierAVE.Segment( const i:Integer; const t:Double ) :TDouble2S;
 var
    Ps :TArray<TDouble2Sw>;
    J :Integer;
