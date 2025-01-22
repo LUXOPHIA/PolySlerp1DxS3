@@ -11,17 +11,9 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C L A S S 】
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TSingleCatmullRom<_TValue_>
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveCatmullRom<_TValue_>
 
-     TSingleCatmullRom<_TPoin_> = class
-     public
-       ///// M E T H O D
-       class function CurveREC( Ps:TArray<_TPoin_>; const t:Single; const Lerp_:TSingleLerp<_TPoin_> ) :_TPoin_;
-     end;
-
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TDoubleCatmullRom<_TValue_>
-
-     TDoubleCatmullRom<_TPoin_> = class
+     TCurveCatmullRom<_TPoin_> = class( TCurve<_TPoin_> )
      public
        ///// M E T H O D
        class function CurveREC( Ps:TArray<_TPoin_>; const t:Double; const Lerp_:TDoubleLerp<_TPoin_> ) :_TPoin_;
@@ -38,33 +30,13 @@ implementation //###############################################################
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C L A S S 】
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TSingleCatmullRom<_TValue_>
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveCatmullRom<_TValue_>
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
 //////////////////////////////////////////////////////////////////// M E T H O D
 
-class function TSingleCatmullRom<_TPoin_>.CurveREC( Ps:TArray<_TPoin_>; const t:Single; const Lerp_:TSingleLerp<_TPoin_> ) :_TPoin_;
-begin
-     Ps[0] := Lerp_( Ps[0], Ps[1],   t + 1       );
-     Ps[1] := Lerp_( Ps[1], Ps[2],   t           );
-     Ps[2] := Lerp_( Ps[2], Ps[3],   t - 1       );
-
-     Ps[0] := Lerp_( Ps[0], Ps[1], ( t + 1 ) / 2 );
-     Ps[1] := Lerp_( Ps[1], Ps[2],   t       / 2 );
-
-     Ps[0] := Lerp_( Ps[0], Ps[1],   t           );
-
-     Result := Ps[0];
-end;
-
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TDoubleCatmullRom<_TValue_>
-
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
-
-//////////////////////////////////////////////////////////////////// M E T H O D
-
-class function TDoubleCatmullRom<_TPoin_>.CurveREC( Ps:TArray<_TPoin_>; const t:Double; const Lerp_:TDoubleLerp<_TPoin_> ) :_TPoin_;
+class function TCurveCatmullRom<_TPoin_>.CurveREC( Ps:TArray<_TPoin_>; const t:Double; const Lerp_:TDoubleLerp<_TPoin_> ) :_TPoin_;
 begin
      Ps[0] := Lerp_( Ps[0], Ps[1],   t + 1       );
      Ps[1] := Lerp_( Ps[1], Ps[2],   t           );

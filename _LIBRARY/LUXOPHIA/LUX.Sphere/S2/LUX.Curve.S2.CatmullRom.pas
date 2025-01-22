@@ -2,26 +2,21 @@
 
 interface //#################################################################### ■
 
-uses LUX.S2,
+uses LIB.Curve.CatmullRom,
+     LUX.S2,
      LUX.Curve.S2;
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 T Y P E 】
+
+     TCurveCatmullRom2S = TCurveCatmullRom<TDouble2S>;
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R E C O R D 】
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C L A S S 】
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveCatmullRom
-
-     TCurveCatmullRom = class( TCurve2S )
-     private
-     protected
-     public
-     end;
-
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveCatmullRomREC
 
-     TCurveCatmullRomREC = class( TCurveCatmullRom )
+     TCurveCatmullRomREC = class( TCurveCatmullRom2S )
      private
      protected
        ///// M E T H O D
@@ -31,7 +26,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveCatmullRomAVE
 
-     TCurveCatmullRomAVE = class( TCurveCatmullRom )
+     TCurveCatmullRomAVE = class( TCurveCatmullRom2S )
      private
      protected
        ///// M E T H O D
@@ -43,8 +38,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 implementation //############################################################### ■
 
-uses LUX.D4,
-     LIB.Curve.CatmullRom;
+uses LUX.D4;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R E C O R D 】
 
@@ -69,7 +63,7 @@ begin
      Ps[2] := _Poins[ i+1 ];
      Ps[3] := _Poins[ i+2 ];
 
-     Result := TDoubleCatmullRom<TDouble2S>.CurveREC( Ps, t, Slerp );
+     Result := CurveREC( Ps, t, Slerp );
 end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveCatmullRomAVE
