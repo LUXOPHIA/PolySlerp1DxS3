@@ -21,7 +21,6 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      private
        ///// M E T H O D
        function BSpline4( P1,P2,P3,P4,P5:TDouble3S ) :TDouble3S;
-       function BSpline5( P1,P2,P3,P4,P5:TDouble3S ): TDouble3S;
      protected
        _Poins2S :_TPoins_;
        ///// A C C E S S O R
@@ -59,10 +58,10 @@ uses LUX, LUX.D3, LUX.Quaternion, LUX.Curve.S3.BSpline;
 
 //////////////////////////////////////////////////////////////////// M E T H O D
 
-//    |-----+-----+--|--+-----+-----| :Basis Function
-//                0     1
-// +-----+-----+--===+===--+-----+-----+-----+ :Poins
-// 0    [1]   [2]   [3]   [4]   [5]    6     7
+//    |-----+-----+--|--+-----+-----|    :Basis Function
+//                0-----1                : t
+// +-----+-----+--===+===--+-----+-----+ :Poins
+// 0    [1]   [2]   [3]   [4]   [5]    6
 
 function TPolyPoins3S<_TPoins_>.BSpline4( P1,P2,P3,P4,P5:TDouble3S ) :TDouble3S;  // DegN = 4, t = 1/2
 begin
@@ -77,30 +76,6 @@ begin
 
      P1 := Slerp( P1, P2, 3/4 );
      P2 := Slerp( P2, P3, 1/4 );
-
-     P1 := Slerp( P1, P2, 1/2 );
-
-     Result := P1;
-end;
-
-// |-----+-----+-----|-----+-----+-----| :Basis Function
-//                   0     1
-// +-----+-----+-----+=====+-----+-----+-----+ :Poins
-// 0    [1]   [2]   [3]   [4]   [5]    6     7
-
-function TPolyPoins3S<_TPoins_>.BSpline5( P1,P2,P3,P4,P5:TDouble3S ): TDouble3S;  // DegN = 5, t = 0
-begin
-     P1 := Slerp( P1, P2, 4/5 );
-     P2 := Slerp( P2, P3, 3/5 );
-     P3 := Slerp( P3, P4, 2/5 );
-     P4 := Slerp( P4, P5, 1/5 );
-
-     P1 := Slerp( P1, P2, 3/4 );
-     P2 := Slerp( P2, P3, 2/4 );
-     P3 := Slerp( P3, P4, 1/4 );
-
-     P1 := Slerp( P1, P2, 2/3 );
-     P2 := Slerp( P2, P3, 1/3 );
 
      P1 := Slerp( P1, P2, 1/2 );
 
