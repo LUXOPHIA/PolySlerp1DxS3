@@ -37,9 +37,9 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      public
      end;
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveBSplinePOL
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveBSplineAVE
 
-     TCurveBSplinePOL = class( TCurveBSpline )
+     TCurveBSplineAVE = class( TCurveBSpline )
      private
      protected
        ///// M E T H O D
@@ -100,13 +100,13 @@ begin
      Result := TDoubleBSpline<TDouble3S>.CurveREC( Ps, t, DegN, Slerp );
 end;
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveBSplinePOL
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveBSplineAVE
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
 
 //////////////////////////////////////////////////////////////////// M E T H O D
 
-function TCurveBSplinePOL.Segment( const i:Integer; const t:Double ) :TDouble3S;
+function TCurveBSplineAVE.Segment( const i:Integer; const t:Double ) :TDouble3S;
 var
    Ps :TArray<TDouble3Sw>;
    J :Integer;

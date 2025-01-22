@@ -29,9 +29,9 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      public
      end;
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveLinearPOL
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveLinearAVE
 
-     TCurveLinearPOL = class( TCurveLinear )
+     TCurveLinearAVE = class( TCurveLinear )
      private
      protected
        ///// M E T H O D
@@ -65,13 +65,13 @@ begin
      Result := Slerp( P0, P1, t );
 end;
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveLinearPOL
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveLinearAVE
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
 
 //////////////////////////////////////////////////////////////////// M E T H O D
 
-function TCurveLinearPOL.Segment( const i:Integer; const t:Double ) :TDouble3S;
+function TCurveLinearAVE.Segment( const i:Integer; const t:Double ) :TDouble3S;
 var
    P0, P1 :TDouble3Sw;
 begin
