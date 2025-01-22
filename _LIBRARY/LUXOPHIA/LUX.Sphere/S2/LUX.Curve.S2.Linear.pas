@@ -73,12 +73,14 @@ end;
 
 function TCurveLinearAVE.Segment( const i:Integer; const t:Double ) :TDouble2S;
 var
-   P0, P1 :TDouble2Sw;
+   Ps :TArray<TDouble2Sw>;
 begin
-     P0 := TDouble2Sw.Create( _Poins[ i   ], 1 - t );
-     P1 := TDouble2Sw.Create( _Poins[ i+1 ],     t );
+     SetLength( Ps, 2 );
 
-     Result := TDouble2S( Sum1D( [ P0, P1 ] ) );
+     Ps[0] := TDouble2Sw.Create( _Poins[ i   ], 1 - t );
+     Ps[1] := TDouble2Sw.Create( _Poins[ i+1 ],     t );
+
+     Result := TDouble2S( Sum1D( Ps ) );
 end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
