@@ -40,9 +40,9 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      public
      end;
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveBezierPOL
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveBezierAVE
 
-     TCurveBezierPOL = class( TCurveBezier )
+     TCurveBezierAVE = class( TCurveBezier )
      private
      protected
        ///// M E T H O D
@@ -116,13 +116,13 @@ begin
      Result := TDoubleBezier<TDouble2S>.CurveREC( Ps, t, DegN, Slerp );
 end;
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveBezierPOL
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveBezierAVE
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
 
 //////////////////////////////////////////////////////////////////// M E T H O D
 
-function TCurveBezierPOL.Segment2( const i:Integer; const t:Double ) :TDouble2S;
+function TCurveBezierAVE.Segment2( const i:Integer; const t:Double ) :TDouble2S;
 var
    Ps :TArray<TDouble2Sw>;
    J :Integer;

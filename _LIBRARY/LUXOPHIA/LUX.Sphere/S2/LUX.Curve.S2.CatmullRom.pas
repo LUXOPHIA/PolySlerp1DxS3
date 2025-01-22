@@ -29,9 +29,9 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      public
      end;
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveCatmullRomPOL
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveCatmullRomAVE
 
-     TCurveCatmullRomPOL = class( TCurveCatmullRom )
+     TCurveCatmullRomAVE = class( TCurveCatmullRom )
      private
      protected
        ///// M E T H O D
@@ -70,13 +70,13 @@ begin
      Result := TDoubleCatmullRom<TDouble2S>.CurveREC( P0,P1,P2,P3, t, Slerp );
 end;
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveCatmullRomPOL
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveCatmullRomAVE
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
 
 //////////////////////////////////////////////////////////////////// M E T H O D
 
-function TCurveCatmullRomPOL.Segment( const i:Integer; const t:Double ) :TDouble2S;
+function TCurveCatmullRomAVE.Segment( const i:Integer; const t:Double ) :TDouble2S;
 var
    Ws :TDouble4D;
    P1, P2, P3, P4 :TDouble2Sw;
