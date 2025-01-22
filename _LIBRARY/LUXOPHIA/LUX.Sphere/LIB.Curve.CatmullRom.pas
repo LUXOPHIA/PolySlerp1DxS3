@@ -13,18 +13,18 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TSingleCatmullRom<_TValue_>
 
-     TSingleCatmullRom<_TValue_> = class
+     TSingleCatmullRom<_TPoin_> = class
      public
        ///// M E T H O D
-       class function CurveREC( Ps:TArray<_TValue_>; const t:Single; const Lerp_:TSingleLerp<_TValue_> ) :_TValue_;
+       class function CurveREC( Ps:TArray<_TPoin_>; const t:Single; const Lerp_:TSingleLerp<_TPoin_> ) :_TPoin_;
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TDoubleCatmullRom<_TValue_>
 
-     TDoubleCatmullRom<_TValue_> = class
+     TDoubleCatmullRom<_TPoin_> = class
      public
        ///// M E T H O D
-       class function CurveREC( Ps:TArray<_TValue_>; const t:Double; const Lerp_:TDoubleLerp<_TValue_> ) :_TValue_;
+       class function CurveREC( Ps:TArray<_TPoin_>; const t:Double; const Lerp_:TDoubleLerp<_TPoin_> ) :_TPoin_;
      end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
@@ -44,7 +44,7 @@ implementation //###############################################################
 
 //////////////////////////////////////////////////////////////////// M E T H O D
 
-class function TSingleCatmullRom<_TValue_>.CurveREC( Ps:TArray<_TValue_>; const t:Single; const Lerp_:TSingleLerp<_TValue_> ) :_TValue_;
+class function TSingleCatmullRom<_TPoin_>.CurveREC( Ps:TArray<_TPoin_>; const t:Single; const Lerp_:TSingleLerp<_TPoin_> ) :_TPoin_;
 begin
      Ps[0] := Lerp_( Ps[0], Ps[1],   t + 1       );
      Ps[1] := Lerp_( Ps[1], Ps[2],   t           );
@@ -64,7 +64,7 @@ end;
 
 //////////////////////////////////////////////////////////////////// M E T H O D
 
-class function TDoubleCatmullRom<_TValue_>.CurveREC( Ps:TArray<_TValue_>; const t:Double; const Lerp_:TDoubleLerp<_TValue_> ) :_TValue_;
+class function TDoubleCatmullRom<_TPoin_>.CurveREC( Ps:TArray<_TPoin_>; const t:Double; const Lerp_:TDoubleLerp<_TPoin_> ) :_TPoin_;
 begin
      Ps[0] := Lerp_( Ps[0], Ps[1],   t + 1       );
      Ps[1] := Lerp_( Ps[1], Ps[2],   t           );

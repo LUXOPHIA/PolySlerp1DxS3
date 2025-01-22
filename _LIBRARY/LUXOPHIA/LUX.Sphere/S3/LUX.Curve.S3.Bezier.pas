@@ -113,7 +113,7 @@ begin
 
      for J := 0 to DegN do Ps[ J ] := _Poins[ i + J ];
 
-     Result := TDoubleBezier<TDouble3S>.CurveREC( Ps, t, DegN, Slerp );
+     Result := TDoubleBezier<TDouble3S>.CurveREC( Ps, t, Slerp );
 end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveBezierAVE
