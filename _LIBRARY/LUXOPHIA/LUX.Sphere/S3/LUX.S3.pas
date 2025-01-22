@@ -88,6 +88,11 @@ function Slerp( const P1_,P2_:TDouble3S; const W1_,W2_:Double ) :TDouble3S; over
 function Slerp( const P1_,P2_:TSingle3Sw ) :TSingle3Sw; overload;
 function Slerp( const P1_,P2_:TDouble3Sw ) :TDouble3Sw; overload;
 
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% PowSlerp
+
+function PowSlerp( const Q0_,Q1_:TSingle3S; const T_:Single ) :TSingle3S; overload;
+function PowSlerp( const Q0_,Q1_:TDouble3S; const T_:Double ) :TDouble3S; overload;
+
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Sum1D
 
 function Sum1D( Ps_:TArray<TSingle3Sw> ) :TSingle3Sw; overload;
@@ -418,6 +423,18 @@ begin
                            + Sin( A * P2_.w ) * P2_.v ) / S;
           end;
      end;
+end;
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% PowSlerp
+
+function PowSlerp( const Q0_,Q1_:TSingle3S; const T_:Single ) :TSingle3S;
+begin
+     Result := Q0_ * Pow( Q0_.Inv * Q1_, T_ );
+end;
+
+function PowSlerp( const Q0_,Q1_:TDouble3S; const T_:Double ) :TDouble3S;
+begin
+     Result := Q0_ * Pow( Q0_.Inv * Q1_, T_ );
 end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Sum1D
