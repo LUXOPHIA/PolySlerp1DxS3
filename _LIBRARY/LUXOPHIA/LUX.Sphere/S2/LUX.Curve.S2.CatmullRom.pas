@@ -60,14 +60,16 @@ uses LUX.D4,
 
 function TCurveCatmullRomREC.Segment( const i:Integer; const t:Double ) :TDouble2S;
 var
-   P0, P1, P2, P3 :TDouble2S;
+   Ps :TArray<TDouble2S>;
 begin
-     P0 := _Poins[ i-1 ];
-     P1 := _Poins[ i   ];
-     P2 := _Poins[ i+1 ];
-     P3 := _Poins[ i+2 ];
+     SetLength( Ps, 4 );
 
-     Result := TDoubleCatmullRom<TDouble2S>.CurveREC( P0,P1,P2,P3, t, Slerp );
+     Ps[0] := _Poins[ i-1 ];
+     Ps[1] := _Poins[ i   ];
+     Ps[2] := _Poins[ i+1 ];
+     Ps[3] := _Poins[ i+2 ];
+
+     Result := TDoubleCatmullRom<TDouble2S>.CurveREC( Ps, t, Slerp );
 end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveCatmullRomAVE
@@ -79,16 +81,18 @@ end;
 function TCurveCatmullRomAVE.Segment( const i:Integer; const t:Double ) :TDouble2S;
 var
    Ws :TDouble4D;
-   P1, P2, P3, P4 :TDouble2Sw;
+   Ps :TArray<TDouble2Sw>;
 begin
      Ws := CatmullRom( t );
 
-     P1 := TDouble2Sw.Create( _Poins[ i-1 ], Ws[1] );
-     P2 := TDouble2Sw.Create( _Poins[ i   ], Ws[2] );
-     P3 := TDouble2Sw.Create( _Poins[ i+1 ], Ws[3] );
-     P4 := TDouble2Sw.Create( _Poins[ i+2 ], Ws[4] );
+     SetLength( Ps, 4 );
 
-     Result := TDouble2S( Sum1D( [ P1, P2, P3, P4 ] ) );
+     Ps[0] := TDouble2Sw.Create( _Poins[ i-1 ], Ws[1] );
+     Ps[1] := TDouble2Sw.Create( _Poins[ i   ], Ws[2] );
+     Ps[2] := TDouble2Sw.Create( _Poins[ i+1 ], Ws[3] );
+     Ps[3] := TDouble2Sw.Create( _Poins[ i+2 ], Ws[4] );
+
+     Result := TDouble2S( Sum1D( Ps ) );
 end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】

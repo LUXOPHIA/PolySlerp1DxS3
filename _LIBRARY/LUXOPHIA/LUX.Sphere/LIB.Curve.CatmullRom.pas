@@ -16,7 +16,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      TSingleCatmullRom<_TValue_> = class
      public
        ///// M E T H O D
-       class function CurveREC( P0,P1,P2,P3:_TValue_; const t:Single; const Lerp_:TSingleLerp<_TValue_> ) :_TValue_;
+       class function CurveREC( Ps:TArray<_TValue_>; const t:Single; const Lerp_:TSingleLerp<_TValue_> ) :_TValue_;
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TDoubleCatmullRom<_TValue_>
@@ -24,7 +24,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      TDoubleCatmullRom<_TValue_> = class
      public
        ///// M E T H O D
-       class function CurveREC( P0,P1,P2,P3:_TValue_; const t:Double; const Lerp_:TDoubleLerp<_TValue_> ) :_TValue_;
+       class function CurveREC( Ps:TArray<_TValue_>; const t:Double; const Lerp_:TDoubleLerp<_TValue_> ) :_TValue_;
      end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
@@ -44,18 +44,18 @@ implementation //###############################################################
 
 //////////////////////////////////////////////////////////////////// M E T H O D
 
-class function TSingleCatmullRom<_TValue_>.CurveREC( P0,P1,P2,P3:_TValue_; const t:Single; const Lerp_:TSingleLerp<_TValue_> ) :_TValue_;
+class function TSingleCatmullRom<_TValue_>.CurveREC( Ps:TArray<_TValue_>; const t:Single; const Lerp_:TSingleLerp<_TValue_> ) :_TValue_;
 begin
-     P0 := Lerp_( P0, P1,   t + 1       );
-     P1 := Lerp_( P1, P2,   t           );
-     P2 := Lerp_( P2, P3,   t - 1       );
+     Ps[0] := Lerp_( Ps[0], Ps[1],   t + 1       );
+     Ps[1] := Lerp_( Ps[1], Ps[2],   t           );
+     Ps[2] := Lerp_( Ps[2], Ps[3],   t - 1       );
 
-     P0 := Lerp_( P0, P1, ( t + 1 ) / 2 );
-     P1 := Lerp_( P1, P2,   t       / 2 );
+     Ps[0] := Lerp_( Ps[0], Ps[1], ( t + 1 ) / 2 );
+     Ps[1] := Lerp_( Ps[1], Ps[2],   t       / 2 );
 
-     P0 := Lerp_( P0, P1,   t           );
+     Ps[0] := Lerp_( Ps[0], Ps[1],   t           );
 
-     Result := P0;
+     Result := Ps[0];
 end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TDoubleCatmullRom<_TValue_>
@@ -64,18 +64,18 @@ end;
 
 //////////////////////////////////////////////////////////////////// M E T H O D
 
-class function TDoubleCatmullRom<_TValue_>.CurveREC( P0,P1,P2,P3:_TValue_; const t:Double; const Lerp_:TDoubleLerp<_TValue_> ) :_TValue_;
+class function TDoubleCatmullRom<_TValue_>.CurveREC( Ps:TArray<_TValue_>; const t:Double; const Lerp_:TDoubleLerp<_TValue_> ) :_TValue_;
 begin
-     P0 := Lerp_( P0, P1,   t + 1       );
-     P1 := Lerp_( P1, P2,   t           );
-     P2 := Lerp_( P2, P3,   t - 1       );
+     Ps[0] := Lerp_( Ps[0], Ps[1],   t + 1       );
+     Ps[1] := Lerp_( Ps[1], Ps[2],   t           );
+     Ps[2] := Lerp_( Ps[2], Ps[3],   t - 1       );
 
-     P0 := Lerp_( P0, P1, ( t + 1 ) / 2 );
-     P1 := Lerp_( P1, P2,   t       / 2 );
+     Ps[0] := Lerp_( Ps[0], Ps[1], ( t + 1 ) / 2 );
+     Ps[1] := Lerp_( Ps[1], Ps[2],   t       / 2 );
 
-     P0 := Lerp_( P0, P1,   t           );
+     Ps[0] := Lerp_( Ps[0], Ps[1],   t           );
 
-     Result := P0;
+     Result := Ps[0];
 end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
