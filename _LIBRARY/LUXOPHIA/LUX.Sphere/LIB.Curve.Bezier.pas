@@ -2,7 +2,8 @@
 
 interface //#################################################################### ■
 
-uses LIB.Curve;
+uses LIB.Poins,
+     LIB.Curve;
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 T Y P E 】
 
@@ -10,18 +11,22 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C L A S S 】
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TSingleBezier<_TValue_>
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveBezier<_TValue_>
 
-     TSingleBezier<_TPoin_> = class
-     public
+     TCurveBezier<_TPoin_> = class( TCurve<_TPoin_> )
+     private
+     protected
+       _DegN :Integer;
+       ///// A C C E S S O R
+       function GetDegN :Integer; virtual;
+       procedure SetDegN( const DegN_:Integer ); virtual;
        ///// M E T H O D
-       class function CurveREC( Ps:TArray<_TPoin_>; const t:Single; const Lerp_:TSingleLerp<_TPoin_> ) :_TPoin_;
-     end;
-
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TDoubleBezier<_TValue_>
-
-     TDoubleBezier<_TPoin_> = class
+       function Segment( const i:Integer; const t:Double ) :_TPoin_; override;
+       function Segment2( const i:Integer; const t:Double ) :_TPoin_; virtual; abstract;
      public
+       constructor Create( const Poins_:TPoins<_TPoin_> );
+       ///// P R O P E R T Y
+       property DegN :Integer read GetDegN write SetDegN;
        ///// M E T H O D
        class function CurveREC( Ps:TArray<_TPoin_>; const t:Double; const Lerp_:TDoubleLerp<_TPoin_> ) :_TPoin_;
      end;
@@ -40,31 +45,47 @@ uses System.Math,
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C L A S S 】
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TSingleBezier<_TValue_>
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveBezier<_TValue_>
 
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
 
-//////////////////////////////////////////////////////////////////// M E T H O D
+//////////////////////////////////////////////////////////////// A C C E S S O R
 
-class function TSingleBezier<_TPoin_>.CurveREC( Ps:TArray<_TPoin_>; const t:Single; const Lerp_:TSingleLerp<_TPoin_> ) :_TPoin_;
-var
-   N, I :Integer;
+function TCurveBezier<_TPoin_>.GetDegN :Integer;
 begin
-     for N := Length( Ps )-1 downto 0 do
-     begin
-          for I := 0 to N do Ps[ I ] := Lerp_( Ps[ I ], Ps[ I+1 ], t );
-     end;
-
-     Result := Ps[ 0 ];
+     Result := _DegN;
 end;
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TDoubleBezier<_TValue_>
-
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+procedure TCurveBezier<_TPoin_>.SetDegN( const DegN_:Integer );
+begin
+     _DegN := DegN_;  _OnChange.Run( Self );
+end;
 
 //////////////////////////////////////////////////////////////////// M E T H O D
 
-class function TDoubleBezier<_TPoin_>.CurveREC( Ps:TArray<_TPoin_>; const t:Double; const Lerp_:TDoubleLerp<_TPoin_> ) :_TPoin_;
+function TCurveBezier<_TPoin_>.Segment( const i:Integer; const t:Double ) :_TPoin_;
+var
+   j :Integer;
+   s :Double;
+begin
+     j :=   i div DegN       * DegN;
+     s := ( i mod DegN + t ) / DegN;
+
+     Result := Segment2( j, s );
+end;
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+
+constructor TCurveBezier<_TPoin_>.Create( const Poins_:TPoins<_TPoin_> );
+begin
+     inherited;
+
+     DegN := 3;
+end;
+
+//////////////////////////////////////////////////////////////////// M E T H O D
+
+class function TCurveBezier<_TPoin_>.CurveREC( Ps:TArray<_TPoin_>; const t:Double; const Lerp_:TDoubleLerp<_TPoin_> ) :_TPoin_;
 var
    N, I :Integer;
 begin
