@@ -12,18 +12,18 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TSingleBSpline<_TValue_>
 
-     TSingleBSpline<_TValue_> = class
+     TSingleBSpline<_TPoin_> = class
      public
        ///// M E T H O D
-       class function CurveREC( Ps:TArray<_TValue_>; const t:Single; const DegN_:Integer; const Lerp_:TSingleLerp<_TValue_> ) :_TValue_;
+       class function CurveREC( Ps:TArray<_TPoin_>; const t:Single; const Lerp_:TSingleLerp<_TPoin_> ) :_TPoin_;
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TDoubleBSpline<_TValue_>
 
-     TDoubleBSpline<_TValue_> = class
+     TDoubleBSpline<_TPoin_> = class
      public
        ///// M E T H O D
-       class function CurveREC( Ps:TArray<_TValue_>; const t:Double; const DegN_:Integer; const Lerp_:TDoubleLerp<_TValue_> ) :_TValue_;
+       class function CurveREC( Ps:TArray<_TPoin_>; const t:Double; const Lerp_:TDoubleLerp<_TPoin_> ) :_TPoin_;
      end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
@@ -52,12 +52,12 @@ implementation //###############################################################
 
 //////////////////////////////////////////////////////////////////// M E T H O D
 
-class function TSingleBSpline<_TValue_>.CurveREC( Ps:TArray<_TValue_>; const t:Single; const DegN_:Integer; const Lerp_:TSingleLerp<_TValue_> ) :_TValue_;
+class function TSingleBSpline<_TPoin_>.CurveREC( Ps:TArray<_TPoin_>; const t:Single; const Lerp_:TSingleLerp<_TPoin_> ) :_TPoin_;
 var
    N, I :Integer;
    S :Single;
 begin
-     for N := DegN_-1 downto 0 do
+     for N := Length( Ps )-1 downto 0 do
      begin
           for I := 0 to N do
           begin
@@ -76,12 +76,12 @@ end;
 
 //////////////////////////////////////////////////////////////////// M E T H O D
 
-class function TDoubleBSpline<_TValue_>.CurveREC( Ps:TArray<_TValue_>; const t:Double; const DegN_:Integer; const Lerp_:TDoubleLerp<_TValue_> ) :_TValue_;
+class function TDoubleBSpline<_TPoin_>.CurveREC( Ps:TArray<_TPoin_>; const t:Double; const Lerp_:TDoubleLerp<_TPoin_> ) :_TPoin_;
 var
    N, I :Integer;
    S :Double;
 begin
-     for N := DegN_-1 downto 0 do
+     for N := Length( Ps )-1 downto 0 do
      begin
           for I := 0 to N do
           begin
