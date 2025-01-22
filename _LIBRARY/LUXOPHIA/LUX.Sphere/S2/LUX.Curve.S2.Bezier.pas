@@ -2,37 +2,22 @@
 
 interface //#################################################################### ■
 
-uses LUX.S2,
+uses LIB.Curve.Bezier,
+     LUX.S2,
      LUX.Poins.S2,
      LUX.Curve.S2;
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 T Y P E 】
 
+     TCurveBezier2S = TCurveBezier<TDouble2S>;
+
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R E C O R D 】
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C L A S S 】
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveBezier
-
-     TCurveBezier = class( TCurve2S )
-     private
-     protected
-       _DegN :Integer;
-       ///// A C C E S S O R
-       function GetDegN :Integer; virtual;
-       procedure SetDegN( const DegreeN_:Integer ); virtual;
-       ///// M E T H O D
-       function Segment( const i:Integer; const t:Double ) :TDouble2S; override;
-       function Segment2( const i:Integer; const t:Double ) :TDouble2S; virtual; abstract;
-     public
-       constructor Create( const Poins_:TPoins2S );
-       ///// P R O P E R T Y
-       property DegN :Integer read GetDegN write SetDegN;
-     end;
-
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveBezierREC
 
-     TCurveBezierREC = class( TCurveBezier )
+     TCurveBezierREC = class( TCurveBezier2S )
      private
      protected
        ///// M E T H O D
@@ -42,7 +27,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveBezierAVE
 
-     TCurveBezierAVE = class( TCurveBezier )
+     TCurveBezierAVE = class( TCurveBezier2S )
      private
      protected
        ///// M E T H O D
@@ -54,49 +39,9 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 implementation //############################################################### ■
 
-uses LIB.Curve.Bezier;
-
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R E C O R D 】
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C L A S S 】
-
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveBezier
-
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
-
-//////////////////////////////////////////////////////////////// A C C E S S O R
-
-function TCurveBezier.GetDegN :Integer;
-begin
-     Result := _DegN;
-end;
-
-procedure TCurveBezier.SetDegN( const DegreeN_:Integer );
-begin
-     _DegN := DegreeN_;  _OnChange.Run( Self );
-end;
-
-//////////////////////////////////////////////////////////////////// M E T H O D
-
-function TCurveBezier.Segment( const i:Integer; const t:Double ) :TDouble2S;
-var
-   j :Integer;
-   s :Double;
-begin
-     j :=   i div DegN       * DegN;
-     s := ( i mod DegN + t ) / DegN;
-
-     Result := Segment2( j, s );
-end;
-
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
-
-constructor TCurveBezier.Create( const Poins_:TPoins2S );
-begin
-     inherited;
-
-     DegN := 3;
-end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveBezierREC
 
@@ -113,7 +58,7 @@ begin
 
      for J := 0 to DegN do Ps[ J ] := _Poins[ i + J ];
 
-     Result := TDoubleBezier<TDouble2S>.CurveREC( Ps, t, Slerp );
+     Result := CurveREC( Ps, t, Slerp );
 end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveBezierAVE
