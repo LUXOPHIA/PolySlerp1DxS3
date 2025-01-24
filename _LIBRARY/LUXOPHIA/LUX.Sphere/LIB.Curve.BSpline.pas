@@ -11,7 +11,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C L A S S 】
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveBSpline<_TValue_>
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveBSpline<_TPoin_>
 
      TCurveBSpline<_TPoin_> = class( TCurve<_TPoin_> )
      private
@@ -24,8 +24,26 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        constructor Create( const Poins_:TPoins<_TPoin_> );
        ///// P R O P E R T Y
        property DegN :Integer read GetDegN write SetDegN;
+     end;
+
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveBSplineREC<_TPoin_>
+
+     TCurveBSplineREC<_TPoin_> = class( TCurveBSpline<_TPoin_> )
+     private
+     protected
        ///// M E T H O D
-       function CurveREC( Ps:TArray<_TPoin_>; const t:Double; const Lerp_:TDoubleLerp<_TPoin_> ) :_TPoin_;
+       function Segment( const i:Integer; const t:Double ) :_TPoin_; override;
+     public
+     end;
+
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveBSplineAVE<_TPoin_>
+
+     TCurveBSplineAVE<_TPoin_> = class( TCurveBSpline<_TPoin_> )
+     private
+     protected
+       ///// M E T H O D
+       function Segment( const i:Integer; const t:Double ) :_TPoin_; override;
+     public
      end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
@@ -48,7 +66,7 @@ implementation //###############################################################
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C L A S S 】
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveBSpline<_TValue_>
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveBSpline<_TPoin_>
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
 
@@ -73,24 +91,51 @@ begin
      DegN := 3;
 end;
 
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveBSplineREC<_TPoin_>
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
+
 //////////////////////////////////////////////////////////////////// M E T H O D
 
-function TCurveBSpline<_TPoin_>.CurveREC( Ps:TArray<_TPoin_>; const t:Double; const Lerp_:TDoubleLerp<_TPoin_> ) :_TPoin_;
+function TCurveBSplineREC<_TPoin_>.Segment( const i:Integer; const t:Double ) :_TPoin_;
 var
-   N, I :Integer;
+   Ps :TArray<_TPoin_>;
+   J, N :Integer;
    S :Double;
 begin
+     SetLength( Ps, DegN+1 );
+
+     for J := 0 to DegN do Ps[ J ] := _Poins[ i + J ];
+
      for N := DegN-1 downto 0 do
      begin
-          for I := 0 to N do
+          for J := 0 to N do
           begin
-               S := ( t + N - I ) / ( N + 1 );
+               S := ( t + N - J ) / ( N + 1 );
 
-               Ps[ I ] := Lerp_( Ps[ I ], Ps[ I+1 ], S );
+               Ps[ J ] := Bary.Lerp( Ps[ J ], Ps[ J+1 ], S );
           end;
      end;
 
      Result := Ps[ 0 ];
+end;
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveBSplineAVE<_TPoin_>
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
+
+//////////////////////////////////////////////////////////////////// M E T H O D
+
+function TCurveBSplineAVE<_TPoin_>.Segment( const i:Integer; const t:Double ) :_TPoin_;
+var
+   Ps :TArray<TWector>;
+   J :Integer;
+begin
+     SetLength( Ps, DegN+1 );
+
+     for J := 0 to DegN do Ps[ J ] := TWector.Create( _Poins[ i+J ], BSpline( DegN, J, t ) );
+
+     Result := Bary.Lerp( Ps );
 end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
