@@ -11,7 +11,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C L A S S 】
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveBezier<_TValue_>
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveBezier<_TPoin_>
 
      TCurveBezier<_TPoin_> = class( TCurve<_TPoin_> )
      private
@@ -26,7 +26,26 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        property DegN :Integer read GetDegN write SetDegN;
        ///// M E T H O D
        function Value( const X_:Double ) :_TPoin_; override;
-       function CurveREC( Ps:TArray<_TPoin_>; const t:Double; const Lerp_:TDoubleLerp<_TPoin_> ) :_TPoin_;
+     end;
+
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveBezierREC<_TPoin_>
+
+     TCurveBezierREC<_TPoin_> = class( TCurveBezier<_TPoin_> )
+     private
+     protected
+       ///// M E T H O D
+       function Segment( const i:Integer; const t:Double ) :_TPoin_; override;
+     public
+     end;
+
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveBezierAVE<_TPoin_>
+
+     TCurveBezierAVE<_TPoin_> = class( TCurveBezier<_TPoin_> )
+     private
+     protected
+       ///// M E T H O D
+       function Segment( const i:Integer; const t:Double ) :_TPoin_; override;
+     public
      end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
@@ -43,7 +62,7 @@ uses System.Math,
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C L A S S 】
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveBezier<_TValue_>
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveBezier<_TPoin_>
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
 
@@ -84,18 +103,47 @@ begin
      Result := Segment( j, s );
 end;
 
-//------------------------------------------------------------------------------
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveBezierREC<_TPoin_>
 
-function TCurveBezier<_TPoin_>.CurveREC( Ps:TArray<_TPoin_>; const t:Double; const Lerp_:TDoubleLerp<_TPoin_> ) :_TPoin_;
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
+
+//////////////////////////////////////////////////////////////////// M E T H O D
+
+function TCurveBezierREC<_TPoin_>.Segment( const i:Integer; const t:Double ) :_TPoin_;
 var
-   N, I :Integer;
+   Ps :TArray<_TPoin_>;
+   J, N :Integer;
 begin
+     SetLength( Ps, DegN+1 );
+
+     for J := 0 to DegN do Ps[ J ] := Poins[ i + J ];
+
      for N := DegN-1 downto 0 do
      begin
-          for I := 0 to N do Ps[ I ] := Lerp_( Ps[ I ], Ps[ I+1 ], t );
+          for J := 0 to N do Ps[ J ] := Bary.Lerp( Ps[ J ], Ps[ J+1 ], t );
      end;
 
      Result := Ps[ 0 ];
+end;
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveBezierAVE<_TPoin_>
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
+
+//////////////////////////////////////////////////////////////////// M E T H O D
+
+function TCurveBezierAVE<_TPoin_>.Segment( const i:Integer; const t:Double ) :_TPoin_;
+var
+   Ps :TArray<TWector>;
+   J :Integer;
+begin
+     SetLength( Ps, DegN+1 );
+
+     for J := 0 to DegN do Ps[ J ] := TWector.Create( Poins[ i+J ], Bezier( DegN, J, t ) );
+
+     Result := Bary.Lerp( Ps );
 end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
