@@ -105,7 +105,7 @@ var
 begin
      SetLength( Ps, DegN+1 );
 
-     for J := 0 to DegN do Ps[ J ] := _Poins[ i + J ];
+     for J := 0 to DegN do Ps[ J ] := Poins[ i + J ];
 
      for N := DegN-1 downto 0 do
      begin
@@ -133,7 +133,7 @@ var
 begin
      SetLength( Ps, DegN+1 );
 
-     for J := 0 to DegN do Ps[ J ] := TWector.Create( _Poins[ i+J ], BSpline( DegN, J, t ) );
+     for J := 0 to DegN do Ps[ J ] := TWector.Create( Poins[ i+J ], BSpline( DegN, J, t ) );
 
      Result := Bary.Center( Ps );
 end;

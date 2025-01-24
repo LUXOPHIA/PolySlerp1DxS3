@@ -61,12 +61,10 @@ function TCurveCatmullRomREC<_TPoin_>.Segment( const i:Integer; const t:Double )
 var
    Ps :TArray<_TPoin_>;
 begin
-     SetLength( Ps, 4 );
-
-     Ps[0] := Poins[ i-1 ];
-     Ps[1] := Poins[ i   ];
-     Ps[2] := Poins[ i+1 ];
-     Ps[3] := Poins[ i+2 ];
+     Ps := [ Poins[ i-1 ],
+             Poins[ i   ],
+             Poins[ i+1 ],
+             Poins[ i+2 ] ];
 
      Ps[0] := Bary.Center( Ps[0], Ps[1],   t + 1       );
      Ps[1] := Bary.Center( Ps[1], Ps[2],   t           );
@@ -88,17 +86,15 @@ end;
 
 function TCurveCatmullRomAVE<_TPoin_>.Segment( const i:Integer; const t:Double ) :_TPoin_;
 var
-   Ps :TArray<TWector>;
    Ws :TArray<Double>;
+   Ps :TArray<TWector>;
 begin
-     SetLength( Ps, 4 );
-
      Ws := CatmullRom( t );
 
-     Ps[0] := TWector.Create( Poins[ i-1 ], Ws[0] );
-     Ps[1] := TWector.Create( Poins[ i   ], Ws[1] );
-     Ps[2] := TWector.Create( Poins[ i+1 ], Ws[2] );
-     Ps[3] := TWector.Create( Poins[ i+2 ], Ws[3] );
+     Ps := [ TWector.Create( Poins[ i-1 ], Ws[0] ),
+             TWector.Create( Poins[ i   ], Ws[1] ),
+             TWector.Create( Poins[ i+1 ], Ws[2] ),
+             TWector.Create( Poins[ i+2 ], Ws[3] ) ];
 
      Result := Bary.Center( Ps );
 end;
