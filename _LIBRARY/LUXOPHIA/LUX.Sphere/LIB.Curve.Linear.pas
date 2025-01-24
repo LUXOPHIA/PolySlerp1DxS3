@@ -58,8 +58,8 @@ function TCurveLinearREC<_TPoin_>.Segment( const i:Integer; const t:Double ) :_T
 var
    P0, P1 :_TPoin_;
 begin
-     P0 := _Poins[ i   ];
-     P1 := _Poins[ i+1 ];
+     P0 := Poins[ i   ];
+     P1 := Poins[ i+1 ];
 
      Result := Bary.Center( P0, P1, t );
 end;
@@ -74,8 +74,8 @@ function TCurveLinearAVE<_TPoin_>.Segment( const i:Integer; const t:Double ) :_T
 var
    Ps :TArray<TWector>;
 begin
-     Ps := [ TWector.Create( _Poins[ i   ], 1 - t ),
-             TWector.Create( _Poins[ i+1 ],     t ) ];
+     Ps := [ TWector.Create( Poins[ i   ], 1 - t ),
+             TWector.Create( Poins[ i+1 ],     t ) ];
 
      Result := Bary.Center( Ps );
 end;
