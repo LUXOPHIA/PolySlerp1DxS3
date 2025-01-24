@@ -73,9 +73,9 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      TBaryGLerp3S = class( TDoubleBary3S )
      private
      protected
-       ///// A C C E S S O R
-       function GetCenter :TDouble3S; override;
      public
+       ///// M E T H O D
+       function Lerp( const Ps_:TArray<TDoubleWector3S> ) :TDouble3S; override;
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TBaryPolySlerp3S
@@ -83,9 +83,9 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      TBaryPolySlerp3S = class( TDoubleBary3S )
      private
      protected
-       ///// A C C E S S O R
-       function GetCenter :TDouble3S; override;
      public
+       ///// M E T H O D
+       function Lerp( const Ps_:TArray<TDoubleWector3S> ) :TDouble3S; override;
      end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
@@ -298,31 +298,37 @@ end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TBaryGLerp3S
 
-//////////////////////////////////////////////////////////////// A C C E S S O R
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-function TBaryGLerp3S.GetCenter :TDouble3S;
+//////////////////////////////////////////////////////////////////// M E T H O D
+
+function TBaryGLerp3S.Lerp( const Ps_:TArray<TDoubleWector3S> ) :TDouble3S;
 var
    P :TDoubleWector3S;
 begin
      Result := 0;
 
-     for P in _Poins do Result := Result + P.w * P.v;
+     for P in Ps_ do Result := Result + P.w * P.v;
 
      Result := Result.Unitor;
 end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TBaryPolySlerp3S
 
-//////////////////////////////////////////////////////////////// A C C E S S O R
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-function TBaryPolySlerp3S.GetCenter :TDouble3S;
+//////////////////////////////////////////////////////////////////// M E T H O D
+
+function TBaryPolySlerp3S.Lerp( const Ps_:TArray<TDoubleWector3S> ) :TDouble3S;
 var
+   PsN, I :Integer;
    Ps :TArray<TDouble3Sw>;
-   I :Integer;
 begin
-     SetLength( Ps, PoinsN );
+     PsN := Length( Ps_ );
 
-     for I := 0 to PoinsN-1 do Ps[ I ] := Poins[ I ];
+     SetLength( Ps, PsN );
+
+     for I := 0 to PsN-1 do Ps[ I ] := Ps_[ I ];
 
      Result := TDouble3S( Sum1D( Ps ) );
 end;
