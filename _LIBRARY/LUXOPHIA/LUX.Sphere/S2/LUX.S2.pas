@@ -2,12 +2,19 @@
 
 interface //#################################################################### ■
 
-uses LUX.D3;
+uses LUX.D3,
+     LIB;
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 T Y P E 】
 
      TSingle2S = TSingle3D;
      TDouble2S = TDouble3D;
+
+     TSingleWector2S = TWector<TSingle2S>;
+     TDoubleWector2S = TWector<TDouble2S>;
+
+     TSingleBary2S = TBarycenter<TSingle2S>;
+     TDoubleBary2S = TBarycenter<TDouble2S>;
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R E C O R D 】
 
@@ -29,6 +36,8 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        class operator Multiply( const A_:TSingle2Sw; const B_:Single ) :TSingle2Sw;
        class operator Divide( const A_:TSingle2Sw; const B_:Single ) :TSingle2Sw;
        ///// C A S T
+       class operator Implicit( const S_:TSingleWector2S ) :TSingle2Sw;
+       class operator Explicit( const S_:TSingle2Sw ) :TSingleWector2S;
        class operator Implicit( const V_:TSingle2S ) :TSingle2Sw;
        class operator Explicit( const S_:TSingle2Sw ) :TSingle2S;
      end;
@@ -51,15 +60,33 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        class operator Multiply( const A_:TDouble2Sw; const B_:Double ) :TDouble2Sw;
        class operator Divide( const A_:TDouble2Sw; const B_:Double ) :TDouble2Sw;
        ///// C A S T
+       class operator Implicit( const S_:TDoubleWector2S ) :TDouble2Sw;
+       class operator Explicit( const S_:TDouble2Sw ) :TDoubleWector2S;
        class operator Implicit( const V_:TDouble2S ) :TDouble2Sw;
        class operator Explicit( const S_:TDouble2Sw ) :TDouble2S;
      end;
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C L A S S 】
 
-//const //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C O N S T A N T 】
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TBaryGLerp2S
 
-//var //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 V A R I A B L E 】
+     TBaryGLerp2S = class( TDoubleBary2S )
+     private
+     protected
+       ///// A C C E S S O R
+       function GetCenter :TDouble2S; override;
+     public
+     end;
+
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TBaryPolySlerp2S
+
+     TBaryPolySlerp2S = class( TDoubleBary2S )
+     private
+     protected
+       ///// A C C E S S O R
+       function GetCenter :TDouble2S; override;
+     public
+     end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
 
@@ -153,6 +180,20 @@ end;
 
 //////////////////////////////////////////////////////////////////////// C A S T
 
+class operator TSingle2Sw.Implicit( const S_:TSingleWector2S ) :TSingle2Sw;
+begin
+     Result.v := S_.v;
+     Result.w := S_.w;
+end;
+
+class operator TSingle2Sw.Explicit( const S_:TSingle2Sw ) :TSingleWector2S;
+begin
+     Result.v := S_.v;
+     Result.w := S_.w;
+end;
+
+//------------------------------------------------------------------------------
+
 class operator TSingle2Sw.Implicit( const V_:TSingle2S ) :TSingle2Sw;
 begin
      Result.v := V_;
@@ -164,7 +205,7 @@ begin
      Result := S_.v;
 end;
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TDouble3Sw
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TDouble2Sw
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
@@ -218,6 +259,20 @@ end;
 
 //////////////////////////////////////////////////////////////////////// C A S T
 
+class operator TDouble2Sw.Implicit( const S_:TDoubleWector2S ) :TDouble2Sw;
+begin
+     Result.v := S_.v;
+     Result.w := S_.w;
+end;
+
+class operator TDouble2Sw.Explicit( const S_:TDouble2Sw ) :TDoubleWector2S;
+begin
+     Result.v := S_.v;
+     Result.w := S_.w;
+end;
+
+//------------------------------------------------------------------------------
+
 class operator TDouble2Sw.Implicit( const V_:TDouble2S ) :TDouble2Sw;
 begin
      Result.v := V_;
@@ -230,6 +285,37 @@ begin
 end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C L A S S 】
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TBaryGLerp2S
+
+//////////////////////////////////////////////////////////////// A C C E S S O R
+
+function TBaryGLerp2S.GetCenter :TDouble2S;
+var
+   P :TDoubleWector2S;
+begin
+     Result := 0;
+
+     for P in _Poins do Result := Result + P.w * P.v;
+
+     Result := Result.Unitor;
+end;
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TBaryPolySlerp2S
+
+//////////////////////////////////////////////////////////////// A C C E S S O R
+
+function TBaryPolySlerp2S.GetCenter :TDouble2S;
+var
+   Ps :TArray<TDouble2Sw>;
+   I :Integer;
+begin
+     SetLength( Ps, PoinsN );
+
+     for I := 0 to PoinsN-1 do Ps[ I ] := Poins[ I ];
+
+     Result := TDouble2S( Sum1D( Ps ) );
+end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
 
