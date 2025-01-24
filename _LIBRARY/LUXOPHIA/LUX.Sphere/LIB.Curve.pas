@@ -3,14 +3,13 @@
 interface //#################################################################### ■
 
 uses LUX,
+     LIB,
      LIB.Poins;
 
 type //$$$$$$$$$&&$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 T Y P E 】
 
-     TSingleLerp<_TValue_> = reference to function ( const P0_,P1_:_TValue_; const T_:Single ) :_TValue_;
-     TDoubleLerp<_TValue_> = reference to function ( const P0_,P1_:_TValue_; const T_:Double ) :_TValue_;
-
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R E C O R D 】
+
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C L A S S 】
 
@@ -18,21 +17,27 @@ type //$$$$$$$$$&&$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      TCurve<_TPoin_> = class
      private
+       type TBarycenter = TBarycenter<_TPoin_>;
+       type TPoins      = TPoins<_TPoin_>;
      protected
-       _Poins :TPoins<_TPoin_>;
+       _Bary  :TBarycenter;
+       _Poins :TPoins;
        ///// E V E N T
        _OnChange :TDelegates;
        ///// A C C E S S O R
+       function GetBary :TBarycenter; virtual;
+       procedure SetBary( const Bary_:TBarycenter ); virtual;
        procedure UpPoins( Sender_:TObject );
-       function GetPoins :TPoins<_TPoin_>; virtual;
-       procedure SetPoins( const Poins_:TPoins<_TPoin_> ); virtual;
+       function GetPoins :TPoins; virtual;
+       procedure SetPoins( const Poins_:TPoins ); virtual;
        ///// M E T H O D
        function Segment( const I:Integer; const T:Double ) :_TPoin_; virtual; abstract;
      public
-       constructor Create( const Poins_:TPoins<_TPoin_> );
+       constructor Create( const Poins_:TPoins );
        destructor Destroy; Override;
        ///// P R O P E R T Y
-       property Poins :TPoins<_TPoin_> read GetPoins write SetPoins;
+       property Bary  :TBarycenter read GetBary  write SetBary ;
+       property Poins :TPoins      read GetPoins write SetPoins;
        ///// M E T H O D
        function Value( const X_:Double ) :_TPoin_; virtual;
        ///// E V E N T
@@ -61,17 +66,29 @@ uses System.Math;
 
 //////////////////////////////////////////////////////////////// A C C E S S O R
 
+function TCurve<_TPoin_>.GetBary :TBarycenter;
+begin
+     Result := _Bary;
+end;
+
+procedure TCurve<_TPoin_>.SetBary( const Bary_:TBarycenter );
+begin
+     _Bary := Bary_;  _OnChange.Run( Self );
+end;
+
+//------------------------------------------------------------------------------
+
 procedure TCurve<_TPoin_>.UpPoins( Sender_:TObject );
 begin
      _OnChange.Run( Self );
 end;
 
-function TCurve<_TPoin_>.GetPoins :TPoins<_TPoin_>;
+function TCurve<_TPoin_>.GetPoins :TPoins;
 begin
      Result := _Poins;
 end;
 
-procedure TCurve<_TPoin_>.SetPoins( const Poins_:TPoins<_TPoin_> );
+procedure TCurve<_TPoin_>.SetPoins( const Poins_:TPoins );
 begin
      if Assigned( _Poins ) then _Poins.OnChange.Del( UpPoins );
 
@@ -84,7 +101,7 @@ end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-constructor TCurve<_TPoin_>.Create( const Poins_:TPoins<_TPoin_> );
+constructor TCurve<_TPoin_>.Create( const Poins_:TPoins );
 begin
      inherited Create;
 
