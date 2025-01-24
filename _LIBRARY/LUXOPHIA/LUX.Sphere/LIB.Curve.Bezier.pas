@@ -120,7 +120,7 @@ begin
 
      for N := DegN-1 downto 0 do
      begin
-          for J := 0 to N do Ps[ J ] := Bary.Lerp( Ps[ J ], Ps[ J+1 ], t );
+          for J := 0 to N do Ps[ J ] := Bary.Center( Ps[ J ], Ps[ J+1 ], t );
      end;
 
      Result := Ps[ 0 ];
@@ -143,7 +143,7 @@ begin
 
      for J := 0 to DegN do Ps[ J ] := TWector.Create( Poins[ i+J ], Bezier( DegN, J, t ) );
 
-     Result := Bary.Lerp( Ps );
+     Result := Bary.Center( Ps );
 end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】

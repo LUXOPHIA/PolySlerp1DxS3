@@ -75,7 +75,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      protected
      public
        ///// M E T H O D
-       function Lerp( const Ps_:TArray<TDoubleWector3S> ) :TDouble3S; override;
+       function Center( const Ps_:TArray<TDoubleWector3S> ) :TDouble3S; override;
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TBaryPolySlerp3S
@@ -85,7 +85,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      protected
      public
        ///// M E T H O D
-       function Lerp( const Ps_:TArray<TDoubleWector3S> ) :TDouble3S; override;
+       function Center( const Ps_:TArray<TDoubleWector3S> ) :TDouble3S; override;
      end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
@@ -302,7 +302,7 @@ end;
 
 //////////////////////////////////////////////////////////////////// M E T H O D
 
-function TBaryGLerp3S.Lerp( const Ps_:TArray<TDoubleWector3S> ) :TDouble3S;
+function TBaryGLerp3S.Center( const Ps_:TArray<TDoubleWector3S> ) :TDouble3S;
 var
    P :TDoubleWector3S;
 begin
@@ -319,7 +319,7 @@ end;
 
 //////////////////////////////////////////////////////////////////// M E T H O D
 
-function TBaryPolySlerp3S.Lerp( const Ps_:TArray<TDoubleWector3S> ) :TDouble3S;
+function TBaryPolySlerp3S.Center( const Ps_:TArray<TDoubleWector3S> ) :TDouble3S;
 var
    PsN, I :Integer;
    Ps :TArray<TDouble3Sw>;

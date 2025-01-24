@@ -68,14 +68,14 @@ begin
      Ps[2] := Poins[ i+1 ];
      Ps[3] := Poins[ i+2 ];
 
-     Ps[0] := Bary.Lerp( Ps[0], Ps[1],   t + 1       );
-     Ps[1] := Bary.Lerp( Ps[1], Ps[2],   t           );
-     Ps[2] := Bary.Lerp( Ps[2], Ps[3],   t - 1       );
+     Ps[0] := Bary.Center( Ps[0], Ps[1],   t + 1       );
+     Ps[1] := Bary.Center( Ps[1], Ps[2],   t           );
+     Ps[2] := Bary.Center( Ps[2], Ps[3],   t - 1       );
 
-     Ps[0] := Bary.Lerp( Ps[0], Ps[1], ( t + 1 ) / 2 );
-     Ps[1] := Bary.Lerp( Ps[1], Ps[2],   t       / 2 );
+     Ps[0] := Bary.Center( Ps[0], Ps[1], ( t + 1 ) / 2 );
+     Ps[1] := Bary.Center( Ps[1], Ps[2],   t       / 2 );
 
-     Ps[0] := Bary.Lerp( Ps[0], Ps[1],   t           );
+     Ps[0] := Bary.Center( Ps[0], Ps[1],   t           );
 
      Result := Ps[0];
 end;
@@ -100,7 +100,7 @@ begin
      Ps[2] := TWector.Create( Poins[ i+1 ], Ws[2] );
      Ps[3] := TWector.Create( Poins[ i+2 ], Ws[3] );
 
-     Result := Bary.Lerp( Ps );
+     Result := Bary.Center( Ps );
 end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】

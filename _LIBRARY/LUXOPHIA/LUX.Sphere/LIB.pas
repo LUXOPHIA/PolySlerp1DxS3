@@ -23,13 +23,12 @@ type //$$$$$$$$$&&$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      TBarycenter<_TPoin_> = class
      private
-       type TWector  = TWector<_TPoin_>;
-       type TWectors = TArray<TWector>;
+       type TWector = TWector<_TPoin_>;
      protected
      public
        ///// M E T H O D
-       function Lerp( const Ps_:TWectors ) :_TPoin_; overload; virtual; abstract;
-       function Lerp( const P0_,P1_:_TPoin_; const T_:Double ) :_TPoin_; overload; virtual;
+       function Center( const Ps_:TArray<TWector> ) :_TPoin_; overload; virtual; abstract;
+       function Center( const P0_,P1_:_TPoin_; const T_:Double ) :_TPoin_; overload; virtual;
      end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
@@ -56,9 +55,9 @@ end;
 
 //////////////////////////////////////////////////////////////////// M E T H O D
 
-function TBarycenter<_TPoin_>.Lerp( const P0_,P1_:_TPoin_; const T_:Double ) :_TPoin_;
+function TBarycenter<_TPoin_>.Center( const P0_,P1_:_TPoin_; const T_:Double ) :_TPoin_;
 begin
-     Result := Lerp( [ TWector.Create( P0_, 1 - T_ ),
+     Result := Center( [ TWector.Create( P0_, 1 - T_ ),
                        TWector.Create( P1_,     T_ ) ] );
 end;
 
