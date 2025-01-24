@@ -108,8 +108,8 @@ end;
 
 function TBarycenter<_TPoin_>.Lerp( const P0_,P1_:_TPoin_; const T_:Double ) :_TPoin_;
 begin
-     Poins[ 0 ] := TWector.Create( P0_, 1 - T_ );
-     Poins[ 1 ] := TWector.Create( P1_,     T_ );
+     _Poins := [ TWector.Create( P0_, 1 - T_ ),
+                 TWector.Create( P1_,     T_ ) ];
 
      Result := Center;
 end;
