@@ -113,7 +113,7 @@ begin
           begin
                S := ( t + N - J ) / ( N + 1 );
 
-               Ps[ J ] := Bary.Lerp( Ps[ J ], Ps[ J+1 ], S );
+               Ps[ J ] := Bary.Center( Ps[ J ], Ps[ J+1 ], S );
           end;
      end;
 
@@ -135,7 +135,7 @@ begin
 
      for J := 0 to DegN do Ps[ J ] := TWector.Create( _Poins[ i+J ], BSpline( DegN, J, t ) );
 
-     Result := Bary.Lerp( Ps );
+     Result := Bary.Center( Ps );
 end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】

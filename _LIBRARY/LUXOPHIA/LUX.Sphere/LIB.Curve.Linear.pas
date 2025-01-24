@@ -61,7 +61,7 @@ begin
      P0 := _Poins[ i   ];
      P1 := _Poins[ i+1 ];
 
-     Result := Bary.Lerp( P0, P1, t );
+     Result := Bary.Center( P0, P1, t );
 end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveLinearAVE<_TPoin_>
@@ -77,7 +77,7 @@ begin
      Ps := [ TWector.Create( _Poins[ i   ], 1 - t ),
              TWector.Create( _Poins[ i+1 ],     t ) ];
 
-     Result := Bary.Lerp( Ps );
+     Result := Bary.Center( Ps );
 end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
