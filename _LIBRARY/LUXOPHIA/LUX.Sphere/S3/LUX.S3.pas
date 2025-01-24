@@ -2,12 +2,19 @@
 
 interface //#################################################################### ■
 
-uses LUX.Quaternion;
+uses LUX.Quaternion,
+     LIB;
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 T Y P E 】
 
      TSingle3S = TSingleQ;
      TDouble3S = TDoubleQ;
+
+     TSingleWector3S = TWector<TSingle3S>;
+     TDoubleWector3S = TWector<TDouble3S>;
+
+     TSingleBary3S = TBarycenter<TSingle3S>;
+     TDoubleBary3S = TBarycenter<TDouble3S>;
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R E C O R D 】
 
@@ -29,6 +36,8 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        class operator Multiply( const A_:TSingle3Sw; const B_:Single ) :TSingle3Sw;
        class operator Divide( const A_:TSingle3Sw; const B_:Single ) :TSingle3Sw;
        ///// C A S T
+       class operator Implicit( const S_:TSingleWector3S ) :TSingle3Sw;
+       class operator Explicit( const S_:TSingle3Sw ) :TSingleWector3S;
        class operator Implicit( const V_:TSingle3S ) :TSingle3Sw;
        class operator Explicit( const S_:TSingle3Sw ) :TSingle3S;
      end;
@@ -51,15 +60,33 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        class operator Multiply( const A_:TDouble3Sw; const B_:Double ) :TDouble3Sw;
        class operator Divide( const A_:TDouble3Sw; const B_:Double ) :TDouble3Sw;
        ///// C A S T
+       class operator Implicit( const S_:TDoubleWector3S ) :TDouble3Sw;
+       class operator Explicit( const S_:TDouble3Sw ) :TDoubleWector3S;
        class operator Implicit( const V_:TDouble3S ) :TDouble3Sw;
        class operator Explicit( const S_:TDouble3Sw ) :TDouble3S;
      end;
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C L A S S 】
 
-//const //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C O N S T A N T 】
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TBaryGLerp3S
 
-//var //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 V A R I A B L E 】
+     TBaryGLerp3S = class( TDoubleBary3S )
+     private
+     protected
+       ///// A C C E S S O R
+       function GetCenter :TDouble3S; override;
+     public
+     end;
+
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TBaryPolySlerp3S
+
+     TBaryPolySlerp3S = class( TDoubleBary3S )
+     private
+     protected
+       ///// A C C E S S O R
+       function GetCenter :TDouble3S; override;
+     public
+     end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
 
@@ -163,6 +190,20 @@ end;
 
 //////////////////////////////////////////////////////////////////////// C A S T
 
+class operator TSingle3Sw.Implicit( const S_:TSingleWector3S ) :TSingle3Sw;
+begin
+     Result.v := S_.v;
+     Result.w := S_.w;
+end;
+
+class operator TSingle3Sw.Explicit( const S_:TSingle3Sw ) :TSingleWector3S;
+begin
+     Result.v := S_.v;
+     Result.w := S_.w;
+end;
+
+//------------------------------------------------------------------------------
+
 class operator TSingle3Sw.Implicit( const V_:TSingle3S ) :TSingle3Sw;
 begin
      Result.v := V_;
@@ -228,6 +269,20 @@ end;
 
 //////////////////////////////////////////////////////////////////////// C A S T
 
+class operator TDouble3Sw.Implicit( const S_:TDoubleWector3S ) :TDouble3Sw;
+begin
+     Result.v := S_.v;
+     Result.w := S_.w;
+end;
+
+class operator TDouble3Sw.Explicit( const S_:TDouble3Sw ) :TDoubleWector3S;
+begin
+     Result.v := S_.v;
+     Result.w := S_.w;
+end;
+
+//------------------------------------------------------------------------------
+
 class operator TDouble3Sw.Implicit( const V_:TDouble3S ) :TDouble3Sw;
 begin
      Result.v := V_;
@@ -240,6 +295,37 @@ begin
 end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C L A S S 】
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TBaryGLerp3S
+
+//////////////////////////////////////////////////////////////// A C C E S S O R
+
+function TBaryGLerp3S.GetCenter :TDouble3S;
+var
+   P :TDoubleWector3S;
+begin
+     Result := 0;
+
+     for P in _Poins do Result := Result + P.w * P.v;
+
+     Result := Result.Unitor;
+end;
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TBaryPolySlerp3S
+
+//////////////////////////////////////////////////////////////// A C C E S S O R
+
+function TBaryPolySlerp3S.GetCenter :TDouble3S;
+var
+   Ps :TArray<TDouble3Sw>;
+   I :Integer;
+begin
+     SetLength( Ps, PoinsN );
+
+     for I := 0 to PoinsN-1 do Ps[ I ] := Poins[ I ];
+
+     Result := TDouble3S( Sum1D( Ps ) );
+end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
 
