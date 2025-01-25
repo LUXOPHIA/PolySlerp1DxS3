@@ -9,9 +9,6 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      TCurveBSpline2S = TCurveBSpline<TDouble2S>;
 
-     TCurveBSplineREC2S = TCurveBSplineREC<TDouble2S>;
-     TCurveBSplineAVE2S = TCurveBSplineAVE<TDouble2S>;
-
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R E C O R D 】
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C L A S S 】
