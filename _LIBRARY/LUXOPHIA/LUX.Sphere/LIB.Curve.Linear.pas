@@ -12,30 +12,13 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveLinear<_TPoin_>
 
-     TCurveLinear<_TPoin_> = class( TCurve<_TPoin_> )
-     private
-     protected
-     public
-     end;
-
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveLinearREC<_TPoin_>
-
-     TCurveLinearREC<_TPoin_> = class( TCurveLinear<_TPoin_> )
+     TCurveLinear<_TPoin_> = class( TCurveAlgo<_TPoin_> )
      private
      protected
        ///// M E T H O D
-       function Segment( const i:Integer; const t:Double ) :_TPoin_; override;
+       function Algorithm0( const i:Integer; const t:Double ) :_TPoin_;
      public
-     end;
-
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveLinearAVE<_TPoin_>
-
-     TCurveLinearAVE<_TPoin_> = class( TCurveLinear<_TPoin_> )
-     private
-     protected
-       ///// M E T H O D
-       function Segment( const i:Integer; const t:Double ) :_TPoin_; override;
-     public
+       constructor Create;
      end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
@@ -48,13 +31,13 @@ implementation //###############################################################
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveLinear
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveLinearREC<_TPoin_>
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveLinear<_TPoin_>
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
 
 //////////////////////////////////////////////////////////////////// M E T H O D
 
-function TCurveLinearREC<_TPoin_>.Segment( const i:Integer; const t:Double ) :_TPoin_;
+function TCurveLinear<_TPoin_>.Algorithm0( const i:Integer; const t:Double ) :_TPoin_;
 var
    P0, P1 :_TPoin_;
 begin
@@ -64,20 +47,14 @@ begin
      Result := Bary.Center( P0, P1, t );
 end;
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveLinearAVE<_TPoin_>
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
-
-//////////////////////////////////////////////////////////////////// M E T H O D
-
-function TCurveLinearAVE<_TPoin_>.Segment( const i:Integer; const t:Double ) :_TPoin_;
-var
-   Ps :TArray<TWector>;
+constructor TCurveLinear<_TPoin_>.Create;
 begin
-     Ps := [ TWector.Create( Poins[ i   ], 1 - t ),
-             TWector.Create( Poins[ i+1 ],     t ) ];
+     inherited;
 
-     Result := Bary.Center( Ps );
+     AlgosN := 1;
+     _Algos[0] := Algorithm0;
 end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
