@@ -13,37 +13,20 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveBSpline<_TPoin_>
 
-     TCurveBSpline<_TPoin_> = class( TCurve<_TPoin_> )
+     TCurveBSpline<_TPoin_> = class( TCurveAlgo<_TPoin_> )
      private
      protected
        _DegN :Integer;
        ///// A C C E S S O R
        function GetDegN :Integer; virtual;
        procedure SetDegN( const DegN_:Integer ); virtual;
+       ///// M E T H O D
+       function Algorithm0( const i:Integer; const t:Double ) :_TPoin_;
+       function Algorithm1( const i:Integer; const t:Double ) :_TPoin_;
      public
-       constructor Create( const Poins_:TPoins<_TPoin_> );
+       constructor Create;
        ///// P R O P E R T Y
        property DegN :Integer read GetDegN write SetDegN;
-     end;
-
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveBSplineREC<_TPoin_>
-
-     TCurveBSplineREC<_TPoin_> = class( TCurveBSpline<_TPoin_> )
-     private
-     protected
-       ///// M E T H O D
-       function Segment( const i:Integer; const t:Double ) :_TPoin_; override;
-     public
-     end;
-
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveBSplineAVE<_TPoin_>
-
-     TCurveBSplineAVE<_TPoin_> = class( TCurveBSpline<_TPoin_> )
-     private
-     protected
-       ///// M E T H O D
-       function Segment( const i:Integer; const t:Double ) :_TPoin_; override;
-     public
      end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
@@ -82,22 +65,21 @@ begin
      _DegN := DegN_;  _OnChange.Run( Self );
 end;
 
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
-
-constructor TCurveBSpline<_TPoin_>.Create( const Poins_:TPoins<_TPoin_> );
-begin
-     inherited;
-
-     DegN := 3;
-end;
-
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveBSplineREC<_TPoin_>
-
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
-
 //////////////////////////////////////////////////////////////////// M E T H O D
 
-function TCurveBSplineREC<_TPoin_>.Segment( const i:Integer; const t:Double ) :_TPoin_;
+function TCurveBSpline<_TPoin_>.Algorithm0( const i:Integer; const t:Double ) :_TPoin_;
+var
+   Ps :TArray<TWector>;
+   J :Integer;
+begin
+     SetLength( Ps, DegN+1 );
+
+     for J := 0 to DegN do Ps[ J ] := TWector.Create( Poins[ i+J ], BSpline( DegN, J, t ) );
+
+     Result := Bary.Center( Ps );
+end;
+
+function TCurveBSpline<_TPoin_>.Algorithm1( const i:Integer; const t:Double ) :_TPoin_;
 var
    Ps :TArray<_TPoin_>;
    J, N :Integer;
@@ -120,22 +102,17 @@ begin
      Result := Ps[ 0 ];
 end;
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveBSplineAVE<_TPoin_>
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
-
-//////////////////////////////////////////////////////////////////// M E T H O D
-
-function TCurveBSplineAVE<_TPoin_>.Segment( const i:Integer; const t:Double ) :_TPoin_;
-var
-   Ps :TArray<TWector>;
-   J :Integer;
+constructor TCurveBSpline<_TPoin_>.Create;
 begin
-     SetLength( Ps, DegN+1 );
+     inherited;
 
-     for J := 0 to DegN do Ps[ J ] := TWector.Create( Poins[ i+J ], BSpline( DegN, J, t ) );
+     AlgosN := 2;
+     _Algos[0] := Algorithm0;
+     _Algos[1] := Algorithm1;
 
-     Result := Bary.Center( Ps );
+     DegN := 3;
 end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
