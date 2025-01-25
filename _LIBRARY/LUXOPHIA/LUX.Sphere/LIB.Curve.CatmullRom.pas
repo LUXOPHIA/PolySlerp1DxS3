@@ -2,7 +2,8 @@
 
 interface //#################################################################### ■
 
-uses LIB.Curve;
+uses LIB,
+     LIB.Curve;
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 T Y P E 】
 
@@ -12,36 +13,20 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveCatmullRom<_TPoin_>
 
-     TCurveCatmullRom<_TPoin_> = class( TCurve<_TPoin_> )
-     private
-     protected
-     public
-     end;
-
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveCatmullRomREC<_TPoin_>
-
-     TCurveCatmullRomREC<_TPoin_> = class( TCurveCatmullRom<_TPoin_> )
+     TCurveCatmullRom<_TPoin_> = class( TCurveAlgo<_TPoin_> )
      private
      protected
        ///// M E T H O D
-       function Segment( const i:Integer; const t:Double ) :_TPoin_; override;
+       function Algorithm0( const i:Integer; const t:Double ) :_TPoin_;
+       function Algorithm1( const i:Integer; const t:Double ) :_TPoin_;
      public
-     end;
-
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveCatmullRomAVE<_TPoin_>
-
-     TCurveCatmullRomAVE<_TPoin_> = class( TCurveCatmullRom<_TPoin_> )
-     private
-     protected
-       ///// M E T H O D
-       function Segment( const i:Integer; const t:Double ) :_TPoin_; override;
-     public
+       constructor Create;
      end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
 
-function CatmullRom( const t:Single ) :TArray<Single>; overload;
-function CatmullRom( const t:Double ) :TArray<Double>; overload;
+function CatmullRom( const t:Single ) :TSingle4; overload;
+function CatmullRom( const t:Double ) :TDouble4; overload;
 
 implementation //############################################################### ■
 
@@ -51,13 +36,26 @@ implementation //###############################################################
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveCatmullRom<_TPoin_>
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveCatmullRomREC<_TPoin_>
-
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
 
 //////////////////////////////////////////////////////////////////// M E T H O D
 
-function TCurveCatmullRomREC<_TPoin_>.Segment( const i:Integer; const t:Double ) :_TPoin_;
+function TCurveCatmullRom<_TPoin_>.Algorithm0( const i:Integer; const t:Double ) :_TPoin_;
+var
+   Ws :TDouble4;
+   Ps :TArray<TWector>;
+begin
+     Ws := CatmullRom( t );
+
+     Ps := [ TWector.Create( Poins[ i-1 ], Ws[0] ),
+             TWector.Create( Poins[ i   ], Ws[1] ),
+             TWector.Create( Poins[ i+1 ], Ws[2] ),
+             TWector.Create( Poins[ i+2 ], Ws[3] ) ];
+
+     Result := Bary.Center( Ps );
+end;
+
+function TCurveCatmullRom<_TPoin_>.Algorithm1( const i:Integer; const t:Double ) :_TPoin_;
 var
    Ps :TArray<_TPoin_>;
 begin
@@ -78,43 +76,29 @@ begin
      Result := Ps[0];
 end;
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveCatmullRomAVE<_TPoin_>
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
-
-//////////////////////////////////////////////////////////////////// M E T H O D
-
-function TCurveCatmullRomAVE<_TPoin_>.Segment( const i:Integer; const t:Double ) :_TPoin_;
-var
-   Ws :TArray<Double>;
-   Ps :TArray<TWector>;
+constructor TCurveCatmullRom<_TPoin_>.Create;
 begin
-     Ws := CatmullRom( t );
+     inherited;
 
-     Ps := [ TWector.Create( Poins[ i-1 ], Ws[0] ),
-             TWector.Create( Poins[ i   ], Ws[1] ),
-             TWector.Create( Poins[ i+1 ], Ws[2] ),
-             TWector.Create( Poins[ i+2 ], Ws[3] ) ];
-
-     Result := Bary.Center( Ps );
+     AlgosN := 2;
+     _Algos[0] := Algorithm0;
+     _Algos[1] := Algorithm1;
 end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
 
-function CatmullRom( const t:Single ) :TArray<Single>;
+function CatmullRom( const t:Single ) :TSingle4;
 begin
-     SetLength( Result, 4 );
-
      Result[0] := ( ( -0.5 * t + 1.0 ) * t - 0.5 ) * t      ;
      Result[1] := ( ( +1.5 * t - 2.5 ) * t       ) * t + 1.0;
      Result[2] := ( ( -1.5 * t + 2.0 ) * t + 0.5 ) * t      ;
      Result[3] := ( ( +0.5 * t - 0.5 ) * t       ) * t      ;
 end;
 
-function CatmullRom( const t:Double ) :TArray<Double>;
+function CatmullRom( const t:Double ) :TDouble4;
 begin
-     SetLength( Result, 4 );
-
      Result[0] := ( ( -0.5 * t + 1.0 ) * t - 0.5 ) * t      ;
      Result[1] := ( ( +1.5 * t - 2.5 ) * t       ) * t + 1.0;
      Result[2] := ( ( -1.5 * t + 2.0 ) * t + 0.5 ) * t      ;
