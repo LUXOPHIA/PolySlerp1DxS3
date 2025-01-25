@@ -9,9 +9,6 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      TCurveCatmullRom2S = TCurveCatmullRom<TDouble2S>;
 
-     TCurveCatmullRomREC2S = TCurveCatmullRomREC<TDouble2S>;
-     TCurveCatmullRomAVE2S = TCurveCatmullRomAVE<TDouble2S>;
-
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R E C O R D 】
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C L A S S 】
