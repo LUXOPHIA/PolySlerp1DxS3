@@ -13,39 +13,22 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveBezier<_TPoin_>
 
-     TCurveBezier<_TPoin_> = class( TCurve<_TPoin_> )
+     TCurveBezier<_TPoin_> = class( TCurveAlgo<_TPoin_> )
      private
      protected
        _DegN :Integer;
        ///// A C C E S S O R
        function GetDegN :Integer; virtual;
        procedure SetDegN( const DegN_:Integer ); virtual;
+       ///// M E T H O D
+       function Algorithm0( const i:Integer; const t:Double ) :_TPoin_;
+       function Algorithm1( const i:Integer; const t:Double ) :_TPoin_;
      public
-       constructor Create( const Poins_:TPoins<_TPoin_> );
+       constructor Create;
        ///// P R O P E R T Y
        property DegN :Integer read GetDegN write SetDegN;
        ///// M E T H O D
        function Value( const X_:Double ) :_TPoin_; override;
-     end;
-
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveBezierREC<_TPoin_>
-
-     TCurveBezierREC<_TPoin_> = class( TCurveBezier<_TPoin_> )
-     private
-     protected
-       ///// M E T H O D
-       function Segment( const i:Integer; const t:Double ) :_TPoin_; override;
-     public
-     end;
-
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveBezierAVE<_TPoin_>
-
-     TCurveBezierAVE<_TPoin_> = class( TCurveBezier<_TPoin_> )
-     private
-     protected
-       ///// M E T H O D
-       function Segment( const i:Integer; const t:Double ) :_TPoin_; override;
-     public
      end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
@@ -78,38 +61,21 @@ begin
      _DegN := DegN_;  _OnChange.Run( Self );
 end;
 
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
-
-constructor TCurveBezier<_TPoin_>.Create( const Poins_:TPoins<_TPoin_> );
-begin
-     inherited;
-
-     DegN := 3;
-end;
-
 //////////////////////////////////////////////////////////////////// M E T H O D
 
-function TCurveBezier<_TPoin_>.Value( const X_:Double ) :_TPoin_;
+function TCurveBezier<_TPoin_>.Algorithm0( const i:Integer; const t:Double ) :_TPoin_;
 var
-   i, J :Integer;
-   t, s :Double;
+   Ps :TArray<TWector>;
+   J :Integer;
 begin
-     i := Floor( X_ );
-     t := X_ - I;
+     SetLength( Ps, DegN+1 );
 
-     j :=   i div DegN       * DegN;
-     s := ( i mod DegN + t ) / DegN;
+     for J := 0 to DegN do Ps[ J ] := TWector.Create( Poins[ i+J ], Bezier( DegN, J, t ) );
 
-     Result := Segment( j, s );
+     Result := Bary.Center( Ps );
 end;
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveBezierREC<_TPoin_>
-
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
-
-//////////////////////////////////////////////////////////////////// M E T H O D
-
-function TCurveBezierREC<_TPoin_>.Segment( const i:Integer; const t:Double ) :_TPoin_;
+function TCurveBezier<_TPoin_>.Algorithm1( const i:Integer; const t:Double ) :_TPoin_;
 var
    Ps :TArray<_TPoin_>;
    J, N :Integer;
@@ -128,22 +94,31 @@ end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveBezierAVE<_TPoin_>
+constructor TCurveBezier<_TPoin_>.Create;
+begin
+     inherited;
 
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
+     AlgosN := 2;
+     _Algos[0] := Algorithm0;
+     _Algos[1] := Algorithm1;
+
+     DegN := 3;
+end;
 
 //////////////////////////////////////////////////////////////////// M E T H O D
 
-function TCurveBezierAVE<_TPoin_>.Segment( const i:Integer; const t:Double ) :_TPoin_;
+function TCurveBezier<_TPoin_>.Value( const X_:Double ) :_TPoin_;
 var
-   Ps :TArray<TWector>;
-   J :Integer;
+   i, J :Integer;
+   t, s :Double;
 begin
-     SetLength( Ps, DegN+1 );
+     i := Floor( X_ );
+     t := X_ - I;
 
-     for J := 0 to DegN do Ps[ J ] := TWector.Create( Poins[ i+J ], Bezier( DegN, J, t ) );
+     j :=   i div DegN       * DegN;
+     s := ( i mod DegN + t ) / DegN;
 
-     Result := Bary.Center( Ps );
+     Result := Segment( j, s );
 end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
