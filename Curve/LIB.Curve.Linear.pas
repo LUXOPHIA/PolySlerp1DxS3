@@ -1,9 +1,8 @@
-﻿unit LUX.Poins.Plots.S3;
+﻿unit LIB.Curve.Linear;
 
 interface //#################################################################### ■
 
-uses LUX.S3,
-     LIB.Poins.Plots;
+uses LIB.Curve;
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 T Y P E 】
 
@@ -11,40 +10,51 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C L A S S 】
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPlots3S
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveLinear<_TPoin_>
 
-     TPlots3S = class( TPlots<TDouble3S> )
+     TCurveLinear<_TPoin_> = class( TCurveAlgo<_TPoin_> )
      private
      protected
        ///// M E T H O D
-       function Distance( const P0_,P1_:TDouble3S ) :Double; override;
+       function Algorithm0( const i:Integer; const t:Double ) :_TPoin_;
      public
+       constructor Create;
      end;
-
-//const //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C O N S T A N T 】
-
-//var //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 V A R I A B L E 】
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
 
 implementation //############################################################### ■
 
-uses LUX.D3, LUX.Quaternion;
-
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R E C O R D 】
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C L A S S 】
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPlots3S
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveLinear
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveLinear<_TPoin_>
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
 
 //////////////////////////////////////////////////////////////////// M E T H O D
 
-function TPlots3S.Distance( const P0_,P1_:TDouble3S ) :Double;
+function TCurveLinear<_TPoin_>.Algorithm0( const i:Integer; const t:Double ) :_TPoin_;
+var
+   P0, P1 :_TPoin_;
 begin
-     Result := Angle( P0_.Trans( TDouble3D.IdentityY ),
-                      P1_.Trans( TDouble3D.IdentityY ) );
+     P0 := Poins[ i   ];
+     P1 := Poins[ i+1 ];
+
+     Result := Bary.Center( P0, P1, t );
+end;
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+
+constructor TCurveLinear<_TPoin_>.Create;
+begin
+     inherited;
+
+     AlgosN := 1;
+     _Algos[0] := Algorithm0;
 end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】

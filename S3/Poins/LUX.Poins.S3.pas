@@ -21,7 +21,6 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      private
        ///// M E T H O D
        function BSpline4( P1,P2,P3,P4,P5:TDouble3S ) :TDouble3S;
-       function BSpline5( P1,P2,P3,P4,P5:TDouble3S ): TDouble3S;
      protected
        _Poins2S :_TPoins_;
        ///// A C C E S S O R
@@ -47,7 +46,10 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 implementation //############################################################### ■
 
-uses LUX, LUX.D3, LUX.Curve.S3.BSpline;
+uses LUX,
+     LUX.D3,
+     LUX.Quaternion,
+     LUX.S3.Bary.Slerp;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R E C O R D 】
 
@@ -59,10 +61,10 @@ uses LUX, LUX.D3, LUX.Curve.S3.BSpline;
 
 //////////////////////////////////////////////////////////////////// M E T H O D
 
-//                0     1
-//       |-----+--===+===--+-----|
-// +-----+=====+=====+=====+=====+-----+-----+
-// 0     1     2     3     4     5     6     7
+//    |-----+-----+--|--+-----+-----|    :Basis Function
+//                0-----1                :t
+// +-----+-----+--===+===--+-----+-----+ :Poins
+// 0    [1]   [2]   [3]   [4]   [5]    6
 
 function TPolyPoins3S<_TPoins_>.BSpline4( P1,P2,P3,P4,P5:TDouble3S ) :TDouble3S;  // DegN = 4, t = 1/2
 begin
@@ -83,30 +85,6 @@ begin
      Result := P1;
 end;
 
-//                   0     1
-//       |-----+-----+=====+-----+-----|
-// +-----+=====+=====+=====+=====+-----+-----+
-// 0     1     2     3     4     5     6     7
-
-function TPolyPoins3S<_TPoins_>.BSpline5( P1,P2,P3,P4,P5:TDouble3S ): TDouble3S;  // DegN = 5, t = 0
-begin
-     P1 := Slerp( P1, P2, 4/5 );
-     P2 := Slerp( P2, P3, 3/5 );
-     P3 := Slerp( P3, P4, 2/5 );
-     P4 := Slerp( P4, P5, 1/5 );
-
-     P1 := Slerp( P1, P2, 3/4 );
-     P2 := Slerp( P2, P3, 2/4 );
-     P3 := Slerp( P3, P4, 1/4 );
-
-     P1 := Slerp( P1, P2, 2/3 );
-     P2 := Slerp( P2, P3, 1/3 );
-
-     P1 := Slerp( P1, P2, 1/2 );
-
-     Result := P1;
-end;
-
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
 
 //////////////////////////////////////////////////////////////////// M E T H O D
@@ -121,20 +99,29 @@ var
    Ps :TArray<TDouble3S>;
    I, N :Integer;
    P :TDouble3S;
+   B :Boolean;
 begin
      SetLength( Ps, PoinsN );
-     for I := 0 to PoinsN-1 do _Poins[ I ] := TDouble3S.Rotate( TDouble3D.IdentityY, _Poins2S.Poins[ I ] );
+     for I := 0 to PoinsN-1 do _Poins[ I ] := TDouble3S.Rotate( TDouble3D.IdentityY, _Poins2S.Poins[ I ] )
+                                            * TDouble3S.Rotate( TDouble3D.IdentityY, Pi2 * Random );
 
-     for N := 1 to 100 do
+     for N := 1 to 1000000 do
      begin
           for I := 0 to PoinsN-1 do
           begin
-               P := BSpline5( Poins[ I-2 ], Poins[ I-1 ], Poins[ I ], Poins[ I+1 ], Poins[ I+2 ] );
+               P := BSpline4( Poins[ I-2 ], Poins[ I-1 ], Poins[ I ], Poins[ I+1 ], Poins[ I+2 ] );
 
                Ps[ I ] := TDouble3S.Rotate( P.Trans( TDouble3D.IdentityY ), _Poins2S.Poins[ I ] ) * P;
           end;
 
-          for I := 0 to PoinsN-1 do _Poins[ I ] := Ps[ I ];
+          B := True;
+          for I := 0 to PoinsN-1 do
+          begin
+               B := B and ( 1-DOUBLE_EPS3 < DotProduct( _Poins[ I ], Ps[ I ] ) );
+
+               _Poins[ I ] := Ps[ I ];
+          end;
+          if B then Break;
      end;
 end;
 
