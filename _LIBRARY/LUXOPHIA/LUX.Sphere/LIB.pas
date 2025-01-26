@@ -61,7 +61,7 @@ end;
 function TBarycenter<_TPoin_>.Center( const P0_,P1_:_TPoin_; const T_:Double ) :_TPoin_;
 begin
      Result := Center( [ TWector.Create( P0_, 1 - T_ ),
-                       TWector.Create( P1_,     T_ ) ] );
+                         TWector.Create( P1_,     T_ ) ] );
 end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
