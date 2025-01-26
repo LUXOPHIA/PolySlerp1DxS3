@@ -1,17 +1,14 @@
-﻿unit LUX.S2;
+﻿unit LUX.S2.Bary;
 
 interface //#################################################################### ■
 
-uses LUX.D3,
-     LIB;
+uses LIB,
+     LUX.S2;
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 T Y P E 】
 
-     TSingle2S = TSingle3D;
-     TDouble2S = TDouble3D;
-
-     TSingleW2S = TSingleWector<TSingle2S>;
-     TDoubleW2S = TDoubleWector<TDouble2S>;
+     TSingleBary2S = TBarycenter<TSingle2S>;
+     TDoubleBary2S = TBarycenter<TDouble2S>;
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R E C O R D 】
 
