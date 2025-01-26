@@ -1,17 +1,14 @@
-﻿unit LUX.S3;
+﻿unit LUX.S3.Bary;
 
 interface //#################################################################### ■
 
 uses LIB,
-     LUX.Quaternion;
+     LUX.S3;
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 T Y P E 】
 
-     TSingle3S = TSingleQ;
-     TDouble3S = TDoubleQ;
-
-     TSingleW3S = TSIngleWector<TSingle3S>;
-     TDoubleW3S = TDoubleWector<TDouble3S>;
+     TSingleBary3S = TBarycenter<TSingle3S>;
+     TDoubleBary3S = TBarycenter<TDouble3S>;
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R E C O R D 】
 
