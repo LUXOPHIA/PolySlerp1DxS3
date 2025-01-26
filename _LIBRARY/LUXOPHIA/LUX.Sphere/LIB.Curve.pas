@@ -19,9 +19,9 @@ type //$$$$$$$$$&&$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      TCurve<_TPoin_> = class
      private
      protected
-       type TWector     = TWector    <_TPoin_>;
-       type TBarycenter = TBarycenter<_TPoin_>;
-       type TPoins      = TPoins     <_TPoin_>;
+       type TWector     = TDoubleWector<_TPoin_>;
+       type TBarycenter = TBarycenter  <_TPoin_>;
+       type TPoins      = TPoins       <_TPoin_>;
      protected
        _Bary  :TBarycenter;
        _Poins :TPoins;
