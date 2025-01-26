@@ -1,17 +1,13 @@
-﻿unit LUX.S2;
+﻿unit LUX.Curve.S3.Linear;
 
 interface //#################################################################### ■
 
-uses LUX.D3,
-     LIB;
+uses LIB.Curve.Linear,
+     LUX.S3;
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 T Y P E 】
 
-     TSingle2S = TSingle3D;
-     TDouble2S = TDouble3D;
-
-     TSingleW2S = TSingleWector<TSingle2S>;
-     TDoubleW2S = TDoubleWector<TDouble2S>;
+     TCurveLinear3S = TCurveLinear<TDouble3S>;
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R E C O R D 】
 

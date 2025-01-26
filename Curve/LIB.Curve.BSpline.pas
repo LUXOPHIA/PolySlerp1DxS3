@@ -2,7 +2,8 @@
 
 interface //#################################################################### ■
 
-uses LIB.Curve;
+uses LIB.Poins,
+     LIB.Curve;
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 T Y P E 】
 
@@ -10,20 +11,22 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C L A S S 】
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TSingleBSpline<_TValue_>
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveBSpline<_TPoin_>
 
-     TSingleBSpline<_TValue_> = class
-     public
+     TCurveBSpline<_TPoin_> = class( TCurveAlgo<_TPoin_> )
+     private
+     protected
+       _DegN :Integer;
+       ///// A C C E S S O R
+       function GetDegN :Integer; virtual;
+       procedure SetDegN( const DegN_:Integer ); virtual;
        ///// M E T H O D
-       class function CurveREC( Ps:TArray<_TValue_>; const t:Single; const DegN_:Integer; const Lerp_:TSingleLerp<_TValue_> ) :_TValue_;
-     end;
-
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TDoubleBSpline<_TValue_>
-
-     TDoubleBSpline<_TValue_> = class
+       function Algorithm0( const i:Integer; const t:Double ) :_TPoin_;
+       function Algorithm1( const i:Integer; const t:Double ) :_TPoin_;
      public
-       ///// M E T H O D
-       class function CurveREC( Ps:TArray<_TValue_>; const t:Double; const DegN_:Integer; const Lerp_:TDoubleLerp<_TValue_> ) :_TValue_;
+       constructor Create;
+       ///// P R O P E R T Y
+       property DegN :Integer read GetDegN write SetDegN;
      end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
@@ -46,52 +49,70 @@ implementation //###############################################################
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C L A S S 】
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TSingleBSpline<_TValue_>
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TCurveBSpline<_TPoin_>
 
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
+
+//////////////////////////////////////////////////////////////// A C C E S S O R
+
+function TCurveBSpline<_TPoin_>.GetDegN :Integer;
+begin
+     Result := _DegN;
+end;
+
+procedure TCurveBSpline<_TPoin_>.SetDegN( const DegN_:Integer );
+begin
+     _DegN := DegN_;  _OnChange.Run( Self );
+end;
 
 //////////////////////////////////////////////////////////////////// M E T H O D
 
-class function TSingleBSpline<_TValue_>.CurveREC( Ps:TArray<_TValue_>; const t:Single; const DegN_:Integer; const Lerp_:TSingleLerp<_TValue_> ) :_TValue_;
+function TCurveBSpline<_TPoin_>.Algorithm0( const i:Integer; const t:Double ) :_TPoin_;
 var
-   N, I :Integer;
-   S :Single;
+   Ps :TArray<TWector>;
+   J :Integer;
 begin
-     for N := DegN_-1 downto 0 do
-     begin
-          for I := 0 to N do
-          begin
-               S := ( t + N - I ) / ( N + 1 );
+     SetLength( Ps, DegN+1 );
 
-               Ps[ I ] := Lerp_( Ps[ I ], Ps[ I+1 ], S );
+     for J := 0 to DegN do Ps[ J ] := TWector.Create( Poins[ i+J ], BSpline( DegN, J, t ) );
+
+     Result := Bary.Center( Ps );
+end;
+
+function TCurveBSpline<_TPoin_>.Algorithm1( const i:Integer; const t:Double ) :_TPoin_;
+var
+   Ps :TArray<_TPoin_>;
+   J, N :Integer;
+   S :Double;
+begin
+     SetLength( Ps, DegN+1 );
+
+     for J := 0 to DegN do Ps[ J ] := Poins[ i + J ];
+
+     for N := DegN-1 downto 0 do
+     begin
+          for J := 0 to N do
+          begin
+               S := ( t + N - J ) / ( N + 1 );
+
+               Ps[ J ] := Bary.Center( Ps[ J ], Ps[ J+1 ], S );
           end;
      end;
 
      Result := Ps[ 0 ];
 end;
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TDoubleBSpline<_TValue_>
-
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-//////////////////////////////////////////////////////////////////// M E T H O D
-
-class function TDoubleBSpline<_TValue_>.CurveREC( Ps:TArray<_TValue_>; const t:Double; const DegN_:Integer; const Lerp_:TDoubleLerp<_TValue_> ) :_TValue_;
-var
-   N, I :Integer;
-   S :Double;
+constructor TCurveBSpline<_TPoin_>.Create;
 begin
-     for N := DegN_-1 downto 0 do
-     begin
-          for I := 0 to N do
-          begin
-               S := ( t + N - I ) / ( N + 1 );
+     inherited;
 
-               Ps[ I ] := Lerp_( Ps[ I ], Ps[ I+1 ], S );
-          end;
-     end;
+     AlgosN := 2;
+     _Algos[0] := Algorithm0;
+     _Algos[1] := Algorithm1;
 
-     Result := Ps[ 0 ];
+     DegN := 3;
 end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】

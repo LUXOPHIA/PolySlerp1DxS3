@@ -37,7 +37,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        procedure MakeEdges; virtual;
        procedure MakePoins; override;
      public
-       constructor Create( const Curve_:TCurve<_TPoin_> );
+       constructor Create;
        destructor Destroy; Override;
        ///// P R O P E R T Y
        property CellsN                    :Integer         read GetCellsN                  ;
@@ -94,6 +94,8 @@ end;
 
 procedure TPlots<_TPoin_>.SetCurve( const Curve_:TCurve<_TPoin_> );
 begin
+     if _Curve = Curve_ then Exit;
+
      if Assigned( _Curve ) then _Curve.OnChange.Del( UpCurve );
 
      _Curve := Curve_;
@@ -166,6 +168,8 @@ var
    P0, P1 :_TPoin_;
    J :Integer;
 begin
+     if not Assigned( _Curve ) then Exit;
+
      Td := _Curve.Poins.CellsN / EdgesN;
      T := 0;  P0 := _Curve.Value( T );
      for J := 0 to EdgesN-1 do
@@ -190,6 +194,8 @@ var
    I, J :Integer;
    A, Ad, T, Td :Double;
 begin
+     if not Assigned( _Curve ) then Exit;
+
      Td := _Curve.Poins.CellsN / EdgesN;
      Ad := ArcLen / CellsN;
 
@@ -212,11 +218,11 @@ end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-constructor TPlots<_TPoin_>.Create( const Curve_:TCurve<_TPoin_> );
+constructor TPlots<_TPoin_>.Create;
 begin
      inherited Create;
 
-     Curve   := Curve_;
+     Curve   := nil;
      EdgesN  := 1000;
      PlotGap := 1;
 end;

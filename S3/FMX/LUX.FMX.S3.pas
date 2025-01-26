@@ -129,6 +129,8 @@ end;
 
 procedure TPoins3D.SetPoins( const Poins_:TPoins3S );
 begin
+     if _Poins = Poins_ then Exit;
+
      if Assigned( _Poins ) then _Poins.OnChange.Del( UpPoins );
 
      _Poins := Poins_;
@@ -212,6 +214,8 @@ var
    M0, M :TSingleM4;
    J, N :Integer;
 begin
+     if not Assigned( _Poins ) then Exit;
+
      _Polygons.VertexBuffer.Length := (DivY+1)*(DivX+1){Vert/Grid} * 1{Grid/Poin} * Poins.PoinsN{Poin};
 
      M0 := TSingleM4.Translate( 0, Radius, 0 ) * TSingleM4.Scale( _DotSize );
@@ -229,7 +233,9 @@ procedure TPoins3D.MakeTopology;
 var
    J, I, N :Integer;
 begin
-     _Polygons.IndexBuffer.Length := 3{Vert/Tria} * 2{Tria/Face} * DivY*DivX{Face/Grid} * 1{Grid/Poin} *  _Poins.PoinsN{Poin};
+     if not Assigned( _Poins ) then Exit;
+
+     _Polygons.IndexBuffer.Length := 3{Vert/Tria} * 2{Tria/Face} * DivY*DivX{Face/Grid} * 1{Grid/Poin} *  Poins.PoinsN{Poin};
 
      J := 0;  I := 0;
      for N := 0 to _Poins.PoinsN-1 do AddGridT( J, I );
@@ -352,7 +358,9 @@ procedure THemiPoins3D.MakeTopology;
 var
    J, I, N :Integer;
 begin
-     _Polygons.IndexBuffer.Length := 3{Vert/Tria} * 2{Tria/Face} * DivY*DivX{Face/Grid} * 2{Grid/Poin} * _Poins.PoinsN{Poin};
+     if not Assigned( _Poins ) then Exit;
+
+     _Polygons.IndexBuffer.Length := 3{Vert/Tria} * 2{Tria/Face} * DivY*DivX{Face/Grid} * 2{Grid/Poin} * Poins.PoinsN{Poin};
 
      J := 0;  I := 0;
      for N := 0 to _Poins.PoinsN-1 do
@@ -375,6 +383,8 @@ var
    M0, M :TSingleM4;
    I, N :Integer;
 begin
+     if not Assigned( _Poins ) then Exit;
+
      _Polygons.VertexBuffer.Length := (DivY+1)*(DivX+1){Vert/Grid} * 2{Grid/Poin} * Poins.PoinsN{Poin};
 
      M0 := TSingleM4.Translate( 0, Radius, 0 ) * TSingleM4.Scale( _DotSize );
@@ -445,6 +455,8 @@ var
    M0, M :TSingleM4;
    I, N :Integer;
 begin
+     if not Assigned( _Poins ) then Exit;
+
      _Polygons.VertexBuffer.Length := (DivY+1)*(DivX+1){Vert/Grid} * 2{Grid/Poin} * Poins.PoinsN{Poin};
 
      M0 := TSingleM4.Translate( 0, Radius, 0 ) * TSingleM4.Scale( _DotSize );

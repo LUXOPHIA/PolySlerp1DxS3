@@ -1,17 +1,13 @@
-﻿unit LUX.S2;
+﻿unit LUX.Curve.S3.Bezier;
 
 interface //#################################################################### ■
 
-uses LUX.D3,
-     LIB;
+uses LIB.Curve.Bezier,
+     LUX.S3;
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 T Y P E 】
 
-     TSingle2S = TSingle3D;
-     TDouble2S = TDouble3D;
-
-     TSingleW2S = TSingleWector<TSingle2S>;
-     TDoubleW2S = TDoubleWector<TDouble2S>;
+     TCurveBezier3S = TCurveBezier<TDouble3S>;
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R E C O R D 】
 

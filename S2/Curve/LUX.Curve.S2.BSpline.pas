@@ -1,17 +1,13 @@
-﻿unit LUX.S2;
+﻿unit LUX.Curve.S2.BSpline;
 
 interface //#################################################################### ■
 
-uses LUX.D3,
-     LIB;
+uses LIB.Curve.BSpline,
+     LUX.S2;
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 T Y P E 】
 
-     TSingle2S = TSingle3D;
-     TDouble2S = TDouble3D;
-
-     TSingleW2S = TSingleWector<TSingle2S>;
-     TDoubleW2S = TDoubleWector<TDouble2S>;
+     TCurveBSpline2S = TCurveBSpline<TDouble2S>;
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R E C O R D 】
 
