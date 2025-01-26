@@ -10,8 +10,8 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      TSingle2S = TSingle3D;
      TDouble2S = TDouble3D;
 
-     TSingleWector2S = TWector<TSingle2S>;
-     TDoubleWector2S = TWector<TDouble2S>;
+     TSingleWector2S = TSingleWector<TSingle2S>;
+     TDoubleWector2S = TDoubleWector<TDouble2S>;
 
      TSingleBary2S = TBarycenter<TSingle2S>;
      TDoubleBary2S = TBarycenter<TDouble2S>;
