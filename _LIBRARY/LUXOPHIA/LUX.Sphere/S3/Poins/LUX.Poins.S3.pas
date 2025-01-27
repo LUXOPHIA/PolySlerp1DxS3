@@ -22,15 +22,22 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        ///// M E T H O D
        function BSpline4( P1,P2,P3,P4,P5:TDouble3S ) :TDouble3S;
      protected
+       _Anchs :TLoopPoins3S;
+       _Twist :Double;
+       ///// A C C E S S O R
+       function GetTwist :Double; virtual;
+       procedure SetTwist( const Twist_:Double ); virtual;
        ///// M E T H O D
        procedure MakeAnchs( const Poins2S_:TLoopPoins2S );
+       procedure MakePoins; override;
      public
        constructor Create;
        destructor Destroy; override;
        ///// P R O P E R T Y
-       property CellsN                    :Integer    read GetCellsN;
-       property PoinsN                    :Integer    read GetPoinsN;
-       property Poins[ const I_:Integer ] :TDouble3S  read GetPoins ; default;
+       property CellsN                    :Integer   read GetCellsN               ;
+       property PoinsN                    :Integer   read GetPoinsN               ;
+       property Poins[ const I_:Integer ] :TDouble3S read GetPoins                ; default;
+       property Twist                     :Double    read GetTwist  write SetTwist;
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPolyPoins3S04
@@ -86,7 +93,8 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 implementation //############################################################### ■
 
-uses LUX,
+uses System.Math,
+     LUX,
      LUX.D3,
      LUX.Quaternion,
      LUX.S3.Bary.Slerp;
@@ -127,6 +135,20 @@ end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
 
+//////////////////////////////////////////////////////////////// A C C E S S O R
+
+function TPolyPoins3S.GetTwist :Double;
+begin
+     Result := Twist;
+end;
+
+procedure TPolyPoins3S.SetTwist( const Twist_:Double );
+begin
+     if _Twist = Twist_ then Exit;
+
+     _Twist := Twist_;  upPoins := True;  _OnChange.Run( Self );
+end;
+
 //////////////////////////////////////////////////////////////////// M E T H O D
 
 procedure TPolyPoins3S.MakeAnchs( const Poins2S_:TLoopPoins2S );
@@ -138,7 +160,9 @@ var
 begin
      SetPoinsN( Poins2S_.PoinsN );
 
-     for I := 0 to PoinsN-1 do _Poins[ I ] := TDouble3S.Rotate( TDouble3D.IdentityY, Poins2S_[ I ] )
+     _Anchs.PoinsN := PoinsN;
+
+     for I := 0 to PoinsN-1 do _Anchs[ I ] := TDouble3S.Rotate( TDouble3D.IdentityY, Poins2S_[ I ] )
                                             * TDouble3S.Rotate( TDouble3D.IdentityY, Pi2 * Random );
 
      SetLength( Ps, PoinsN );
@@ -146,7 +170,7 @@ begin
      begin
           for I := 0 to PoinsN-1 do
           begin
-               P := BSpline4( Poins[ I-2 ], Poins[ I-1 ], Poins[ I ], Poins[ I+1 ], Poins[ I+2 ] );
+               P := BSpline4( _Anchs[ I-2 ], _Anchs[ I-1 ], _Anchs[ I ], _Anchs[ I+1 ], _Anchs[ I+2 ] );
 
                Ps[ I ] := TDouble3S.Rotate( P.Trans( TDouble3D.IdentityY ), Poins2S_[ I ] ) * P;
           end;
@@ -154,14 +178,27 @@ begin
           B := True;
           for I := 0 to PoinsN-1 do
           begin
-               B := B and ( 1-DOUBLE_EPS3 < DotProduct( _Poins[ I ], Ps[ I ] ) );
+               B := B and ( 1-DOUBLE_EPS3 < DotProduct( _Anchs[ I ], Ps[ I ] ) );
 
-               _Poins[ I ] := Ps[ I ];
+               _Anchs[ I ] := Ps[ I ];
           end;
           if B then Break;
      end;
 
      Poins2S_.Free;
+end;
+
+procedure TPolyPoins3S.MakePoins;
+var
+   I :Integer;
+   S :Double;
+begin
+     for I := 0 to PoinsN-1 do
+     begin
+          S := I mod 2 * 2 - 1;
+
+          _Poins[ I ] := _Anchs[ I ] * TDouble3S.Rotate( TDouble3D.IdentityY, S * _Twist );
+     end;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
@@ -170,10 +207,14 @@ constructor TPolyPoins3S.Create;
 begin
      inherited;
 
+     _Anchs := TLoopPoins3S.Create;
+
+     Twist := DegToRad( 60 );
 end;
 
 destructor TPolyPoins3S.Destroy;
 begin
+     _Anchs.Free;
 
      inherited;
 end;
