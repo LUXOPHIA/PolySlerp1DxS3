@@ -109,7 +109,7 @@ type
     _MouseP :TPointF;
   public
     { public êÈåæ }
-    _Poins3S  :TObjectList<TPoins3S>;
+    _Poins3S  :TObjectList<TPolyPoins3S>;
     _Bary3S   :TObjectList<TDoubleBary3S>;
     _Curve3S0 :TObjectList<TCurve3S>;
     _Curve3S1 :TObjectList<TCurve3S>;
@@ -189,7 +189,7 @@ end;
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
-     _Poins3S  := TObjectList<TPoins3S>     .Create;
+     _Poins3S  := TObjectList<TPolyPoins3S> .Create;
      _Bary3S   := TObjectList<TDoubleBary3S>.Create;
      _Curve3S0 := TObjectList<TCurve3S>     .Create;
      _Curve3S1 := TObjectList<TCurve3S>     .Create;
