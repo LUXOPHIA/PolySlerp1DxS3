@@ -11,28 +11,19 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      TPoins3S     = TPoins    <TDouble3S>;
      TLoopPoins3S = TLoopPoins<TDouble3S>;
 
-     TPolyPoins3S<_TPoins_:constructor,TLoopPoins2S> = class;
-
-     TPolyPoins3S04 = TPolyPoins3S<TPolyPoins2S04>;
-     TPolyPoins3S06 = TPolyPoins3S<TPolyPoins2S06>;
-     TPolyPoins3S08 = TPolyPoins3S<TPolyPoins2S08>;
-     TPolyPoins3S12 = TPolyPoins3S<TPolyPoins2S12>;
-     TPolyPoins3S20 = TPolyPoins3S<TPolyPoins2S20>;
-
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R E C O R D 】
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C L A S S 】
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPolyPoins3S<_TPoins_>
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPolyPoins3S
 
-     TPolyPoins3S<_TPoins_:constructor,TLoopPoins2S> = class( TLoopPoins3S )
+     TPolyPoins3S = class( TLoopPoins3S )
      private
        ///// M E T H O D
        function BSpline4( P1,P2,P3,P4,P5:TDouble3S ) :TDouble3S;
      protected
-       _Poins2S :_TPoins_;
        ///// M E T H O D
-       procedure MakePoins; override;
+       procedure MakeAnchs( const Poins2S_:TLoopPoins2S );
      public
        constructor Create;
        destructor Destroy; override;
@@ -40,6 +31,51 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        property CellsN                    :Integer    read GetCellsN;
        property PoinsN                    :Integer    read GetPoinsN;
        property Poins[ const I_:Integer ] :TDouble3S  read GetPoins ; default;
+     end;
+
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPolyPoins3S04
+
+     TPolyPoins3S04 = class( TPolyPoins3S )
+     private
+     protected
+     public
+       constructor Create;
+     end;
+
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPolyPoins3S06
+
+     TPolyPoins3S06 = class( TPolyPoins3S )
+     private
+     protected
+     public
+       constructor Create;
+     end;
+
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPolyPoins3S08
+
+     TPolyPoins3S08 = class( TPolyPoins3S )
+     private
+     protected
+     public
+       constructor Create;
+     end;
+
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPolyPoins3S12
+
+     TPolyPoins3S12 = class( TPolyPoins3S )
+     private
+     protected
+     public
+       constructor Create;
+     end;
+
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPolyPoins3S20
+
+     TPolyPoins3S20 = class( TPolyPoins3S )
+     private
+     protected
+     public
+       constructor Create;
      end;
 
 //const //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C O N S T A N T 】
@@ -70,7 +106,7 @@ uses LUX,
 // +-----+-----+--===+===--+-----+-----+ :Poins
 // 0    [1]   [2]   [3]   [4]   [5]    6
 
-function TPolyPoins3S<_TPoins_>.BSpline4( P1,P2,P3,P4,P5:TDouble3S ) :TDouble3S;  // DegN = 4, t = 1/2
+function TPolyPoins3S.BSpline4( P1,P2,P3,P4,P5:TDouble3S ) :TDouble3S;  // DegN = 4, t = 1/2
 begin
      P1 := Slerp( P1, P2, 7/8 );
      P2 := Slerp( P2, P3, 5/8 );
@@ -93,24 +129,26 @@ end;
 
 //////////////////////////////////////////////////////////////////// M E T H O D
 
-procedure TPolyPoins3S<_TPoins_>.MakePoins;
+procedure TPolyPoins3S.MakeAnchs( const Poins2S_:TLoopPoins2S );
 var
    Ps :TArray<TDouble3S>;
    I, N :Integer;
    P :TDouble3S;
    B :Boolean;
 begin
-     SetLength( Ps, PoinsN );
-     for I := 0 to PoinsN-1 do _Poins[ I ] := TDouble3S.Rotate( TDouble3D.IdentityY, _Poins2S.Poins[ I ] )
+     SetPoinsN( Poins2S_.PoinsN );
+
+     for I := 0 to PoinsN-1 do _Poins[ I ] := TDouble3S.Rotate( TDouble3D.IdentityY, Poins2S_[ I ] )
                                             * TDouble3S.Rotate( TDouble3D.IdentityY, Pi2 * Random );
 
+     SetLength( Ps, PoinsN );
      for N := 1 to 1000000 do
      begin
           for I := 0 to PoinsN-1 do
           begin
                P := BSpline4( Poins[ I-2 ], Poins[ I-1 ], Poins[ I ], Poins[ I+1 ], Poins[ I+2 ] );
 
-               Ps[ I ] := TDouble3S.Rotate( P.Trans( TDouble3D.IdentityY ), _Poins2S.Poins[ I ] ) * P;
+               Ps[ I ] := TDouble3S.Rotate( P.Trans( TDouble3D.IdentityY ), Poins2S_[ I ] ) * P;
           end;
 
           B := True;
@@ -122,24 +160,77 @@ begin
           end;
           if B then Break;
      end;
+
+     Poins2S_.Free;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-constructor TPolyPoins3S<_TPoins_>.Create;
+constructor TPolyPoins3S.Create;
 begin
      inherited;
 
-     _Poins2S := _TPoins_.Create;
-
-     SetPoinsN( _Poins2S.PoinsN );
 end;
 
-destructor TPolyPoins3S<_TPoins_>.Destroy;
+destructor TPolyPoins3S.Destroy;
 begin
-     _Poins2S.Free;
 
      inherited;
+end;
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPolyPoins3S04
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+
+constructor TPolyPoins3S04.Create;
+begin
+     inherited;
+
+     MakeAnchs( TPolyPoins2S04.Create );
+end;
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPolyPoins3S06
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+
+constructor TPolyPoins3S06.Create;
+begin
+     inherited;
+
+     MakeAnchs( TPolyPoins2S06.Create );
+end;
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPolyPoins3S08
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+
+constructor TPolyPoins3S08.Create;
+begin
+     inherited;
+
+     MakeAnchs( TPolyPoins2S08.Create );
+end;
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPolyPoins3S12
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+
+constructor TPolyPoins3S12.Create;
+begin
+     inherited;
+
+     MakeAnchs( TPolyPoins2S12.Create );
+end;
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPolyPoins3S20
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+
+constructor TPolyPoins3S20.Create;
+begin
+     inherited;
+
+     MakeAnchs( TPolyPoins2S20.Create );
 end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
