@@ -23,13 +23,15 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        function BSpline4( P1,P2,P3,P4,P5:TDouble3S ) :TDouble3S;
      protected
        _Poins2S :_TPoins_;
-       ///// A C C E S S O R
-       function GetPoinsN :Integer; override;
        ///// M E T H O D
        procedure MakePoins; override;
      public
        constructor Create;
        destructor Destroy; override;
+       ///// P R O P E R T Y
+       property CellsN                    :Integer    read GetCellsN;
+       property PoinsN                    :Integer    read GetPoinsN;
+       property Poins[ const I_:Integer ] :TDouble3S  read GetPoins ; default;
      end;
 
      TPolyPoins3S04 = TPolyPoins3S<TPolyPoins2S04>;
@@ -89,11 +91,6 @@ end;
 
 //////////////////////////////////////////////////////////////////// M E T H O D
 
-function TPolyPoins3S<_TPoins_>.GetPoinsN :Integer;
-begin
-     Result := _Poins2S.PoinsN;
-end;
-
 procedure TPolyPoins3S<_TPoins_>.MakePoins;
 var
    Ps :TArray<TDouble3S>;
@@ -132,6 +129,8 @@ begin
      inherited;
 
      _Poins2S := _TPoins_.Create;
+
+     SetPoinsN( _Poins2S.PoinsN );
 end;
 
 destructor TPolyPoins3S<_TPoins_>.Destroy;
