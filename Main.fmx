@@ -2,8 +2,8 @@ object Form1: TForm1
   Left = 0
   Top = 0
   Caption = 'Quaternion Curve'
-  ClientHeight = 520
-  ClientWidth = 760
+  ClientHeight = 532
+  ClientWidth = 772
   Position = ScreenCenter
   FormFactor.Width = 320
   FormFactor.Height = 480
@@ -18,8 +18,8 @@ object Form1: TForm1
     Margins.Top = 10.000000000000000000
     Margins.Right = 10.000000000000000000
     Margins.Bottom = 10.000000000000000000
-    Size.Width = 500.000000000000000000
-    Size.Height = 500.000000000000000000
+    Size.Width = 512.000000000000000000
+    Size.Height = 512.000000000000000000
     Size.PlatformDefault = False
     UsingDesignCamera = False
     OnMouseDown = Viewport3D1MouseDown
@@ -29,46 +29,20 @@ object Form1: TForm1
   object Panel1: TPanel
     Align = Right
     Margins.Left = -10.000000000000000000
-    Position.X = 510.000000000000000000
+    Position.X = 522.000000000000000000
     Size.Width = 250.000000000000000000
-    Size.Height = 520.000000000000000000
+    Size.Height = 532.000000000000000000
     Size.PlatformDefault = False
     StyleLookup = 'pushpanel'
     TabOrder = 2
-    object ComboBoxP: TComboBox
-      Items.Strings = (
-        '04'
-        '06'
-        '08'
-        '12'
-        '20')
-      ItemIndex = 4
-      Position.X = 100.000000000000000000
-      Position.Y = 15.000000000000000000
-      Size.Width = 110.000000000000000000
-      Size.Height = 20.000000000000000000
-      Size.PlatformDefault = False
-      TabOrder = 1
-      OnChange = ComboBoxPChange
-    end
-    object LabelP: TLabel
-      Position.X = 5.000000000000000000
-      Position.Y = 15.000000000000000000
-      Size.Width = 90.000000000000000000
-      Size.Height = 20.000000000000000000
-      Size.PlatformDefault = False
-      TextSettings.HorzAlign = Trailing
-      Text = 'Points:'
-      TabOrder = 2
-    end
     object GroupBoxUC: TGroupBox
       Position.X = 10.000000000000000000
-      Position.Y = 45.000000000000000000
+      Position.Y = 115.000000000000000000
       Size.Width = 230.000000000000000000
       Size.Height = 195.000000000000000000
       Size.PlatformDefault = False
       Text = 'Upper Curve'
-      TabOrder = 4
+      TabOrder = 3
       object TabControlUC: TTabControl
         Position.X = 15.000000000000000000
         Position.Y = 95.000000000000000000
@@ -354,7 +328,7 @@ object Form1: TForm1
           'Bezier'
           'B-Spline'
           'Catmull-Rom')
-        ItemIndex = 0
+        ItemIndex = 2
         Position.X = 90.000000000000000000
         Position.Y = 25.000000000000000000
         Size.Width = 110.000000000000000000
@@ -363,17 +337,17 @@ object Form1: TForm1
         TabOrder = 1
         OnChange = ComboBoxUCKChange
       end
-      object LabelUCM: TLabel
+      object LabelUCB: TLabel
         Position.X = 5.000000000000000000
         Position.Y = 60.000000000000000000
         Size.Width = 80.000000000000000000
         Size.Height = 20.000000000000000000
         Size.PlatformDefault = False
         TextSettings.HorzAlign = Trailing
-        Text = 'Method:'
+        Text = 'Barycenter:'
         TabOrder = 5
       end
-      object ComboBoxUCM: TComboBox
+      object ComboBoxUCB: TComboBox
         Items.Strings = (
           'GLerp'
           'Slerp'
@@ -388,17 +362,17 @@ object Form1: TForm1
         Size.Height = 20.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 4
-        OnChange = ComboBoxUCMChange
+        OnChange = ComboBoxUCBChange
       end
     end
     object GroupBoxLC: TGroupBox
       Position.X = 10.000000000000000000
-      Position.Y = 250.000000000000000000
+      Position.Y = 320.000000000000000000
       Size.Width = 230.000000000000000000
       Size.Height = 195.000000000000000000
       Size.PlatformDefault = False
       Text = 'Lower Curve'
-      TabOrder = 3
+      TabOrder = 2
       object LabelLCK: TLabel
         Position.X = 5.000000000000000000
         Position.Y = 25.000000000000000000
@@ -424,17 +398,17 @@ object Form1: TForm1
         TabOrder = 1
         OnChange = ComboBoxLCKChange
       end
-      object LabelLCM: TLabel
+      object LabelLCB: TLabel
         Position.X = 5.000000000000000000
         Position.Y = 60.000000000000000000
         Size.Width = 80.000000000000000000
         Size.Height = 20.000000000000000000
         Size.PlatformDefault = False
         TextSettings.HorzAlign = Trailing
-        Text = 'Method:'
+        Text = 'Barycenter:'
         TabOrder = 5
       end
-      object ComboBoxLCM: TComboBox
+      object ComboBoxLCB: TComboBox
         Items.Strings = (
           'GLerp'
           'Slerp'
@@ -442,18 +416,18 @@ object Form1: TForm1
           'PolySlerp'
           'ExpMap'
           'ModExpMap')
-        ItemIndex = 4
+        ItemIndex = 1
         Position.X = 90.000000000000000000
         Position.Y = 60.000000000000000000
         Size.Width = 110.000000000000000000
         Size.Height = 20.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 4
-        OnChange = ComboBoxLCMChange
+        OnChange = ComboBoxLCBChange
       end
       object TabControlLC: TTabControl
         Position.X = 15.000000000000000000
-        Position.Y = 90.000000000000000000
+        Position.Y = 95.000000000000000000
         Size.Width = 200.000000000000000000
         Size.Height = 85.000000000000000000
         Size.PlatformDefault = False
@@ -719,6 +693,63 @@ object Form1: TForm1
             OnChange = ComboBoxLC3AChange
           end
         end
+      end
+    end
+    object GroupBoxP: TGroupBox
+      Position.X = 10.000000000000000000
+      Position.Y = 10.000000000000000000
+      Size.Width = 230.000000000000000000
+      Size.Height = 95.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Points'
+      TabOrder = 1
+      object LabelPN: TLabel
+        Position.X = 5.000000000000000000
+        Position.Y = 25.000000000000000000
+        Size.Width = 80.000000000000000000
+        Size.Height = 20.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.HorzAlign = Trailing
+        Text = 'Count:'
+        TabOrder = 3
+      end
+      object ComboBoxPN: TComboBox
+        Items.Strings = (
+          '04'
+          '06'
+          '08'
+          '12'
+          '20')
+        ItemIndex = 4
+        Position.X = 90.000000000000000000
+        Position.Y = 25.000000000000000000
+        Size.Width = 110.000000000000000000
+        Size.Height = 20.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+        OnChange = ComboBoxPNChange
+      end
+      object ScrollBarPT: TScrollBar
+        Max = 90.000000000000000000
+        SmallChange = 0.000000000000000000
+        Orientation = Horizontal
+        Position.X = 90.000000000000000000
+        Position.Y = 60.000000000000000000
+        Size.Width = 110.000000000000000000
+        Size.Height = 20.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 38
+        OnChange = ScrollBarPTChange
+      end
+      object LabelPT: TLabel
+        Position.X = 5.000000000000000000
+        Position.Y = 60.000000000000000000
+        Size.Width = 80.000000000000000000
+        Size.Height = 20.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.HorzAlign = Trailing
+        Text = 'Twist Angle:'
+        TabOrder = 2
       end
     end
   end

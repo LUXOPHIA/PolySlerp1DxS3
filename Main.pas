@@ -29,13 +29,16 @@ type
   TForm1 = class(TForm)
     Viewport3D1: TViewport3D;
     Panel1: TPanel;
-      LabelP: TLabel;
-        ComboBoxP: TComboBox;
+      GroupBoxP: TGroupBox;
+        LabelPN: TLabel;
+          ComboBoxPN: TComboBox;
+        LabelPT: TLabel;
+          ScrollBarPT: TScrollBar;
       GroupBoxUC: TGroupBox;
         LabelUCK: TLabel;
           ComboBoxUCK: TComboBox;
-        LabelUCM: TLabel;
-          ComboBoxUCM: TComboBox;
+        LabelUCB: TLabel;
+          ComboBoxUCB: TComboBox;
         TabControlUC: TTabControl;
           TabItemUC0: TTabItem;
             LabelUC0A: TLabel;
@@ -60,8 +63,8 @@ type
       GroupBoxLC: TGroupBox;
         LabelLCK: TLabel;
           ComboBoxLCK: TComboBox;
-        LabelLCM: TLabel;
-          ComboBoxLCM: TComboBox;
+        LabelLCB: TLabel;
+          ComboBoxLCB: TComboBox;
         TabControlLC: TTabControl;
           TabItemLC0: TTabItem;
             LabelLC0A: TLabel;
@@ -88,11 +91,12 @@ type
     procedure Viewport3D1MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Single);
     procedure Viewport3D1MouseMove(Sender: TObject; Shift: TShiftState; X, Y: Single);
     procedure Viewport3D1MouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Single);
-    procedure ComboBoxPChange(Sender: TObject);
+    procedure ComboBoxPNChange(Sender: TObject);
+    procedure ScrollBarPTChange(Sender: TObject);
     procedure ComboBoxUCKChange(Sender: TObject);
     procedure ComboBoxLCKChange(Sender: TObject);
-    procedure ComboBoxUCMChange(Sender: TObject);
-    procedure ComboBoxLCMChange(Sender: TObject);
+    procedure ComboBoxUCBChange(Sender: TObject);
+    procedure ComboBoxLCBChange(Sender: TObject);
     procedure ComboBoxUC1AChange(Sender: TObject);
     procedure ComboBoxLC1AChange(Sender: TObject);
     procedure SpinBoxUC1DChange(Sender: TObject);
@@ -162,11 +166,12 @@ end;
 procedure TForm1.InitObjects;
 begin
      ///// Point Sets
-     ComboBoxPChange( Self );
+     ComboBoxPNChange ( Self );
+     ScrollBarPTChange( Self );
 
      ///// Barycenters
-     ComboBoxUCMChange( Self );
-     ComboBoxLCMChange( Self );
+     ComboBoxUCBChange( Self );
+     ComboBoxLCBChange( Self );
 
      ///// Curves
      ComboBoxUCKChange( Self );
@@ -251,17 +256,24 @@ end;
 
 //------------------------------------------------------------------------------
 
-procedure TForm1.ComboBoxPChange(Sender: TObject);
+procedure TForm1.ComboBoxPNChange(Sender: TObject);
 var
    Ps :TPoins3S;
    C :TCurve3S;
 begin
-     Ps := _Poins3S[ ComboBoxP.ItemIndex ];
+     Ps := _Poins3S[ ComboBoxPN.ItemIndex ];
 
      for C in _Curve3S0 do C.Poins := Ps;
      for C in _Curve3S1 do C.Poins := Ps;
 
      _Poins3D.Poins := Ps;
+end;
+
+procedure TForm1.ScrollBarPTChange(Sender: TObject);
+var
+   Ps :TPolyPoins3S;
+begin
+     for Ps in _Poins3S do Ps.Twist := DegToRad( ScrollBarPT.Value );
 end;
 
 //------------------------------------------------------------------------------
@@ -282,18 +294,18 @@ end;
 
 //------------------------------------------------------------------------------
 
-procedure TForm1.ComboBoxUCMChange(Sender: TObject);
+procedure TForm1.ComboBoxUCBChange(Sender: TObject);
 var
    C :TCurve3S;
 begin
-     for C in _Curve3S1 do C.Bary := _Bary3S[ ComboBoxUCM.ItemIndex ];
+     for C in _Curve3S1 do C.Bary := _Bary3S[ ComboBoxUCB.ItemIndex ];
 end;
 
-procedure TForm1.ComboBoxLCMChange(Sender: TObject);
+procedure TForm1.ComboBoxLCBChange(Sender: TObject);
 var
    C :TCurve3S;
 begin
-     for C in _Curve3S0 do C.Bary := _Bary3S[ ComboBoxLCM.ItemIndex ];
+     for C in _Curve3S0 do C.Bary := _Bary3S[ ComboBoxLCB.ItemIndex ];
 end;
 
 //------------------------------------------------------------------------------
