@@ -11,6 +11,14 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      TPoins3S     = TPoins    <TDouble3S>;
      TLoopPoins3S = TLoopPoins<TDouble3S>;
 
+     TPolyPoins3S<_TPoins_:constructor,TLoopPoins2S> = class;
+
+     TPolyPoins3S04 = TPolyPoins3S<TPolyPoins2S04>;
+     TPolyPoins3S06 = TPolyPoins3S<TPolyPoins2S06>;
+     TPolyPoins3S08 = TPolyPoins3S<TPolyPoins2S08>;
+     TPolyPoins3S12 = TPolyPoins3S<TPolyPoins2S12>;
+     TPolyPoins3S20 = TPolyPoins3S<TPolyPoins2S20>;
+
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R E C O R D 】
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C L A S S 】
@@ -33,12 +41,6 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        property PoinsN                    :Integer    read GetPoinsN;
        property Poins[ const I_:Integer ] :TDouble3S  read GetPoins ; default;
      end;
-
-     TPolyPoins3S04 = TPolyPoins3S<TPolyPoins2S04>;
-     TPolyPoins3S06 = TPolyPoins3S<TPolyPoins2S06>;
-     TPolyPoins3S08 = TPolyPoins3S<TPolyPoins2S08>;
-     TPolyPoins3S12 = TPolyPoins3S<TPolyPoins2S12>;
-     TPolyPoins3S20 = TPolyPoins3S<TPolyPoins2S20>;
 
 //const //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C O N S T A N T 】
 
