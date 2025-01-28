@@ -33,6 +33,11 @@ function PowSlerp( const Q0_,Q1_:TDouble3S; const T_:Double ) :TDouble3S; overlo
 function PowSlerp( const P1_,P2_:TSingleW3S ) :TSingleW3S; overload;
 function PowSlerp( const P1_,P2_:TDoubleW3S ) :TDoubleW3S; overload;
 
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ChainPowSlerp
+
+function ChainPowSlerp( const Ps_:TArray<TSingleW3S> ) :TSingleW3S; overload;
+function ChainPowSlerp( const Ps_:TArray<TDoubleW3S> ) :TDoubleW3S; overload;
+
 implementation //############################################################### ■
 
 uses System.Math,
@@ -51,17 +56,8 @@ uses System.Math,
 //////////////////////////////////////////////////////////////////// M E T H O D
 
 function TBaryPowSlerp3S.Center( const Ps_:TArray<TDoubleW3S> ) :TDouble3S;
-var
-   PsN, I :Integer;
-   P :TDoubleW3S;
 begin
-     PsN := Length( Ps_ );
-
-     P := Ps_[0];
-
-     for I := 1 to PsN-1 do P := PowSlerp( P, Ps_[ I ] );
-
-     Result := P.v;
+     Result := ChainPowSlerp( Ps_ ).v;
 end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
@@ -110,6 +106,26 @@ begin
           if 1-DOUBLE_EPS3 < C then Result.v := GLerp( P1_.v, P2_.v, P1_.w, P2_.w )
                                else Result.v := PowSlerp( P1_.v, P2_.v, P2_.w / Result.w );
      end;
+end;
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ChainPowSlerp
+
+function ChainPowSlerp( const Ps_:TArray<TSingleW3S> ) :TSingleW3S;
+var
+   I :Integer;
+begin
+     Result := Ps_[0];
+
+     for I := 1 to High( Ps_ ) do Result := PowSlerp( Result, Ps_[ I ] );
+end;
+
+function ChainPowSlerp( const Ps_:TArray<TDoubleW3S> ) :TDoubleW3S;
+var
+   I :Integer;
+begin
+     Result := Ps_[0];
+
+     for I := 1 to High( Ps_ ) do Result := PowSlerp( Result, Ps_[ I ] );
 end;
 
 end. //######################################################################### ■
