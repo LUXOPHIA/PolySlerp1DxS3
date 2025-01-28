@@ -64,7 +64,7 @@ type
           TabItemUC4: TTabItem;
             LabelUC4A: TLabel;
               ComboBoxUC4A: TComboBox;
-            LabelUC4D: TLabel;
+            LabelUC4W: TLabel;
               SpinBoxUC4W: TSpinBox;
       GroupBoxLC: TGroupBox;
         LabelLCK: TLabel;
@@ -95,7 +95,7 @@ type
           TabItemLC4: TTabItem;
             LabelLC4A: TLabel;
               ComboBoxLC4A: TComboBox;
-            LabeLC4D: TLabel;
+            LabeLC4W: TLabel;
               SpinBoxLC4W: TSpinBox;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);

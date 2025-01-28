@@ -49,7 +49,7 @@ object Form1: TForm1
         Size.Width = 200.000000000000000000
         Size.Height = 85.000000000000000000
         Size.PlatformDefault = False
-        TabIndex = 3
+        TabIndex = 2
         TabOrder = 4
         TabPosition = None
         Sizes = (
@@ -193,7 +193,7 @@ object Form1: TForm1
             item
             end>
           TextSettings.Trimming = None
-          IsSelected = False
+          IsSelected = True
           Size.Width = 8.000000000000000000
           Size.Height = 8.000000000000000000
           Size.PlatformDefault = False
@@ -255,7 +255,7 @@ object Form1: TForm1
             item
             end>
           TextSettings.Trimming = None
-          IsSelected = True
+          IsSelected = False
           Size.Width = 8.000000000000000000
           Size.Height = 8.000000000000000000
           Size.PlatformDefault = False
@@ -325,6 +325,8 @@ object Form1: TForm1
           StyleLookup = ''
           TabOrder = 0
           Text = 'TabItemUC4'
+          ExplicitSize.cx = 8.000000000000000000
+          ExplicitSize.cy = 8.000000000000000000
           object SpinBoxUC4W: TSpinBox
             Touch.InteractiveGestures = [LongTap, DoubleTap]
             TabOrder = 3
@@ -339,14 +341,14 @@ object Form1: TForm1
             Size.PlatformDefault = False
             OnChange = SpinBoxUC4WChange
           end
-          object LabelUC4D: TLabel
+          object LabelUC4W: TLabel
             Position.X = 5.000000000000000000
             Position.Y = 50.000000000000000000
             Size.Width = 65.000000000000000000
             Size.Height = 20.000000000000000000
             Size.PlatformDefault = False
             TextSettings.HorzAlign = Trailing
-            Text = 'Degree:'
+            Text = 'Width:'
             TabOrder = 2
           end
           object LabelUC4A: TLabel
@@ -453,7 +455,7 @@ object Form1: TForm1
           'B-Spline'
           'Catmull-Rom'
           'Lanczos')
-        ItemIndex = 0
+        ItemIndex = 2
         Position.X = 90.000000000000000000
         Position.Y = 25.000000000000000000
         Size.Width = 110.000000000000000000
@@ -495,7 +497,7 @@ object Form1: TForm1
         Size.Width = 200.000000000000000000
         Size.Height = 85.000000000000000000
         Size.PlatformDefault = False
-        TabIndex = 0
+        TabIndex = 2
         TabOrder = 4
         TabPosition = None
         Sizes = (
@@ -514,7 +516,7 @@ object Form1: TForm1
             item
             end>
           TextSettings.Trimming = None
-          IsSelected = True
+          IsSelected = False
           Size.Width = 8.000000000000000000
           Size.Height = 8.000000000000000000
           Size.PlatformDefault = False
@@ -639,7 +641,7 @@ object Form1: TForm1
             item
             end>
           TextSettings.Trimming = None
-          IsSelected = False
+          IsSelected = True
           Size.Width = 8.000000000000000000
           Size.Height = 8.000000000000000000
           Size.PlatformDefault = False
@@ -771,6 +773,8 @@ object Form1: TForm1
           StyleLookup = ''
           TabOrder = 0
           Text = 'TabItemLC4'
+          ExplicitSize.cx = 8.000000000000000000
+          ExplicitSize.cy = 8.000000000000000000
           object SpinBoxLC4W: TSpinBox
             Touch.InteractiveGestures = [LongTap, DoubleTap]
             TabOrder = 3
@@ -785,14 +789,14 @@ object Form1: TForm1
             Size.PlatformDefault = False
             OnChange = SpinBoxLC4WChange
           end
-          object LabeLC4D: TLabel
+          object LabeLC4W: TLabel
             Position.X = 5.000000000000000000
             Position.Y = 50.000000000000000000
             Size.Width = 65.000000000000000000
             Size.Height = 20.000000000000000000
             Size.PlatformDefault = False
             TextSettings.HorzAlign = Trailing
-            Text = 'Degree:'
+            Text = 'Width:'
             TabOrder = 2
           end
           object LabelLC4A: TLabel
