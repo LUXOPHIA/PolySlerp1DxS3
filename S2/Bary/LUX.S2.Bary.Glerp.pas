@@ -39,14 +39,15 @@ function Glerp( const P1_,P2_:TDouble2S; const W1_,W2_:Double ) :TDouble2S; over
 function Glerp( const P1_,P2_:TSingleW2S ) :TSingleW2S; overload;
 function Glerp( const P1_,P2_:TDoubleW2S ) :TDoubleW2S; overload;
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% GlerpSum
+function Glerp( const Ps_:TArray<TSingle2S> ) :TSingle2S; overload;
+function Glerp( const Ps_:TArray<TDouble2S> ) :TDouble2S; overload;
 
-function GlerpSum( const Ps_:TArray<TSingleW2S> ) :TSingleW2S; overload;
-function GlerpSum( const Ps_:TArray<TDoubleW2S> ) :TDoubleW2S; overload;
+function Glerp( const Ps_:TArray<TSingleW2S> ) :TSingleW2S; overload;
+function Glerp( const Ps_:TArray<TDoubleW2S> ) :TDoubleW2S; overload;
 
 implementation //############################################################### ■
 
-uses LIB.D3;
+uses LUX, LIB.D3;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R E C O R D 】
 
@@ -59,14 +60,8 @@ uses LIB.D3;
 //////////////////////////////////////////////////////////////////// M E T H O D
 
 function TBaryGLerp2S.Center( const Ps_:TArray<TDoubleW2S> ) :TDouble2S;
-var
-   P :TDoubleW2S;
 begin
-     Result := 0;
-
-     for P in Ps_ do Result := Result + P.w * P.v;
-
-     Result := Result.Unitor;
+     Result := Glerp( Ps_ ).v;
 end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
@@ -121,34 +116,70 @@ begin
      Result.w := P1_.w + P2_.w;
 end;
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% GlerpSum
+//------------------------------------------------------------------------------
 
-function GlerpSum( const Ps_:TArray<TSingleW2S> ) :TSingleW2S;
+function Glerp( const Ps_:TArray<TSingle2S> ) :TSingle2S;
+var
+   P :TSingle2S;
+begin
+     Result := 0;
+     for P in Ps_ do Result := Result + P;
+     Result := Result.Unitor;
+end;
+
+function Glerp( const Ps_:TArray<TDouble2S> ) :TDouble2S;
+var
+   P :TDouble2S;
+begin
+     Result := 0;
+     for P in Ps_ do Result := Result + P;
+     Result := Result.Unitor;
+end;
+
+//------------------------------------------------------------------------------
+
+function Glerp( const Ps_:TArray<TSingleW2S> ) :TSingleW2S;
 var
    P :TSingleW2S;
 begin
-     Result.v := 0;
-     Result.w := 0;
-     for P in Ps_ do
+     Result := TSingleW2S.Create( 0, 0 );
+
+     for P in Ps_ do Result.w := Result.w + P.w;
+
+     if Abs( Result.w ) < SINGLE_EPS3 then
      begin
-          Result.v := Result.v + P.w * P.v;
-          Result.w := Result.w + P.w;
+          for P in Ps_ do Result.v := Result.v + P.v;
+
+          Result.v := Result.v.Unitor;
+     end
+     else
+     begin
+          for P in Ps_ do Result.v := Result.v + P.w * P.v;
+
+          Result.v := ( Result.v / Result.w ).Unitor;
      end;
-     Result.v := Result.v / Result.w;
 end;
 
-function GlerpSum( const Ps_:TArray<TDoubleW2S> ) :TDoubleW2S;
+function Glerp( const Ps_:TArray<TDoubleW2S> ) :TDoubleW2S;
 var
    P :TDoubleW2S;
 begin
-     Result.v := 0;
-     Result.w := 0;
-     for P in Ps_ do
+     Result := TDoubleW2S.Create( 0, 0 );
+
+     for P in Ps_ do Result.w := Result.w + P.w;
+
+     if Abs( Result.w ) < DOUBLE_EPS3 then
      begin
-          Result.v := Result.v + P.w * P.v;
-          Result.w := Result.w + P.w;
+          for P in Ps_ do Result.v := Result.v + P.v;
+
+          Result.v := Result.v.Unitor;
+     end
+     else
+     begin
+          for P in Ps_ do Result.v := Result.v + P.w * P.v;
+
+          Result.v := ( Result.v / Result.w ).Unitor;
      end;
-     Result.v := Result.v / Result.w;
 end;
 
 end. //######################################################################### ■

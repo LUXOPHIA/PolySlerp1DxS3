@@ -83,6 +83,8 @@ end;
 
 procedure TPoins<_TPoin_>.SetPoinsN( const PoinsN_:Integer );
 begin
+     if PoinsN = PoinsN_ then Exit;
+
      SetLength( _Poins, PoinsN_ );  upPoins := True;  _OnChange.Run( Self );
 end;
 

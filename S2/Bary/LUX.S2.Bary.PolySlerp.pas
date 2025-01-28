@@ -79,10 +79,10 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 function Slerp( const P1_,P2_:TSingle2Sw ) :TSingle2Sw; overload;
 function Slerp( const P1_,P2_:TDouble2Sw ) :TDouble2Sw; overload;
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Sum1D
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% PolySlerp1D
 
-function Sum1D( Ps_:TArray<TSingle2Sw> ) :TSingle2Sw; overload;
-function Sum1D( Ps_:TArray<TDouble2Sw> ) :TDouble2Sw; overload;
+function PolySlerp1D( Ps_:TArray<TSingle2Sw> ) :TSingle2Sw; overload;
+function PolySlerp1D( Ps_:TArray<TDouble2Sw> ) :TDouble2Sw; overload;
 
 implementation //############################################################### ■
 
@@ -262,12 +262,10 @@ var
    Ps :TArray<TDouble2Sw>;
 begin
      PsN := Length( Ps_ );
-
      SetLength( Ps, PsN );
-
      for I := 0 to PsN-1 do Ps[ I ] := Ps_[ I ];
 
-     Result := TDouble2S( Sum1D( Ps ) );
+     Result := PolySlerp1D( Ps ).v;
 end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
@@ -320,32 +318,42 @@ begin
      end;
 end;
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Sum1D
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% PolySlerp1D
 
-function Sum1D( Ps_:TArray<TSingle2Sw> ) :TSingle2Sw;
+//  4A /1-+
+//        |- 4A+2B /1-+
+//  4B /2-+           |- 4A+3B+1C /1-+
+//        |- 2B+2C /2-+              |- 4A+4B+4C+4D
+//  4C /2-+           |- 1B+3C+4D /1-+
+//        |- 2C+4D /1-+
+//  4D /1-+
+
+function PolySlerp1D( Ps_:TArray<TSingle2Sw> ) :TSingle2Sw;
 var
-   N, I, L :Integer;
+   N, L, I :Integer;
 begin
      N := High( Ps_ );
 
-     for I := 0 to N do Ps_[ I ] := Ps_[ I ] / Binomial( N, I );
-
      for L := N-1 downto 0 do
-     for I := 0 to L do Ps_[ I ] := Ps_[ I ] + Ps_[ I+1 ];
+     begin
+           for I := 1 to L do Ps_[ I ] := Ps_[ I ] / 2;
+           for I := 0 to L do Ps_[ I ] := Ps_[ I ] + Ps_[ I+1 ];
+     end;
 
      Result := Ps_[ 0 ];
 end;
 
-function Sum1D( Ps_:TArray<TDouble2Sw> ) :TDouble2Sw;
+function PolySlerp1D( Ps_:TArray<TDouble2Sw> ) :TDouble2Sw;
 var
-   N, I, L :Integer;
+   N, L, I :Integer;
 begin
      N := High( Ps_ );
 
-     for I := 0 to N do Ps_[ I ] := Ps_[ I ] / Binomial( N, I );
-
      for L := N-1 downto 0 do
-     for I := 0 to L do Ps_[ I ] := Ps_[ I ] + Ps_[ I+1 ];
+     begin
+           for I := 1 to L do Ps_[ I ] := Ps_[ I ] / 2;
+           for I := 0 to L do Ps_[ I ] := Ps_[ I ] + Ps_[ I+1 ];
+     end;
 
      Result := Ps_[ 0 ];
 end;

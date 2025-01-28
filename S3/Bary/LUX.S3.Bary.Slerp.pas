@@ -36,6 +36,11 @@ function Slerp( const P1_,P2_:TDouble3S; const W1_,W2_:Double ) :TDouble3S; over
 function Slerp( const P1_,P2_:TSingleW3S ) :TSingleW3S; overload;
 function Slerp( const P1_,P2_:TDoubleW3S ) :TDoubleW3S; overload;
 
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ChainSlerp
+
+function ChainSlerp( const Ps_:TArray<TSingleW3S> ) :TSingleW3S; overload;
+function ChainSlerp( const Ps_:TArray<TDoubleW3S> ) :TDoubleW3S; overload;
+
 implementation //############################################################### ■
 
 uses System.Math,
@@ -54,17 +59,8 @@ uses System.Math,
 //////////////////////////////////////////////////////////////////// M E T H O D
 
 function TBarySlerp3S.Center( const Ps_:TArray<TDoubleW3S> ) :TDouble3S;
-var
-   PsN, I :Integer;
-   P :TDoubleW3S;
 begin
-     PsN := Length( Ps_ );
-
-     P := Ps_[0];
-
-     for I := 1 to PsN-1 do P := Slerp( P, Ps_[ I ] );
-
-     Result := P.v;
+     Result := ChainSlerp( Ps_ ).v;
 end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
@@ -199,6 +195,26 @@ begin
                            + Sin( A * P2_.w ) * P2_.v ) / S;
           end;
      end;
+end;
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ChainSlerp
+
+function ChainSlerp( const Ps_:TArray<TSingleW3S> ) :TSingleW3S;
+var
+   I :Integer;
+begin
+     Result := Ps_[0];
+
+     for I := 1 to High( Ps_ ) do Result := Slerp( Result, Ps_[ I ] );
+end;
+
+function ChainSlerp( const Ps_:TArray<TDoubleW3S> ) :TDoubleW3S;
+var
+   I :Integer;
+begin
+     Result := Ps_[0];
+
+     for I := 1 to High( Ps_ ) do Result := Slerp( Result, Ps_[ I ] );
 end;
 
 end. //######################################################################### ■

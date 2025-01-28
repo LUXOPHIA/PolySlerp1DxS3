@@ -25,10 +25,10 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ExpSum1D
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ExpMap
 
-function ExpSum1D( const Qs_:TArray<TSingleW3S> ) :TSingleW3S; overload;
-function ExpSum1D( const Qs_:TArray<TDoubleW3S> ) :TDoubleW3S; overload;
+function ExpMap( const Qs_:TArray<TSingleW3S> ) :TSingleW3S; overload;
+function ExpMap( const Qs_:TArray<TDoubleW3S> ) :TDoubleW3S; overload;
 
 implementation //############################################################### ■
 
@@ -46,14 +46,14 @@ uses LUX.Quaternion;
 
 function TBaryExpMap3S.Center( const Ps_:TArray<TDoubleW3S> ) :TDouble3S;
 begin
-     Result := ExpSum1D( Ps_ ).v;
+     Result := ExpMap( Ps_ ).v;
 end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ExpSum1D
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ExpMap
 
-function ExpSum1D( const Qs_:TArray<TSingleW3S> ) :TSingleW3S;
+function ExpMap( const Qs_:TArray<TSingleW3S> ) :TSingleW3S;
 var
    Q :TSingleW3S;
 begin
@@ -67,7 +67,7 @@ begin
      Result.v := Exp( Result.v / Result.w );
 end;
 
-function ExpSum1D( const Qs_:TArray<TDoubleW3S> ) :TDoubleW3S;
+function ExpMap( const Qs_:TArray<TDoubleW3S> ) :TDoubleW3S;
 var
    Q :TDoubleW3S;
 begin
