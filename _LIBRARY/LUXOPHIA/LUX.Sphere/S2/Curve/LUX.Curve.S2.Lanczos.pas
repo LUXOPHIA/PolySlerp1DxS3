@@ -7,7 +7,7 @@ uses LIB.Curve.Lanczos,
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 T Y P E 】
 
-     TCurveLanczos3S = TCurveLanczos<TDouble2S>;
+     TCurveLanczos2S = TCurveLanczos<TDouble2S>;
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R E C O R D 】
 
