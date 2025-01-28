@@ -25,10 +25,10 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ModExpSum1D
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ModExpMap
 
-function ModExpSum1D( const Qs_:TArray<TSingleW3S> ) :TSingleW3S; overload;
-function ModExpSum1D( const Qs_:TArray<TDoubleW3S> ) :TDoubleW3S; overload;
+function ModExpMap( const Qs_:TArray<TSingleW3S> ) :TSingleW3S; overload;
+function ModExpMap( const Qs_:TArray<TDoubleW3S> ) :TDoubleW3S; overload;
 
 implementation //############################################################### ■
 
@@ -47,19 +47,19 @@ uses LUX.Quaternion,
 
 function TBaryModExpMap3S.Center( const Ps_:TArray<TDoubleW3S> ) :TDouble3S;
 begin
-     Result := ModExpSum1D( Ps_ ).v;
+     Result := ModExpMap( Ps_ ).v;
 end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ModExpSum1D
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ModExpMap
 
-function ModExpSum1D( const Qs_:TArray<TSingleW3S> ) :TSingleW3S;
+function ModExpMap( const Qs_:TArray<TSingleW3S> ) :TSingleW3S;
 var
    G, Gi :TSingle3S;
    Q :TSingleW3S;
 begin
-     G := GlerpSum( Qs_ ).v;  Gi := G.Inv;
+     G := Glerp( Qs_ ).v;  Gi := G.Inv;
 
      Result.v := 0;
      Result.w := 0;
@@ -71,12 +71,12 @@ begin
      Result.v := G * Exp( Result.v / Result.w );
 end;
 
-function ModExpSum1D( const Qs_:TArray<TDoubleW3S> ) :TDoubleW3S;
+function ModExpMap( const Qs_:TArray<TDoubleW3S> ) :TDoubleW3S;
 var
    G, Gi :TDouble3S;
    Q :TDoubleW3S;
 begin
-     G := GlerpSum( Qs_ ).v;  Gi := G.Inv;
+     G := Glerp( Qs_ ).v;  Gi := G.Inv;
 
      Result.v := 0;
      Result.w := 0;
