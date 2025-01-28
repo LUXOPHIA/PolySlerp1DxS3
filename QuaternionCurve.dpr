@@ -51,7 +51,14 @@ uses
   LIB.Curve.BSpline in '_LIBRARY\LUXOPHIA\LUX.Sphere\Curve\LIB.Curve.BSpline.pas',
   LIB.Curve.CatmullRom in '_LIBRARY\LUXOPHIA\LUX.Sphere\Curve\LIB.Curve.CatmullRom.pas',
   LIB.Poins in '_LIBRARY\LUXOPHIA\LUX.Sphere\Poins\LIB.Poins.pas',
-  LIB.Poins.Plots in '_LIBRARY\LUXOPHIA\LUX.Sphere\Poins\LIB.Poins.Plots.pas';
+  LIB.Poins.Plots in '_LIBRARY\LUXOPHIA\LUX.Sphere\Poins\LIB.Poins.Plots.pas',
+  LIB.Curve.Lanczos in '_LIBRARY\LUXOPHIA\LUX.Sphere\Curve\LIB.Curve.Lanczos.pas',
+  LUX.Curve.S3.Lanczos in '_LIBRARY\LUXOPHIA\LUX.Sphere\S3\Curve\LUX.Curve.S3.Lanczos.pas',
+  LUX.Curve.S2.Lanczos in '_LIBRARY\LUXOPHIA\LUX.Sphere\S2\Curve\LUX.Curve.S2.Lanczos.pas',
+  LUX.S2.Bary.PolySlerp in '_LIBRARY\LUXOPHIA\LUX.Sphere\S2\Bary\LUX.S2.Bary.PolySlerp.pas',
+  LUX.S2.Bary.Slerp in '_LIBRARY\LUXOPHIA\LUX.Sphere\S2\Bary\LUX.S2.Bary.Slerp.pas',
+  LUX.S2.Bary.Glerp in '_LIBRARY\LUXOPHIA\LUX.Sphere\S2\Bary\LUX.S2.Bary.Glerp.pas',
+  LUX.S2.Bary in '_LIBRARY\LUXOPHIA\LUX.Sphere\S2\Bary\LUX.S2.Bary.pas';
 
 {$R *.res}
 

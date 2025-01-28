@@ -320,6 +320,13 @@
         <DCCReference Include="_LIBRARY\LUXOPHIA\LUX.Sphere\Curve\LIB.Curve.CatmullRom.pas"/>
         <DCCReference Include="_LIBRARY\LUXOPHIA\LUX.Sphere\Poins\LIB.Poins.pas"/>
         <DCCReference Include="_LIBRARY\LUXOPHIA\LUX.Sphere\Poins\LIB.Poins.Plots.pas"/>
+        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX.Sphere\Curve\LIB.Curve.Lanczos.pas"/>
+        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX.Sphere\S3\Curve\LUX.Curve.S3.Lanczos.pas"/>
+        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX.Sphere\S2\Curve\LUX.Curve.S2.Lanczos.pas"/>
+        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX.Sphere\S2\Bary\LUX.S2.Bary.PolySlerp.pas"/>
+        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX.Sphere\S2\Bary\LUX.S2.Bary.Slerp.pas"/>
+        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX.Sphere\S2\Bary\LUX.S2.Bary.Glerp.pas"/>
+        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX.Sphere\S2\Bary\LUX.S2.Bary.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
