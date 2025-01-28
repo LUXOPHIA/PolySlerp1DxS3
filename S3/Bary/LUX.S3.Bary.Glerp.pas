@@ -39,12 +39,15 @@ function Glerp( const P1_,P2_:TDouble3S; const W1_,W2_:Double ) :TDouble3S; over
 function Glerp( const P1_,P2_:TSingleW3S ) :TSingleW3S; overload;
 function Glerp( const P1_,P2_:TDoubleW3S ) :TDoubleW3S; overload;
 
+function Glerp( const Ps_:TArray<TSingle3S> ) :TSingle3S; overload;
+function Glerp( const Ps_:TArray<TDouble3S> ) :TDouble3S; overload;
+
 function Glerp( const Ps_:TArray<TSingleW3S> ) :TSingleW3S; overload;
 function Glerp( const Ps_:TArray<TDoubleW3S> ) :TDoubleW3S; overload;
 
 implementation //############################################################### ■
 
-uses LIB.D4;
+uses LUX, LIB.D4;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R E C O R D 】
 
@@ -115,32 +118,68 @@ end;
 
 //------------------------------------------------------------------------------
 
+function Glerp( const Ps_:TArray<TSingle3S> ) :TSingle3S;
+var
+   P :TSingle3S;
+begin
+     Result := 0;
+     for P in Ps_ do Result := Result + P;
+     Result := Result.Unitor;
+end;
+
+function Glerp( const Ps_:TArray<TDouble3S> ) :TDouble3S;
+var
+   P :TDouble3S;
+begin
+     Result := 0;
+     for P in Ps_ do Result := Result + P;
+     Result := Result.Unitor;
+end;
+
+//------------------------------------------------------------------------------
+
 function Glerp( const Ps_:TArray<TSingleW3S> ) :TSingleW3S;
 var
    P :TSingleW3S;
 begin
-     Result.v := 0;
-     Result.w := 0;
-     for P in Ps_ do
+     Result := TSingleW3S.Create( 0, 0 );
+
+     for P in Ps_ do Result.w := Result.w + P.w;
+
+     if Abs( Result.w ) < SINGLE_EPS3 then
      begin
-          Result.v := Result.v + P.w * P.v;
-          Result.w := Result.w + P.w;
+          for P in Ps_ do Result.v := Result.v + P.v;
+
+          Result.v := Result.v.Unitor;
+     end
+     else
+     begin
+          for P in Ps_ do Result.v := Result.v + P.w * P.v;
+
+          Result.v := ( Result.v / Result.w ).Unitor;
      end;
-     Result.v := ( Result.v / Result.w ).Unitor;
 end;
 
 function Glerp( const Ps_:TArray<TDoubleW3S> ) :TDoubleW3S;
 var
    P :TDoubleW3S;
 begin
-     Result.v := 0;
-     Result.w := 0;
-     for P in Ps_ do
+     Result := TDoubleW3S.Create( 0, 0 );
+
+     for P in Ps_ do Result.w := Result.w + P.w;
+
+     if Abs( Result.w ) < DOUBLE_EPS3 then
      begin
-          Result.v := Result.v + P.w * P.v;
-          Result.w := Result.w + P.w;
+          for P in Ps_ do Result.v := Result.v + P.v;
+
+          Result.v := Result.v.Unitor;
+     end
+     else
+     begin
+          for P in Ps_ do Result.v := Result.v + P.w * P.v;
+
+          Result.v := ( Result.v / Result.w ).Unitor;
      end;
-     Result.v := ( Result.v / Result.w ).Unitor;
 end;
 
 end. //######################################################################### ■

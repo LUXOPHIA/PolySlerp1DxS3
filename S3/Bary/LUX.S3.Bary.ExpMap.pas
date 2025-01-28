@@ -32,7 +32,7 @@ function ExpMap( const Qs_:TArray<TDoubleW3S> ) :TDoubleW3S; overload;
 
 implementation //############################################################### ■
 
-uses LUX.Quaternion;
+uses LUX, LUX.Quaternion;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R E C O R D 】
 
@@ -57,28 +57,44 @@ function ExpMap( const Qs_:TArray<TSingleW3S> ) :TSingleW3S;
 var
    Q :TSingleW3S;
 begin
-     Result.v := 0;
-     Result.w := 0;
-     for Q in Qs_ do
+     Result := TSingleW3S.Create( 0, 0 );
+
+     for Q in Qs_ do Result.w := Result.w + Q.w;
+
+     if Abs( Result.w ) < SINGLE_EPS3 then
      begin
-          Result.v := Result.v + Q.w * Ln( Q.v );
-          Result.w := Result.w + Q.w;
+          for Q in Qs_ do Result.v := Result.v + Ln( Q.v );
+
+          Result.v := Exp( Result.v );
+     end
+     else
+     begin
+          for Q in Qs_ do Result.v := Result.v + Q.w * Ln( Q.v );
+
+          Result.v := Exp( Result.v / Result.w );
      end;
-     Result.v := Exp( Result.v / Result.w );
 end;
 
 function ExpMap( const Qs_:TArray<TDoubleW3S> ) :TDoubleW3S;
 var
    Q :TDoubleW3S;
 begin
-     Result.v := 0;
-     Result.w := 0;
-     for Q in Qs_ do
+     Result := TDoubleW3S.Create( 0, 0 );
+
+     for Q in Qs_ do Result.w := Result.w + Q.w;
+
+     if Abs( Result.w ) < DOUBLE_EPS3 then
      begin
-          Result.v := Result.v + Q.w * Ln( Q.v );
-          Result.w := Result.w + Q.w;
+          for Q in Qs_ do Result.v := Result.v + Ln( Q.v );
+
+          Result.v := Exp( Result.v );
+     end
+     else
+     begin
+          for Q in Qs_ do Result.v := Result.v + Q.w * Ln( Q.v );
+
+          Result.v := Exp( Result.v / Result.w );
      end;
-     Result.v := Exp( Result.v / Result.w );
 end;
 
 end. //######################################################################### ■
