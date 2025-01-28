@@ -49,9 +49,9 @@ var
    E :TSingle3D;
 begin
      case MinI( Abs( V_.X ), Abs( V_.Y ), Abs( V_.Z ) ) of
-       1: E := TDouble3D.IdentityX;
-       2: E := TDouble3D.IdentityY;
-       3: E := TDouble3D.IdentityZ;
+       1: E := TSingle3D.IdentityX;
+       2: E := TSingle3D.IdentityY;
+       3: E := TSingle3D.IdentityZ;
      end;
 
      Result := CrossProduct( V_, E ).Unitor;
