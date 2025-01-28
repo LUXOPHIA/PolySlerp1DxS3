@@ -49,10 +49,12 @@ object Form1: TForm1
         Size.Width = 200.000000000000000000
         Size.Height = 85.000000000000000000
         Size.PlatformDefault = False
-        TabIndex = 2
+        TabIndex = 3
         TabOrder = 4
         TabPosition = None
         Sizes = (
+          200s
+          85s
           200s
           85s
           200s
@@ -191,7 +193,7 @@ object Form1: TForm1
             item
             end>
           TextSettings.Trimming = None
-          IsSelected = True
+          IsSelected = False
           Size.Width = 8.000000000000000000
           Size.Height = 8.000000000000000000
           Size.PlatformDefault = False
@@ -253,7 +255,7 @@ object Form1: TForm1
             item
             end>
           TextSettings.Trimming = None
-          IsSelected = False
+          IsSelected = True
           Size.Width = 8.000000000000000000
           Size.Height = 8.000000000000000000
           Size.PlatformDefault = False
@@ -311,6 +313,66 @@ object Form1: TForm1
             OnChange = ComboBoxUC3AChange
           end
         end
+        object TabItemUC4: TTabItem
+          CustomIcon = <
+            item
+            end>
+          TextSettings.Trimming = None
+          IsSelected = False
+          Size.Width = 8.000000000000000000
+          Size.Height = 8.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = ''
+          TabOrder = 0
+          Text = 'TabItemUC4'
+          object SpinBoxUC4W: TSpinBox
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            TabOrder = 3
+            Cursor = crIBeam
+            Min = 1.000000000000000000
+            Max = 10.000000000000000000
+            Value = 2.000000000000000000
+            Position.X = 75.000000000000000000
+            Position.Y = 50.000000000000000000
+            Size.Width = 110.000000000000000000
+            Size.Height = 20.000000000000000000
+            Size.PlatformDefault = False
+            OnChange = SpinBoxUC4WChange
+          end
+          object LabelUC4D: TLabel
+            Position.X = 5.000000000000000000
+            Position.Y = 50.000000000000000000
+            Size.Width = 65.000000000000000000
+            Size.Height = 20.000000000000000000
+            Size.PlatformDefault = False
+            TextSettings.HorzAlign = Trailing
+            Text = 'Degree:'
+            TabOrder = 2
+          end
+          object LabelUC4A: TLabel
+            Enabled = False
+            Position.X = 5.000000000000000000
+            Position.Y = 15.000000000000000000
+            Size.Width = 65.000000000000000000
+            Size.Height = 20.000000000000000000
+            Size.PlatformDefault = False
+            TextSettings.HorzAlign = Trailing
+            Text = 'Algorithm:'
+            TabOrder = 0
+          end
+          object ComboBoxUC4A: TComboBox
+            Enabled = False
+            Items.Strings = (
+              'Basis Function')
+            ItemIndex = 0
+            Position.X = 75.000000000000000000
+            Position.Y = 15.000000000000000000
+            Size.Width = 110.000000000000000000
+            Size.Height = 20.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 1
+          end
+        end
       end
       object LabelUCK: TLabel
         Position.X = 5.000000000000000000
@@ -327,7 +389,8 @@ object Form1: TForm1
           'Linear'
           'Bezier'
           'B-Spline'
-          'Catmull-Rom')
+          'Catmull-Rom'
+          'Lanczos')
         ItemIndex = 2
         Position.X = 90.000000000000000000
         Position.Y = 25.000000000000000000
@@ -388,7 +451,8 @@ object Form1: TForm1
           'Linear'
           'Bezier'
           'B-Spline'
-          'Catmull-Rom')
+          'Catmull-Rom'
+          'Lanczos')
         ItemIndex = 0
         Position.X = 90.000000000000000000
         Position.Y = 25.000000000000000000
@@ -435,6 +499,8 @@ object Form1: TForm1
         TabOrder = 4
         TabPosition = None
         Sizes = (
+          200s
+          85s
           200s
           85s
           200s
@@ -558,7 +624,7 @@ object Form1: TForm1
             Items.Strings = (
               'Basis Function'
               'Recursive Lerp')
-            ItemIndex = 0
+            ItemIndex = 1
             Position.X = 75.000000000000000000
             Position.Y = 15.000000000000000000
             Size.Width = 110.000000000000000000
@@ -620,7 +686,7 @@ object Form1: TForm1
             Items.Strings = (
               'Basis Function'
               'Recursive Lerp')
-            ItemIndex = 0
+            ItemIndex = 1
             Position.X = 75.000000000000000000
             Position.Y = 15.000000000000000000
             Size.Width = 110.000000000000000000
@@ -683,7 +749,7 @@ object Form1: TForm1
             Items.Strings = (
               'Basis Function'
               'Recursive Lerp')
-            ItemIndex = 0
+            ItemIndex = 1
             Position.X = 75.000000000000000000
             Position.Y = 15.000000000000000000
             Size.Width = 110.000000000000000000
@@ -691,6 +757,66 @@ object Form1: TForm1
             Size.PlatformDefault = False
             TabOrder = 1
             OnChange = ComboBoxLC3AChange
+          end
+        end
+        object TabItemLC4: TTabItem
+          CustomIcon = <
+            item
+            end>
+          TextSettings.Trimming = None
+          IsSelected = False
+          Size.Width = 8.000000000000000000
+          Size.Height = 8.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = ''
+          TabOrder = 0
+          Text = 'TabItemLC4'
+          object SpinBoxLC4W: TSpinBox
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            TabOrder = 3
+            Cursor = crIBeam
+            Min = 1.000000000000000000
+            Max = 10.000000000000000000
+            Value = 2.000000000000000000
+            Position.X = 75.000000000000000000
+            Position.Y = 50.000000000000000000
+            Size.Width = 110.000000000000000000
+            Size.Height = 20.000000000000000000
+            Size.PlatformDefault = False
+            OnChange = SpinBoxLC4WChange
+          end
+          object LabeLC4D: TLabel
+            Position.X = 5.000000000000000000
+            Position.Y = 50.000000000000000000
+            Size.Width = 65.000000000000000000
+            Size.Height = 20.000000000000000000
+            Size.PlatformDefault = False
+            TextSettings.HorzAlign = Trailing
+            Text = 'Degree:'
+            TabOrder = 2
+          end
+          object LabelLC4A: TLabel
+            Enabled = False
+            Position.X = 5.000000000000000000
+            Position.Y = 15.000000000000000000
+            Size.Width = 65.000000000000000000
+            Size.Height = 20.000000000000000000
+            Size.PlatformDefault = False
+            TextSettings.HorzAlign = Trailing
+            Text = 'Algorithm:'
+            TabOrder = 0
+          end
+          object ComboBoxLC4A: TComboBox
+            Enabled = False
+            Items.Strings = (
+              'Basis Function')
+            ItemIndex = 0
+            Position.X = 75.000000000000000000
+            Position.Y = 15.000000000000000000
+            Size.Width = 110.000000000000000000
+            Size.Height = 20.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 1
           end
         end
       end

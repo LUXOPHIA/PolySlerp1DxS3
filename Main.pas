@@ -23,6 +23,7 @@ uses
   LUX.Curve.S3.Bezier,
   LUX.Curve.S3.BSpline,
   LUX.Curve.S3.CatmullRom,
+  LUX.Curve.S3.Lanczos,
   Scene;
 
 type
@@ -60,6 +61,11 @@ type
               ComboBoxUC3A: TComboBox;
             LabelUC3D: TLabel;
               SpinBoxUC3D: TSpinBox;
+          TabItemUC4: TTabItem;
+            LabelUC4A: TLabel;
+              ComboBoxUC4A: TComboBox;
+            LabelUC4D: TLabel;
+              SpinBoxUC4W: TSpinBox;
       GroupBoxLC: TGroupBox;
         LabelLCK: TLabel;
           ComboBoxLCK: TComboBox;
@@ -86,6 +92,11 @@ type
               ComboBoxLC3A: TComboBox;
             LabelLC3D: TLabel;
               SpinBoxLC3D: TSpinBox;
+          TabItemLC4: TTabItem;
+            LabelLC4A: TLabel;
+              ComboBoxLC4A: TComboBox;
+            LabeLC4D: TLabel;
+              SpinBoxLC4W: TSpinBox;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure Viewport3D1MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Single);
@@ -107,6 +118,8 @@ type
     procedure SpinBoxLC2DChange(Sender: TObject);
     procedure ComboBoxUC3AChange(Sender: TObject);
     procedure ComboBoxLC3AChange(Sender: TObject);
+    procedure SpinBoxUC4WChange(Sender: TObject);
+    procedure SpinBoxLC4WChange(Sender: TObject);
   private
     { private êÈåæ }
     _MouseS :TShiftState;
@@ -156,11 +169,13 @@ begin
      _Curve3S0.Add( TCurveBezier3S    .Create );  // 1: Bezier
      _Curve3S0.Add( TCurveBSpline3S   .Create );  // 2: B-Spline
      _Curve3S0.Add( TCurveCatmullRom3S.Create );  // 3: Catmull-Rom
+     _Curve3S0.Add( TCurveLanczos3S   .Create );  // 4: Lanczos
 
      _Curve3S1.Add( TCurveLinear3S    .Create );  // 0: Linear
      _Curve3S1.Add( TCurveBezier3S    .Create );  // 1: Bezier
      _Curve3S1.Add( TCurveBSpline3S   .Create );  // 2: B-Spline
      _Curve3S1.Add( TCurveCatmullRom3S.Create );  // 3: Catmull-Rom
+     _Curve3S1.Add( TCurveLanczos3S   .Create );  // 4: Lanczos
 end;
 
 procedure TForm1.InitObjects;
@@ -188,6 +203,10 @@ begin
      // 3: Catmull-Rom
      ComboBoxUC3AChange( Self );
      ComboBoxLC3AChange( Self );
+
+     // 4: Lanczos
+     SpinBoxUC4WChange( Self );
+     SpinBoxLC4WChange( Self );
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
@@ -362,6 +381,18 @@ end;
 procedure TForm1.ComboBoxLC3AChange(Sender: TObject);
 begin
      TCurveCatmullRom3S( _Curve3S0[ 3 ] ).AlgoID := ComboBoxLC3A.ItemIndex;
+end;
+
+//------------------------------------------------------------------------------
+
+procedure TForm1.SpinBoxUC4WChange(Sender: TObject);
+begin
+     TCurveLanczos3S( _Curve3S1[ 4 ] ).WinR := Round( SpinBoxUC4W.Value );
+end;
+
+procedure TForm1.SpinBoxLC4WChange(Sender: TObject);
+begin
+     TCurveLanczos3S( _Curve3S0[ 4 ] ).WinR := Round( SpinBoxLC4W.Value );
 end;
 
 end. //######################################################################### Å°
