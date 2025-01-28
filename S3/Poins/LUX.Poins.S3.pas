@@ -15,28 +15,75 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C L A S S 】
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPolyPoins3S<_TPoins_>
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPolyPoins3S
 
-     TPolyPoins3S<_TPoins_:constructor,TLoopPoins2S> = class( TLoopPoins3S )
+     TPolyPoins3S = class( TLoopPoins3S )
      private
        ///// M E T H O D
        function BSpline4( P1,P2,P3,P4,P5:TDouble3S ) :TDouble3S;
      protected
-       _Poins2S :_TPoins_;
+       _Anchs :TLoopPoins3S;
+       _Twist :Double;
        ///// A C C E S S O R
-       function GetPoinsN :Integer; override;
+       function GetTwist :Double; virtual;
+       procedure SetTwist( const Twist_:Double ); virtual;
        ///// M E T H O D
+       procedure MakeAnchs( const Poins2S_:TLoopPoins2S );
        procedure MakePoins; override;
      public
        constructor Create;
        destructor Destroy; override;
+       ///// P R O P E R T Y
+       property CellsN                    :Integer   read GetCellsN               ;
+       property PoinsN                    :Integer   read GetPoinsN               ;
+       property Poins[ const I_:Integer ] :TDouble3S read GetPoins                ; default;
+       property Twist                     :Double    read GetTwist  write SetTwist;
      end;
 
-     TPolyPoins3S04 = TPolyPoins3S<TPolyPoins2S04>;
-     TPolyPoins3S06 = TPolyPoins3S<TPolyPoins2S06>;
-     TPolyPoins3S08 = TPolyPoins3S<TPolyPoins2S08>;
-     TPolyPoins3S12 = TPolyPoins3S<TPolyPoins2S12>;
-     TPolyPoins3S20 = TPolyPoins3S<TPolyPoins2S20>;
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPolyPoins3S04
+
+     TPolyPoins3S04 = class( TPolyPoins3S )
+     private
+     protected
+     public
+       constructor Create;
+     end;
+
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPolyPoins3S06
+
+     TPolyPoins3S06 = class( TPolyPoins3S )
+     private
+     protected
+     public
+       constructor Create;
+     end;
+
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPolyPoins3S08
+
+     TPolyPoins3S08 = class( TPolyPoins3S )
+     private
+     protected
+     public
+       constructor Create;
+     end;
+
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPolyPoins3S12
+
+     TPolyPoins3S12 = class( TPolyPoins3S )
+     private
+     protected
+     public
+       constructor Create;
+     end;
+
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPolyPoins3S20
+
+     TPolyPoins3S20 = class( TPolyPoins3S )
+     private
+     protected
+     public
+       constructor Create;
+     end;
 
 //const //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C O N S T A N T 】
 
@@ -46,7 +93,8 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 implementation //############################################################### ■
 
-uses LUX,
+uses System.Math,
+     LUX,
      LUX.D3,
      LUX.Quaternion,
      LUX.S3.Bary.Slerp;
@@ -66,7 +114,7 @@ uses LUX,
 // +-----+-----+--===+===--+-----+-----+ :Poins
 // 0    [1]   [2]   [3]   [4]   [5]    6
 
-function TPolyPoins3S<_TPoins_>.BSpline4( P1,P2,P3,P4,P5:TDouble3S ) :TDouble3S;  // DegN = 4, t = 1/2
+function TPolyPoins3S.BSpline4( P1,P2,P3,P4,P5:TDouble3S ) :TDouble3S;  // DegN = 4, t = 1/2
 begin
      P1 := Slerp( P1, P2, 7/8 );
      P2 := Slerp( P2, P3, 5/8 );
@@ -87,58 +135,143 @@ end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
 
-//////////////////////////////////////////////////////////////////// M E T H O D
+//////////////////////////////////////////////////////////////// A C C E S S O R
 
-function TPolyPoins3S<_TPoins_>.GetPoinsN :Integer;
+function TPolyPoins3S.GetTwist :Double;
 begin
-     Result := _Poins2S.PoinsN;
+     Result := Twist;
 end;
 
-procedure TPolyPoins3S<_TPoins_>.MakePoins;
+procedure TPolyPoins3S.SetTwist( const Twist_:Double );
+begin
+     if _Twist = Twist_ then Exit;
+
+     _Twist := Twist_;  upPoins := True;  _OnChange.Run( Self );
+end;
+
+//////////////////////////////////////////////////////////////////// M E T H O D
+
+procedure TPolyPoins3S.MakeAnchs( const Poins2S_:TLoopPoins2S );
 var
    Ps :TArray<TDouble3S>;
    I, N :Integer;
    P :TDouble3S;
    B :Boolean;
 begin
-     SetLength( Ps, PoinsN );
-     for I := 0 to PoinsN-1 do _Poins[ I ] := TDouble3S.Rotate( TDouble3D.IdentityY, _Poins2S.Poins[ I ] )
+     SetPoinsN( Poins2S_.PoinsN );
+
+     _Anchs.PoinsN := PoinsN;
+
+     for I := 0 to PoinsN-1 do _Anchs[ I ] := TDouble3S.Rotate( TDouble3D.IdentityY, Poins2S_[ I ] )
                                             * TDouble3S.Rotate( TDouble3D.IdentityY, Pi2 * Random );
 
+     SetLength( Ps, PoinsN );
      for N := 1 to 1000000 do
      begin
           for I := 0 to PoinsN-1 do
           begin
-               P := BSpline4( Poins[ I-2 ], Poins[ I-1 ], Poins[ I ], Poins[ I+1 ], Poins[ I+2 ] );
+               P := BSpline4( _Anchs[ I-2 ], _Anchs[ I-1 ], _Anchs[ I ], _Anchs[ I+1 ], _Anchs[ I+2 ] );
 
-               Ps[ I ] := TDouble3S.Rotate( P.Trans( TDouble3D.IdentityY ), _Poins2S.Poins[ I ] ) * P;
+               Ps[ I ] := TDouble3S.Rotate( P.Trans( TDouble3D.IdentityY ), Poins2S_[ I ] ) * P;
           end;
 
           B := True;
           for I := 0 to PoinsN-1 do
           begin
-               B := B and ( 1-DOUBLE_EPS3 < DotProduct( _Poins[ I ], Ps[ I ] ) );
+               B := B and ( 1-DOUBLE_EPS3 < DotProduct( _Anchs[ I ], Ps[ I ] ) );
 
-               _Poins[ I ] := Ps[ I ];
+               _Anchs[ I ] := Ps[ I ];
           end;
           if B then Break;
+     end;
+
+     Poins2S_.Free;
+end;
+
+procedure TPolyPoins3S.MakePoins;
+var
+   I :Integer;
+   S :Double;
+begin
+     for I := 0 to PoinsN-1 do
+     begin
+          S := I mod 2 * 2 - 1;
+
+          _Poins[ I ] := _Anchs[ I ] * TDouble3S.Rotate( TDouble3D.IdentityY, S * _Twist );
      end;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-constructor TPolyPoins3S<_TPoins_>.Create;
+constructor TPolyPoins3S.Create;
 begin
      inherited;
 
-     _Poins2S := _TPoins_.Create;
+     _Anchs := TLoopPoins3S.Create;
+
+     Twist := DegToRad( 60 );
 end;
 
-destructor TPolyPoins3S<_TPoins_>.Destroy;
+destructor TPolyPoins3S.Destroy;
 begin
-     _Poins2S.Free;
+     _Anchs.Free;
 
      inherited;
+end;
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPolyPoins3S04
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+
+constructor TPolyPoins3S04.Create;
+begin
+     inherited;
+
+     MakeAnchs( TPolyPoins2S04.Create );
+end;
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPolyPoins3S06
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+
+constructor TPolyPoins3S06.Create;
+begin
+     inherited;
+
+     MakeAnchs( TPolyPoins2S06.Create );
+end;
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPolyPoins3S08
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+
+constructor TPolyPoins3S08.Create;
+begin
+     inherited;
+
+     MakeAnchs( TPolyPoins2S08.Create );
+end;
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPolyPoins3S12
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+
+constructor TPolyPoins3S12.Create;
+begin
+     inherited;
+
+     MakeAnchs( TPolyPoins2S12.Create );
+end;
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TPolyPoins3S20
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+
+constructor TPolyPoins3S20.Create;
+begin
+     inherited;
+
+     MakeAnchs( TPolyPoins2S20.Create );
 end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】

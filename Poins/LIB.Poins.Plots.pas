@@ -114,6 +114,8 @@ end;
 
 procedure TPlots<_TPoin_>.SetEdgesN( const EdgesN_:Integer );
 begin
+     if _EdgesN = EdgesN_ then Exit;
+
      _EdgesN := EdgesN_;  UpCurve( Self );
 end;
 
@@ -145,6 +147,8 @@ end;
 
 procedure TPlots<_TPoin_>.SetPlotGap( const PlotGap_:Double );
 begin
+     if _PlotGap = PlotGap_ then Exit;
+
      _PlotGap := PlotGap_;  upPoins := True;  _OnChange.Run( Self );
 end;
 

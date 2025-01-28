@@ -29,6 +29,8 @@ function Lerp( const V1_,V2_:TDouble3D; const W1_,W2_:Double ) :TDouble3D; overl
 
 implementation //############################################################### ■
 
+uses LUX;
+
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R E C O R D 】
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C L A S S 】
@@ -62,13 +64,23 @@ end;
 //------------------------------------------------------------------------------
 
 function Lerp( const V1_,V2_:TSingle3D; const W1_,W2_:Single ) :TSingle3D;
+var
+   W :Single;
 begin
-     Result := ( W1_ * V1_ + W2_ * V2_ ) / ( W1_ + W2_ );
+     W := W1_ + W2_;
+
+     if Abs( W ) < SINGLE_EPS3 then Result := Lerp( V1_, V2_ )
+                               else Result := ( W1_ * V1_ + W2_ * V2_ ) / W;
 end;
 
 function Lerp( const V1_,V2_:TDouble3D; const W1_,W2_:Double ) :TDouble3D;
+var
+   W :Double;
 begin
-     Result := ( W1_ * V1_ + W2_ * V2_ ) / ( W1_ + W2_ );
+     W := W1_ + W2_;
+
+     if Abs( W ) < DOUBLE_EPS3 then Result := Lerp( V1_, V2_ )
+                               else Result := ( W1_ * V1_ + W2_ * V2_ ) / W;
 end;
 
 end. //######################################################################### ■

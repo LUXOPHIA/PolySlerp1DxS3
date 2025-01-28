@@ -39,10 +39,8 @@ function Glerp( const P1_,P2_:TDouble3S; const W1_,W2_:Double ) :TDouble3S; over
 function Glerp( const P1_,P2_:TSingleW3S ) :TSingleW3S; overload;
 function Glerp( const P1_,P2_:TDoubleW3S ) :TDoubleW3S; overload;
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% GlerpSum
-
-function GlerpSum( const Ps_:TArray<TSingleW3S> ) :TSingleW3S; overload;
-function GlerpSum( const Ps_:TArray<TDoubleW3S> ) :TDoubleW3S; overload;
+function Glerp( const Ps_:TArray<TSingleW3S> ) :TSingleW3S; overload;
+function Glerp( const Ps_:TArray<TDoubleW3S> ) :TDoubleW3S; overload;
 
 implementation //############################################################### ■
 
@@ -59,14 +57,8 @@ uses LIB.D4;
 //////////////////////////////////////////////////////////////////// M E T H O D
 
 function TBaryGLerp3S.Center( const Ps_:TArray<TDoubleW3S> ) :TDouble3S;
-var
-   P :TDoubleW3S;
 begin
-     Result := 0;
-
-     for P in Ps_ do Result := Result + P.w * P.v;
-
-     Result := Result.Unitor;
+     Result := Glerp( Ps_ ).v;
 end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
@@ -121,9 +113,9 @@ begin
      Result.w := P1_.w + P2_.w;
 end;
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% GlerpSum
+//------------------------------------------------------------------------------
 
-function GlerpSum( const Ps_:TArray<TSingleW3S> ) :TSingleW3S;
+function Glerp( const Ps_:TArray<TSingleW3S> ) :TSingleW3S;
 var
    P :TSingleW3S;
 begin
@@ -134,10 +126,10 @@ begin
           Result.v := Result.v + P.w * P.v;
           Result.w := Result.w + P.w;
      end;
-     Result.v := Result.v / Result.w;
+     Result.v := ( Result.v / Result.w ).Unitor;
 end;
 
-function GlerpSum( const Ps_:TArray<TDoubleW3S> ) :TDoubleW3S;
+function Glerp( const Ps_:TArray<TDoubleW3S> ) :TDoubleW3S;
 var
    P :TDoubleW3S;
 begin
@@ -148,7 +140,7 @@ begin
           Result.v := Result.v + P.w * P.v;
           Result.w := Result.w + P.w;
      end;
-     Result.v := Result.v / Result.w;
+     Result.v := ( Result.v / Result.w ).Unitor;
 end;
 
 end. //######################################################################### ■
