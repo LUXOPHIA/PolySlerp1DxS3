@@ -87,7 +87,7 @@ function PolySlerp1D( Ps_:TArray<TDouble2Sw> ) :TDouble2Sw; overload;
 implementation //############################################################### ■
 
 uses System.Math,
-     LUX.D3,
+     LUX.D3, LIB.D3,
      LUX.S2.Bary.Glerp;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R E C O R D 】
@@ -285,6 +285,11 @@ begin
 
           if 1-SINGLE_EPS3 < C then Result.v := GLerp( P1_.v, P2_.v, P1_.w, P2_.w )
           else
+          if C < SINGLE_EPS3-1 then
+          begin
+               Result.v := OrthVector( P1_.v );  // 不完全
+          end
+          else
           begin
                A := ArcCos( C ) / Result.w;
                S := Sqrt( 1 - Sqr( C ) );  //= Sin( A )
@@ -307,6 +312,11 @@ begin
           C := DotProduct( P1_.v, P2_.v );
 
           if 1-DOUBLE_EPS3 < C then Result.v := GLerp( P1_.v, P2_.v, P1_.w, P2_.w )
+          else
+          if C < DOUBLE_EPS3-1 then
+          begin
+               Result.v := OrthVector( P1_.v );  // 不完全
+          end
           else
           begin
                A := ArcCos( C ) / Result.w;

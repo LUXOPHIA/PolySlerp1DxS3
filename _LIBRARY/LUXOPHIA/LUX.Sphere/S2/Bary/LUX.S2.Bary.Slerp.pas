@@ -45,7 +45,7 @@ implementation //###############################################################
 
 uses System.Math,
      LUX,
-     LUX.D3,
+     LUX.D3, LIB.D3,
      LUX.S2.Bary.Glerp;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R E C O R D 】
@@ -75,6 +75,11 @@ begin
 
      if 1-SINGLE_EPS3 < C then Result := GLerp( P1_, P2_, T_ )
      else
+     if C < SINGLE_EPS3-1 then
+     begin
+          Result := OrthVector( P1_ );  // 不完全
+     end
+     else
      begin
           A := ArcCos( C );
           S := Sqrt( 1 - Sqr( C ) );  //= Sin( A )
@@ -91,6 +96,11 @@ begin
      C := DotProduct( P1_, P2_ );
 
      if 1-DOUBLE_EPS3 < C then Result := GLerp( P1_, P2_, T_ )
+     else
+     if C < DOUBLE_EPS3-1 then
+     begin
+          Result := OrthVector( P1_ );  // 不完全
+     end
      else
      begin
           A := ArcCos( C );
@@ -116,6 +126,11 @@ begin
 
           if 1-SINGLE_EPS3 < C then Result := GLerp( P1_, P2_, W1_, W2_ )
           else
+          if C < SINGLE_EPS3-1 then
+          begin
+               Result := OrthVector( P1_ );  // 不完全
+          end
+          else
           begin
                A := ArcCos( C ) / W;
                S := Sqrt( 1 - Sqr( C ) );  //= Sin( A )
@@ -138,6 +153,11 @@ begin
           C := DotProduct( P1_, P2_ );
 
           if 1-DOUBLE_EPS3 < C then Result := GLerp( P1_, P2_, W1_, W2_ )
+          else
+          if C < DOUBLE_EPS3-1 then
+          begin
+               Result := OrthVector( P1_ );  // 不完全
+          end
           else
           begin
                A := ArcCos( C ) / W;
@@ -164,6 +184,11 @@ begin
 
           if 1-SINGLE_EPS3 < C then Result.v := GLerp( P1_.v, P2_.v, P1_.w, P2_.w )
           else
+          if C < SINGLE_EPS3-1 then
+          begin
+               Result.v := OrthVector( P1_.v );  // 不完全
+          end
+          else
           begin
                A := ArcCos( C ) / Result.w;
                S := Sqrt( 1 - Sqr( C ) );  //= Sin( A )
@@ -186,6 +211,11 @@ begin
           C := DotProduct( P1_.v, P2_.v );
 
           if 1-DOUBLE_EPS3 < C then Result.v := GLerp( P1_.v, P2_.v, P1_.w, P2_.w )
+          else
+          if C < DOUBLE_EPS3-1 then
+          begin
+               Result.v := OrthVector( P1_.v );  // 不完全
+          end
           else
           begin
                A := ArcCos( C ) / Result.w;
