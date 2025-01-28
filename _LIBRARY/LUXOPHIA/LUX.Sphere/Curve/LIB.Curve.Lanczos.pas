@@ -16,17 +16,17 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      TCurveLanczos<_TPoin_> = class( TCurveAlgo<_TPoin_> )
      private
      protected
-       _DegN :Integer;
+       _WinR :Integer;
        ///// A C C E S S O R
-       function GetDegN :Integer; virtual;
-       procedure SetDegN( const DegN_:Integer ); virtual;
+       function GetWinR :Integer; virtual;
+       procedure SetWinR( const WinR_:Integer ); virtual;
        ///// M E T H O D
        function Lanczos( const X_:Double ) :Double;
        function Algorithm0( const i:Integer; const t:Double ) :_TPoin_;
      public
        constructor Create;
        ///// P R O P E R T Y
-       property DegN :Integer read GetDegN write SetDegN;
+       property WinR :Integer read GetWinR write SetWinR;
      end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
@@ -48,21 +48,21 @@ uses LUX;
 
 //////////////////////////////////////////////////////////////// A C C E S S O R
 
-function TCurveLanczos<_TPoin_>.GetDegN :Integer;
+function TCurveLanczos<_TPoin_>.GetWinR :Integer;
 begin
-     Result := _DegN;
+     Result := _WinR;
 end;
 
-procedure TCurveLanczos<_TPoin_>.SetDegN( const DegN_:Integer );
+procedure TCurveLanczos<_TPoin_>.SetWinR( const WinR_:Integer );
 begin
-     _DegN := DegN_;  _OnChange.Run( Self );
+     _WinR := WinR_;  _OnChange.Run( Self );
 end;
 
 //////////////////////////////////////////////////////////////////// M E T H O D
 
 function TCurveLanczos<_TPoin_>.Lanczos( const X_:Double ) :Double;
 begin
-     if Abs( X_ ) < _DegN then Result := Sinc( X_ ) * Sinc( X_ / _DegN )
+     if Abs( X_ ) < _WinR then Result := Sinc( X_ ) * Sinc( X_ / _WinR )
                           else Result := 0;
 end;
 
@@ -77,9 +77,9 @@ var
    Ps :TArray<TWector>;
    J :Integer;
 begin
-     SetLength( Ps, 2*DegN );
+     SetLength( Ps, 2*WinR );
 
-     for J := 1-DegN to DegN do Ps[ J+DegN-1 ] := TWector.Create( Poins[ i+J ], Lanczos( J-t ) );
+     for J := 1-WinR to WinR do Ps[ J+WinR-1 ] := TWector.Create( Poins[ i+J ], Lanczos( J-t ) );
 
      Result := Bary.Center( Ps );
 end;
@@ -93,7 +93,7 @@ begin
      AlgosN := 1;
      _Algos[0] := Algorithm0;
 
-     DegN := 2;
+     WinR := 2;
 end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
