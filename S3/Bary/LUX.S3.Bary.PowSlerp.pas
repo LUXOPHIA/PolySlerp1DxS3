@@ -65,47 +65,45 @@ end;
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% PowSlerp
 
 function PowSlerp( const Q0_,Q1_:TSingle3S; const T_:Single ) :TSingle3S;
+var
+   C :Single;
 begin
-     Result := Q0_ * Pow( Q0_.Inv * Q1_, T_ );
+     C := DotProduct( Q0_, Q1_ );
+
+     if ( 1-SINGLE_EPS3 < Abs( C ) ) or ( Q0_.Siz2 < SINGLE_EPS3 ) or ( Q1_.Siz2 < SINGLE_EPS3 )
+     then Result := GLerp( Q0_, Q1_, T_ )
+     else Result := Q0_ * Pow( Q0_.Inv * Q1_, T_ );
 end;
 
 function PowSlerp( const Q0_,Q1_:TDouble3S; const T_:Double ) :TDouble3S;
+var
+   C :Double;
 begin
-     Result := Q0_ * Pow( Q0_.Inv * Q1_, T_ );
+     C := DotProduct( Q0_, Q1_ );
+
+     if ( 1-DOUBLE_EPS3 < Abs( C ) ) or ( Q0_.Siz2 < DOUBLE_EPS3 ) or ( Q1_.Siz2 < DOUBLE_EPS3 )
+     then Result := GLerp( Q0_, Q1_, T_ )
+     else Result := Q0_ * Pow( Q0_.Inv * Q1_, T_ );
 end;
 
 //------------------------------------------------------------------------------
 
 function PowSlerp( const P1_,P2_:TSingleW3S ) :TSingleW3S;
-var
-   C :Single;
 begin
      Result.w := P1_.w + P2_.w;
 
-     if Abs( Result.w ) < SINGLE_EPS3 then Result.v := GLerp( P1_.v, P2_.v )
-     else
-     begin
-          C := DotProduct( P1_.v, P2_.v );
-
-          if 1-SINGLE_EPS3 < C then Result.v := GLerp( P1_.v, P2_.v, P1_.w, P2_.w )
-                               else Result.v := PowSlerp( P1_.v, P2_.v, P2_.w / Result.w );
-     end;
+     if Abs( Result.w ) < SINGLE_EPS3
+     then Result.v := 0
+     else Result.v := PowSlerp( P1_.v, P2_.v, P2_.w / Result.w );
 end;
 
 function PowSlerp( const P1_,P2_:TDoubleW3S ) :TDoubleW3S;
-var
-   C :Double;
 begin
      Result.w := P1_.w + P2_.w;
 
-     if Abs( Result.w ) < DOUBLE_EPS3 then Result.v := GLerp( P1_.v, P2_.v )
-     else
-     begin
-          C := DotProduct( P1_.v, P2_.v );
-
-          if 1-DOUBLE_EPS3 < C then Result.v := GLerp( P1_.v, P2_.v, P1_.w, P2_.w )
-                               else Result.v := PowSlerp( P1_.v, P2_.v, P2_.w / Result.w );
-     end;
+     if Abs( Result.w ) < DOUBLE_EPS3
+     then Result.v := 0
+     else Result.v := PowSlerp( P1_.v, P2_.v, P2_.w / Result.w );
 end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ChainPowSlerp

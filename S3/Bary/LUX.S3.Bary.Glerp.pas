@@ -123,7 +123,9 @@ var
    P :TSingle3S;
 begin
      Result := 0;
+
      for P in Ps_ do Result := Result + P;
+
      Result := Result.Unitor;
 end;
 
@@ -132,7 +134,9 @@ var
    P :TDouble3S;
 begin
      Result := 0;
+
      for P in Ps_ do Result := Result + P;
+
      Result := Result.Unitor;
 end;
 
@@ -149,15 +153,15 @@ begin
      if Abs( Result.w ) < SINGLE_EPS3 then
      begin
           for P in Ps_ do Result.v := Result.v + P.v;
-
-          Result.v := Result.v.Unitor;
      end
      else
      begin
           for P in Ps_ do Result.v := Result.v + P.w * P.v;
 
-          Result.v := ( Result.v / Result.w ).Unitor;
+          Result.v := Result.v / Result.w;
      end;
+
+     Result := Result.Unitor;
 end;
 
 function Glerp( const Ps_:TArray<TDoubleW3S> ) :TDoubleW3S;
@@ -171,15 +175,15 @@ begin
      if Abs( Result.w ) < DOUBLE_EPS3 then
      begin
           for P in Ps_ do Result.v := Result.v + P.v;
-
-          Result.v := Result.v.Unitor;
      end
      else
      begin
           for P in Ps_ do Result.v := Result.v + P.w * P.v;
 
-          Result.v := ( Result.v / Result.w ).Unitor;
+          Result.v := Result.v / Result.w;
      end;
+
+     Result := Result.Unitor;
 end;
 
 end. //######################################################################### ■
