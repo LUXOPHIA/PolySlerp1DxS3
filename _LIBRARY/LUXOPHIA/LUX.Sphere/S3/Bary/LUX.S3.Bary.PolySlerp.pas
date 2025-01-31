@@ -74,6 +74,11 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
 
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Glerp
+
+function Glerp( const P1_,P2_:TSingle3Sw ) :TSingle3Sw; overload;
+function Glerp( const P1_,P2_:TDouble3Sw ) :TDouble3Sw; overload;
+
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Slerp
 
 function Slerp( const P1_,P2_:TSingle3Sw ) :TSingle3Sw; overload;
@@ -270,20 +275,34 @@ end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
 
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Glerp
+
+function Glerp( const P1_,P2_:TSingle3Sw ) :TSingle3Sw;
+begin
+     Result.v := Glerp( P1_.v, P2_.v, P1_.w, P2_.w );
+     Result.w := P1_.w + P2_.w;
+end;
+
+function Glerp( const P1_,P2_:TDouble3Sw ) :TDouble3Sw;
+begin
+     Result.v := Glerp( P1_.v, P2_.v, P1_.w, P2_.w );
+     Result.w := P1_.w + P2_.w;
+end;
+
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Slerp
 
 function Slerp( const P1_,P2_:TSingle3Sw ) :TSingle3Sw;
 var
    C, A, S :Single;
 begin
-     Result.w := P1_.w + P2_.w;
+     C := DotProduct( P1_.v, P2_.v );
 
-     if Abs( Result.w ) < SINGLE_EPS3 then Result.v := GLerp( P1_.v, P2_.v )
+     if 1-SINGLE_EPS3 < Abs( C ) then Result := GLerp( P1_, P2_ )
      else
      begin
-          C := DotProduct( P1_.v, P2_.v );
+          Result.w := P1_.w + P2_.w;
 
-          if 1-SINGLE_EPS3 < C then Result.v := GLerp( P1_.v, P2_.v, P1_.w, P2_.w )
+          if Abs( Result.w ) < SINGLE_EPS3 then Result.v := 0
           else
           begin
                A := ArcCos( C ) / Result.w;
@@ -299,14 +318,14 @@ function Slerp( const P1_,P2_:TDouble3Sw ) :TDouble3Sw;
 var
    C, A, S :Double;
 begin
-     Result.w := P1_.w + P2_.w;
+     C := DotProduct( P1_.v, P2_.v );
 
-     if Abs( Result.w ) < DOUBLE_EPS3 then Result.v := GLerp( P1_.v, P2_.v )
+     if 1-DOUBLE_EPS3 < Abs( C ) then Result := GLerp( P1_, P2_ )
      else
      begin
-          C := DotProduct( P1_.v, P2_.v );
+          Result.w := P1_.w + P2_.w;
 
-          if 1-DOUBLE_EPS3 < C then Result.v := GLerp( P1_.v, P2_.v, P1_.w, P2_.w )
+          if Abs( Result.w ) < DOUBLE_EPS3 then Result.v := 0
           else
           begin
                A := ArcCos( C ) / Result.w;
