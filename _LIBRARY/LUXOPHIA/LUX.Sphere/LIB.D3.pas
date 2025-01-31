@@ -16,11 +16,6 @@ uses LUX.D3;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% OrthVector
-
-function OrthVector( const V_:TSingle3D ) :TSingle3D; overload;
-function OrthVector( const V_:TDouble3D ) :TDouble3D; overload;
-
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Lerp
 
 function Lerp( const V1_,V2_:TSingle3D ) :TSingle3D; overload;
@@ -41,34 +36,6 @@ uses LUX;
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C L A S S 】
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
-
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% OrthVector
-
-function OrthVector( const V_:TSingle3D ) :TSingle3D;
-var
-   E :TSingle3D;
-begin
-     case MinI( Abs( V_.X ), Abs( V_.Y ), Abs( V_.Z ) ) of
-       1: E := TSingle3D.IdentityX;
-       2: E := TSingle3D.IdentityY;
-       3: E := TSingle3D.IdentityZ;
-     end;
-
-     Result := CrossProduct( V_, E ).Unitor;
-end;
-
-function OrthVector( const V_:TDouble3D ) :TDouble3D;
-var
-   E :TDouble3D;
-begin
-     case MinI( Abs( V_.X ), Abs( V_.Y ), Abs( V_.Z ) ) of
-       1: E := TDouble3D.IdentityX;
-       2: E := TDouble3D.IdentityY;
-       3: E := TDouble3D.IdentityZ;
-     end;
-
-     Result := CrossProduct( V_, E ).Unitor;
-end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Lerp
 
@@ -102,7 +69,7 @@ var
 begin
      W := W1_ + W2_;
 
-     if Abs( W ) < SINGLE_EPS3 then Result := Lerp( V1_, V2_ )
+     if Abs( W ) < SINGLE_EPS3 then Result := 0
                                else Result := ( W1_ * V1_ + W2_ * V2_ ) / W;
 end;
 
@@ -112,7 +79,7 @@ var
 begin
      W := W1_ + W2_;
 
-     if Abs( W ) < DOUBLE_EPS3 then Result := Lerp( V1_, V2_ )
+     if Abs( W ) < DOUBLE_EPS3 then Result := 0
                                else Result := ( W1_ * V1_ + W2_ * V2_ ) / W;
 end;
 
