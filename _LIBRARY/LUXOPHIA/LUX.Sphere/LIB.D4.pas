@@ -69,7 +69,7 @@ var
 begin
      W := W1_ + W2_;
 
-     if Abs( W ) < SINGLE_EPS3 then Result := Lerp( V1_, V2_ )
+     if Abs( W ) < SINGLE_EPS3 then Result := 0
                                else Result := ( W1_ * V1_ + W2_ * V2_ ) / W;
 end;
 
@@ -79,7 +79,7 @@ var
 begin
      W := W1_ + W2_;
 
-     if Abs( W ) < DOUBLE_EPS3 then Result := Lerp( V1_, V2_ )
+     if Abs( W ) < DOUBLE_EPS3 then Result := 0
                                else Result := ( W1_ * V1_ + W2_ * V2_ ) / W;
 end;
 
