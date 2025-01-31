@@ -149,15 +149,15 @@ begin
      if Abs( Result.w ) < SINGLE_EPS3 then
      begin
           for P in Ps_ do Result.v := Result.v + P.v;
-
-          Result.v := Result.v.Unitor;
      end
      else
      begin
           for P in Ps_ do Result.v := Result.v + P.w * P.v;
 
-          Result.v := ( Result.v / Result.w ).Unitor;
+          Result.v := Result.v / Result.w;
      end;
+
+     Result := Result.Unitor;
 end;
 
 function Glerp( const Ps_:TArray<TDoubleW2S> ) :TDoubleW2S;
@@ -171,15 +171,15 @@ begin
      if Abs( Result.w ) < DOUBLE_EPS3 then
      begin
           for P in Ps_ do Result.v := Result.v + P.v;
-
-          Result.v := Result.v.Unitor;
      end
      else
      begin
           for P in Ps_ do Result.v := Result.v + P.w * P.v;
 
-          Result.v := ( Result.v / Result.w ).Unitor;
+          Result.v := Result.v / Result.w;
      end;
+
+     Result := Result.Unitor;
 end;
 
 end. //######################################################################### ■

@@ -74,7 +74,7 @@ uses System.Math;
 
 function TPlots<_TPoin_>.GetPoinsN :Integer;
 begin
-     Result := Ceil( ArcLen / PlotGap ) + 1;
+     Result := Round( ArcLen / PlotGap ) + 1;
 end;
 
 //------------------------------------------------------------------------------
