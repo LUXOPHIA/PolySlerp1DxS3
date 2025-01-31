@@ -73,12 +73,7 @@ var
 begin
      C := DotProduct( P1_, P2_ );
 
-     if 1-SINGLE_EPS3 < C then Result := GLerp( P1_, P2_, T_ )
-     else
-     if C < SINGLE_EPS3-1 then
-     begin
-          Result := OrthVector( P1_ );  // 不完全
-     end
+     if 1-SINGLE_EPS3 < Abs( C ) then Result := GLerp( P1_, P2_, T_ )
      else
      begin
           A := ArcCos( C );
@@ -95,12 +90,7 @@ var
 begin
      C := DotProduct( P1_, P2_ );
 
-     if 1-DOUBLE_EPS3 < C then Result := GLerp( P1_, P2_, T_ )
-     else
-     if C < DOUBLE_EPS3-1 then
-     begin
-          Result := OrthVector( P1_ );  // 不完全
-     end
+     if 1-DOUBLE_EPS3 < Abs( C ) then Result := GLerp( P1_, P2_, T_ )
      else
      begin
           A := ArcCos( C );
@@ -117,19 +107,14 @@ function Slerp( const P1_,P2_:TSingle2S; const W1_,W2_:Single ) :TSingle2S;
 var
    W, C, A, S :Single;
 begin
-     W := W1_ + W2_;
+     C := DotProduct( P1_, P2_ );
 
-     if Abs( W ) < SINGLE_EPS3 then Result := GLerp( P1_, P2_ )
+     if 1-SINGLE_EPS3 < Abs( C ) then Result := GLerp( P1_, P2_, W1_, W2_ )
      else
      begin
-          C := DotProduct( P1_, P2_ );
+          W := W1_ + W2_;
 
-          if 1-SINGLE_EPS3 < C then Result := GLerp( P1_, P2_, W1_, W2_ )
-          else
-          if C < SINGLE_EPS3-1 then
-          begin
-               Result := OrthVector( P1_ );  // 不完全
-          end
+          if Abs( W ) < SINGLE_EPS3 then Result := 0
           else
           begin
                A := ArcCos( C ) / W;
@@ -145,19 +130,14 @@ function Slerp( const P1_,P2_:TDouble2S; const W1_,W2_:Double ) :TDouble2S;
 var
    W, C, A, S :Double;
 begin
-     W := W1_ + W2_;
+     C := DotProduct( P1_, P2_ );
 
-     if Abs( W ) < DOUBLE_EPS3 then Result := GLerp( P1_, P2_ )
+     if 1-DOUBLE_EPS3 < Abs( C ) then Result := GLerp( P1_, P2_, W1_, W2_ )
      else
      begin
-          C := DotProduct( P1_, P2_ );
+          W := W1_ + W2_;
 
-          if 1-DOUBLE_EPS3 < C then Result := GLerp( P1_, P2_, W1_, W2_ )
-          else
-          if C < DOUBLE_EPS3-1 then
-          begin
-               Result := OrthVector( P1_ );  // 不完全
-          end
+          if Abs( W ) < DOUBLE_EPS3 then Result := 0
           else
           begin
                A := ArcCos( C ) / W;
@@ -175,19 +155,14 @@ function Slerp( const P1_,P2_:TSingleW2S ) :TSingleW2S;
 var
    C, A, S :Single;
 begin
-     Result.w := P1_.w + P2_.w;
+     C := DotProduct( P1_.v, P2_.v );
 
-     if Abs( Result.w ) < SINGLE_EPS3 then Result.v := GLerp( P1_.v, P2_.v )
+     if 1-SINGLE_EPS3 < Abs( C ) then Result := GLerp( P1_, P2_ )
      else
      begin
-          C := DotProduct( P1_.v, P2_.v );
+          Result.w := P1_.w + P2_.w;
 
-          if 1-SINGLE_EPS3 < C then Result.v := GLerp( P1_.v, P2_.v, P1_.w, P2_.w )
-          else
-          if C < SINGLE_EPS3-1 then
-          begin
-               Result.v := OrthVector( P1_.v );  // 不完全
-          end
+          if Abs( Result.w ) < SINGLE_EPS3 then Result.v := 0
           else
           begin
                A := ArcCos( C ) / Result.w;
@@ -203,19 +178,14 @@ function Slerp( const P1_,P2_:TDoubleW2S ) :TDoubleW2S;
 var
    C, A, S :Double;
 begin
-     Result.w := P1_.w + P2_.w;
+     C := DotProduct( P1_.v, P2_.v );
 
-     if Abs( Result.w ) < DOUBLE_EPS3 then Result.v := GLerp( P1_.v, P2_.v )
+     if 1-DOUBLE_EPS3 < Abs( C ) then Result := GLerp( P1_, P2_ )
      else
      begin
-          C := DotProduct( P1_.v, P2_.v );
+          Result.w := P1_.w + P2_.w;
 
-          if 1-DOUBLE_EPS3 < C then Result.v := GLerp( P1_.v, P2_.v, P1_.w, P2_.w )
-          else
-          if C < DOUBLE_EPS3-1 then
-          begin
-               Result.v := OrthVector( P1_.v );  // 不完全
-          end
+          if Abs( Result.w ) < DOUBLE_EPS3 then Result.v := 0
           else
           begin
                A := ArcCos( C ) / Result.w;
