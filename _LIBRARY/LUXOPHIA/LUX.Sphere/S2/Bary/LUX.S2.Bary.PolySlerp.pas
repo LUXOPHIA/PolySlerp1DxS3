@@ -356,6 +356,7 @@ begin
      for L := N-1 downto 0 do
      begin
            for I := 1 to L do Ps_[ I ] := Ps_[ I ] / 2;
+
            for I := 0 to L do Ps_[ I ] := Ps_[ I ] + Ps_[ I+1 ];
      end;
 
@@ -371,6 +372,7 @@ begin
      for L := N-1 downto 0 do
      begin
            for I := 1 to L do Ps_[ I ] := Ps_[ I ] / 2;
+
            for I := 0 to L do Ps_[ I ] := Ps_[ I ] + Ps_[ I+1 ];
      end;
 
