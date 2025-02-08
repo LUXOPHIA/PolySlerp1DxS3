@@ -92,7 +92,8 @@ function PolySlerp1D( Ps_:TArray<TDouble2Sw> ) :TDouble2Sw; overload;
 implementation //############################################################### ■
 
 uses System.Math,
-     LUX.D3, LIB.D3,
+     LUX.D3,
+     LUX.Curve,
      LUX.S2.Bary.Glerp;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R E C O R D 】
