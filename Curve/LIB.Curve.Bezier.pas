@@ -125,14 +125,14 @@ end;
 
 function Bezier( const N_,I_:Integer; const T_:Single ) :Single;
 begin
-     Result := Binomial( N_, I_ ) * IntPower( 1 - T_, N_ - I_ )
-                                  * IntPower(     T_,      I_ );
+     Result := Binomial32( N_, I_ ) * IntPower( 1 - T_, N_ - I_ )
+                                    * IntPower(     T_,      I_ );
 end;
 
 function Bezier( const N_,I_:Integer; const T_:Double ) :Double;
 begin
-     Result := Binomial( N_, I_ ) * IntPower( 1 - T_, N_ - I_ )
-                                  * IntPower(     T_,      I_ );
+     Result := Binomial32( N_, I_ ) * IntPower( 1 - T_, N_ - I_ )
+                                    * IntPower(     T_,      I_ );
 end;
 
 end. //######################################################################### ■
