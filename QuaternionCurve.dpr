@@ -9,7 +9,7 @@ uses
   LUX.Curve.BSpline in '_LIBRARY\LUXOPHIA\LUX\Curve\LUX.Curve.BSpline.pas',
   LUX.Curve.CatmullRom in '_LIBRARY\LUXOPHIA\LUX\Curve\LUX.Curve.CatmullRom.pas',
   LUX.Curve.Data.Grid.D1 in '_LIBRARY\LUXOPHIA\LUX\Curve\Data\Grid\LUX.Curve.Data.Grid.D1.pas',
-  LUX.Curve.Data.Grid.D1.Plot in '_LIBRARY\LUXOPHIA\LUX\Curve\Data\Grid\LUX.Curve.Data.Grid.D1.Plot.pas',
+  LUX.Curve.Data.Grid.D1.Plots in '_LIBRARY\LUXOPHIA\LUX\Curve\Data\Grid\LUX.Curve.Data.Grid.D1.Plots.pas',
   LUX.Curve.Lanczos in '_LIBRARY\LUXOPHIA\LUX\Curve\LUX.Curve.Lanczos.pas',
   LUX.Curve.Linear in '_LIBRARY\LUXOPHIA\LUX\Curve\LUX.Curve.Linear.pas',
   LUX.Curve.Linear.D3 in '_LIBRARY\LUXOPHIA\LUX\Curve\LUX.Curve.Linear.D3.pas',
