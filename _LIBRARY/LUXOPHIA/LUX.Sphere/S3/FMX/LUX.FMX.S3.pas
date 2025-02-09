@@ -214,7 +214,10 @@ var
    M0, M :TSingleM4;
    J, N :Integer;
 begin
-     if not Assigned( _Poins ) then Exit;
+     if not Assigned( _Poins ) then
+     begin
+          _Polygons.VertexBuffer.Length := 0;  Exit;
+     end;
 
      _Polygons.VertexBuffer.Length := (DivY+1)*(DivX+1){Vert/Grid} * 1{Grid/Poin} * Poins.PoinsN{Poin};
 
@@ -233,7 +236,10 @@ procedure TPoins3D.MakeTopology;
 var
    J, I, N :Integer;
 begin
-     if not Assigned( _Poins ) then Exit;
+     if not Assigned( _Poins ) then
+     begin
+          _Polygons.IndexBuffer.Length := 0;  Exit;
+     end;
 
      _Polygons.IndexBuffer.Length := 3{Vert/Tria} * 2{Tria/Face} * DivY*DivX{Face/Grid} * 1{Grid/Poin} *  Poins.PoinsN{Poin};
 
@@ -358,7 +364,10 @@ procedure THemiPoins3D.MakeTopology;
 var
    J, I, N :Integer;
 begin
-     if not Assigned( _Poins ) then Exit;
+     if not Assigned( _Poins ) then
+     begin
+          _Polygons.IndexBuffer.Length := 0;  Exit;
+     end;
 
      _Polygons.IndexBuffer.Length := 3{Vert/Tria} * 2{Tria/Face} * DivY*DivX{Face/Grid} * 2{Grid/Poin} * Poins.PoinsN{Poin};
 
@@ -383,7 +392,10 @@ var
    M0, M :TSingleM4;
    I, N :Integer;
 begin
-     if not Assigned( _Poins ) then Exit;
+     if not Assigned( _Poins ) then
+     begin
+          _Polygons.VertexBuffer.Length := 0;  Exit;
+     end;
 
      _Polygons.VertexBuffer.Length := (DivY+1)*(DivX+1){Vert/Grid} * 2{Grid/Poin} * Poins.PoinsN{Poin};
 
@@ -455,7 +467,10 @@ var
    M0, M :TSingleM4;
    I, N :Integer;
 begin
-     if not Assigned( _Poins ) then Exit;
+     if not Assigned( _Poins ) then
+     begin
+          _Polygons.VertexBuffer.Length := 0;  Exit;
+     end;
 
      _Polygons.VertexBuffer.Length := (DivY+1)*(DivX+1){Vert/Grid} * 2{Grid/Poin} * Poins.PoinsN{Poin};
 
