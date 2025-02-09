@@ -2,8 +2,9 @@
 
 interface //#################################################################### ■
 
-uses LIB.Poins,
-     LIB.Curve;
+uses LUX.Data.Grid.D1,
+     LIB.Curve,
+     LUX.Curve.Bezier;
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 T Y P E 】
 
@@ -32,9 +33,6 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
-
-function Bezier( const N_,I_:Integer; const T_:Single ) :Single; overload;
-function Bezier( const N_,I_:Integer; const T_:Double ) :Double; overload;
 
 implementation //############################################################### ■
 
@@ -122,17 +120,5 @@ begin
 end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
-
-function Bezier( const N_,I_:Integer; const T_:Single ) :Single;
-begin
-     Result := Binomial32( N_, I_ ) * IntPower( 1 - T_, N_ - I_ )
-                                    * IntPower(     T_,      I_ );
-end;
-
-function Bezier( const N_,I_:Integer; const T_:Double ) :Double;
-begin
-     Result := Binomial32( N_, I_ ) * IntPower( 1 - T_, N_ - I_ )
-                                    * IntPower(     T_,      I_ );
-end;
 
 end. //######################################################################### ■

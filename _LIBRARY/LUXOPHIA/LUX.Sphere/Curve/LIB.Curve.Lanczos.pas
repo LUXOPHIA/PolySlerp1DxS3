@@ -2,8 +2,9 @@
 
 interface //#################################################################### ■
 
-uses LIB.Poins,
-     LIB.Curve;
+uses LUX.Data.Grid.D1,
+     LIB.Curve,
+     LUX.Curve.Lanczos;
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 T Y P E 】
 
@@ -30,9 +31,6 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
-
-function Sinc( const X_:Single ) :Single; overload;
-function Sinc( const X_:Double ) :Double; overload;
 
 implementation //############################################################### ■
 
@@ -97,23 +95,5 @@ begin
 end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
-
-function Sinc( const X_:Single ) :Single;
-var
-   X :Single;
-begin
-     X := Pi * X_;
-     if Abs( X ) < SINGLE_EPS3 then Result := 1
-                               else Result := Sin( X ) / X;
-end;
-
-function Sinc( const X_:Double ) :Double;
-var
-   X :Double;
-begin
-     X := Pi * X_;
-     if Abs( X ) < DOUBLE_EPS3 then Result := 1
-                               else Result := Sin( X ) / X;
-end;
 
 end. //######################################################################### ■

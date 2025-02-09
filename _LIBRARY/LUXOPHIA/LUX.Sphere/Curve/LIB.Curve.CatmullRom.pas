@@ -3,7 +3,9 @@
 interface //#################################################################### ■
 
 uses LIB,
-     LIB.Curve;
+     LUX.D4,
+     LIB.Curve,
+     LUX.Curve.CatmullRom;
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 T Y P E 】
 
@@ -25,9 +27,6 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
 
-function CatmullRom( const t:Single ) :TSingle4; overload;
-function CatmullRom( const t:Double ) :TDouble4; overload;
-
 implementation //############################################################### ■
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R E C O R D 】
@@ -42,15 +41,15 @@ implementation //###############################################################
 
 function TCurveCatmullRom<_TPoin_>.Algorithm0( const i:Integer; const t:Double ) :_TPoin_;
 var
-   Ws :TDouble4;
+   Ws :TDouble4D;
    Ps :TArray<TWector>;
 begin
      Ws := CatmullRom( t );
 
-     Ps := [ TWector.Create( Poins[ i-1 ], Ws[0] ),
-             TWector.Create( Poins[ i   ], Ws[1] ),
-             TWector.Create( Poins[ i+1 ], Ws[2] ),
-             TWector.Create( Poins[ i+2 ], Ws[3] ) ];
+     Ps := [ TWector.Create( Poins[ i-1 ], Ws[1] ),
+             TWector.Create( Poins[ i   ], Ws[2] ),
+             TWector.Create( Poins[ i+1 ], Ws[3] ),
+             TWector.Create( Poins[ i+2 ], Ws[4] ) ];
 
      Result := Bary.Center( Ps );
 end;
@@ -88,21 +87,5 @@ begin
 end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
-
-function CatmullRom( const t:Single ) :TSingle4;
-begin
-     Result[0] := ( ( -0.5 * t + 1.0 ) * t - 0.5 ) * t      ;
-     Result[1] := ( ( +1.5 * t - 2.5 ) * t       ) * t + 1.0;
-     Result[2] := ( ( -1.5 * t + 2.0 ) * t + 0.5 ) * t      ;
-     Result[3] := ( ( +0.5 * t - 0.5 ) * t       ) * t      ;
-end;
-
-function CatmullRom( const t:Double ) :TDouble4;
-begin
-     Result[0] := ( ( -0.5 * t + 1.0 ) * t - 0.5 ) * t      ;
-     Result[1] := ( ( +1.5 * t - 2.5 ) * t       ) * t + 1.0;
-     Result[2] := ( ( -1.5 * t + 2.0 ) * t + 0.5 ) * t      ;
-     Result[3] := ( ( +0.5 * t - 0.5 ) * t       ) * t      ;
-end;
 
 end. //######################################################################### ■
