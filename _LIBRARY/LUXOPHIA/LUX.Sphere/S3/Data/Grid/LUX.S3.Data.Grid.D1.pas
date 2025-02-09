@@ -209,7 +209,7 @@ begin
 
      _Anchs := TLoopPoins3S.Create;
 
-     Twist := DegToRad( 60 );
+     Twist := 0;
 end;
 
 destructor TPolyPoins3S.Destroy;

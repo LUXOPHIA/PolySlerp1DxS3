@@ -93,7 +93,6 @@ implementation //###############################################################
 
 uses System.Math,
      LUX.D3,
-     LUX.Curve,
      LUX.S2.Bary.Glerp;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R E C O R D 】
@@ -356,9 +355,9 @@ begin
 
      for L := N-1 downto 0 do
      begin
-           for I := 1 to L do Ps_[ I ] := Ps_[ I ] / 2;
+          for I := 1 to L do Ps_[ I ] := Ps_[ I ] / 2;
 
-           for I := 0 to L do Ps_[ I ] := Ps_[ I ] + Ps_[ I+1 ];
+          for I := 0 to L do Ps_[ I ] := Ps_[ I ] + Ps_[ I+1 ];
      end;
 
      Result := Ps_[ 0 ];
@@ -372,9 +371,9 @@ begin
 
      for L := N-1 downto 0 do
      begin
-           for I := 1 to L do Ps_[ I ] := Ps_[ I ] / 2;
+          for I := 1 to L do Ps_[ I ] := Ps_[ I ] / 2;
 
-           for I := 0 to L do Ps_[ I ] := Ps_[ I ] + Ps_[ I+1 ];
+          for I := 0 to L do Ps_[ I ] := Ps_[ I ] + Ps_[ I+1 ];
      end;
 
      Result := Ps_[ 0 ];
