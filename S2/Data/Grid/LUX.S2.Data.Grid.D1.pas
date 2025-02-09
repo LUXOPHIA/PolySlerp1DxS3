@@ -1,9 +1,9 @@
-﻿unit LUX.Poins.S2;
+﻿unit LUX.S2.Data.Grid.D1;
 
 interface //#################################################################### ■
 
-uses LUX.S2,
-     LIB.Poins;
+uses LUX.Data.Grid.D1,
+     LUX.S2;
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 T Y P E 】
 
