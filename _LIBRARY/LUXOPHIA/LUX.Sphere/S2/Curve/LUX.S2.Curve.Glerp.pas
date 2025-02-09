@@ -1,27 +1,16 @@
-﻿unit LUX.S2.Bary.Glerp;
+﻿unit LUX.S2.Curve.Glerp;
 
 // Glerp :Gnomonic Linear Interpolation
 
 interface //#################################################################### ■
 
-uses LUX.S2,
-     LUX.S2.Bary;
+uses LUX.S2;
 
-type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 T Y P E 】
+//type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 T Y P E 】
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R E C O R D 】
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C L A S S 】
-
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TBaryGLerp2S
-
-     TBaryGLerp2S = class( TDoubleBary2S )
-     private
-     protected
-     public
-       ///// M E T H O D
-       function Center( const Ps_:TArray<TDoubleW2S> ) :TDouble2S; override;
-     end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
 
@@ -52,17 +41,6 @@ uses LUX, LUX.Curve.Linear.D3;
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R E C O R D 】
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C L A S S 】
-
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TBaryGLerp2S
-
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
-
-//////////////////////////////////////////////////////////////////// M E T H O D
-
-function TBaryGLerp2S.Center( const Ps_:TArray<TDoubleW2S> ) :TDouble2S;
-begin
-     Result := Glerp( Ps_ ).v;
-end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
 
@@ -123,7 +101,9 @@ var
    P :TSingle2S;
 begin
      Result := 0;
+
      for P in Ps_ do Result := Result + P;
+
      Result := Result.Unitor;
 end;
 
@@ -132,7 +112,9 @@ var
    P :TDouble2S;
 begin
      Result := 0;
+
      for P in Ps_ do Result := Result + P;
+
      Result := Result.Unitor;
 end;
 
