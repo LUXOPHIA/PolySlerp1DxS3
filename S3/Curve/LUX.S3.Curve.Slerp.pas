@@ -1,79 +1,57 @@
-﻿unit LUX.S2.Bary.Slerp;
+﻿unit LUX.S3.Curve.Slerp;
 
 // Slerp :Sherical Linear Interpolation
 
 interface //#################################################################### ■
 
-uses LUX.S2,
-     LUX.S2.Bary;
+uses LUX,
+     LUX.S3;
 
-type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 T Y P E 】
+//type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 T Y P E 】
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R E C O R D 】
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C L A S S 】
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TBarySlerp2S
-
-     TBarySlerp2S = class( TDoubleBary2S )
-     private
-     protected
-     public
-       ///// M E T H O D
-       function Center( const Ps_:TArray<TDoubleW2S> ) :TDouble2S; override;
-     end;
-
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Slerp
 
-function Slerp( const P1_,P2_:TSingle2S; const T_:Single ) :TSingle2S; overload;
-function Slerp( const P1_,P2_:TDouble2S; const T_:Double ) :TDouble2S; overload;
+function Slerp( const P1_,P2_:TSingle3S; const T_:Single ) :TSingle3S; overload;
+function Slerp( const P1_,P2_:TDouble3S; const T_:Double ) :TDouble3S; overload;
 
-function Slerp( const P1_,P2_:TSingle2S; const W1_,W2_:Single ) :TSingle2S; overload;
-function Slerp( const P1_,P2_:TDouble2S; const W1_,W2_:Double ) :TDouble2S; overload;
+function Slerp( const P1_,P2_:TSingle3S; const W1_,W2_:Single ) :TSingle3S; overload;
+function Slerp( const P1_,P2_:TDouble3S; const W1_,W2_:Double ) :TDouble3S; overload;
 
-function Slerp( const P1_,P2_:TSingleW2S ) :TSingleW2S; overload;
-function Slerp( const P1_,P2_:TDoubleW2S ) :TDoubleW2S; overload;
+function Slerp( const P1_,P2_:TSingleW3S ) :TSingleW3S; overload;
+function Slerp( const P1_,P2_:TDoubleW3S ) :TDoubleW3S; overload;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ChainSlerp
 
-function ChainSlerp( const Ps_:TArray<TSingleW2S> ) :TSingleW2S; overload;
-function ChainSlerp( const Ps_:TArray<TDoubleW2S> ) :TDoubleW2S; overload;
+function ChainSlerp( const Ps_:TArray<TSingleW3S> ) :TSingleW3S; overload;
+function ChainSlerp( const Ps_:TArray<TDoubleW3S> ) :TDoubleW3S; overload;
 
 implementation //############################################################### ■
 
 uses System.Math,
-     LUX,
-     LUX.D3,
-     LUX.S2.Bary.Glerp;
+     LUX.Quaternion,
+     LUX.S3.Curve.Glerp;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R E C O R D 】
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C L A S S 】
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TBarySlerp2S
-
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
-
-//////////////////////////////////////////////////////////////////// M E T H O D
-
-function TBarySlerp2S.Center( const Ps_:TArray<TDoubleW2S> ) :TDouble2S;
-begin
-     Result := ChainSlerp( Ps_ ).v;
-end;
-
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Slerp
 
-function Slerp( const P1_,P2_:TSingle2S; const T_:Single ) :TSingle2S;
+function Slerp( const P1_,P2_:TSingle3S; const T_:Single ) :TSingle3S;
 var
    C, A, S :Single;
 begin
      C := DotProduct( P1_, P2_ );
 
-     if 1-SINGLE_EPS3 < Abs( C ) then Result := GLerp( P1_, P2_, T_ )
+     if 1-SINGLE_EPS3 < C then Result := GLerp( P1_, P2_, T_ )
      else
      begin
           A := ArcCos( C );
@@ -84,13 +62,13 @@ begin
      end;
 end;
 
-function Slerp( const P1_,P2_:TDouble2S; const T_:Double ) :TDouble2S;
+function Slerp( const P1_,P2_:TDouble3S; const T_:Double ) :TDouble3S;
 var
    C, A, S :Double;
 begin
      C := DotProduct( P1_, P2_ );
 
-     if 1-DOUBLE_EPS3 < Abs( C ) then Result := GLerp( P1_, P2_, T_ )
+     if 1-DOUBLE_EPS3 < C then Result := GLerp( P1_, P2_, T_ )
      else
      begin
           A := ArcCos( C );
@@ -103,7 +81,7 @@ end;
 
 //------------------------------------------------------------------------------
 
-function Slerp( const P1_,P2_:TSingle2S; const W1_,W2_:Single ) :TSingle2S;
+function Slerp( const P1_,P2_:TSingle3S; const W1_,W2_:Single ) :TSingle3S;
 var
    W, C, A, S :Single;
 begin
@@ -126,7 +104,7 @@ begin
      end;
 end;
 
-function Slerp( const P1_,P2_:TDouble2S; const W1_,W2_:Double ) :TDouble2S;
+function Slerp( const P1_,P2_:TDouble3S; const W1_,W2_:Double ) :TDouble3S;
 var
    W, C, A, S :Double;
 begin
@@ -151,7 +129,7 @@ end;
 
 //------------------------------------------------------------------------------
 
-function Slerp( const P1_,P2_:TSingleW2S ) :TSingleW2S;
+function Slerp( const P1_,P2_:TSingleW3S ) :TSingleW3S;
 var
    C, A, S :Single;
 begin
@@ -174,7 +152,7 @@ begin
      end;
 end;
 
-function Slerp( const P1_,P2_:TDoubleW2S ) :TDoubleW2S;
+function Slerp( const P1_,P2_:TDoubleW3S ) :TDoubleW3S;
 var
    C, A, S :Double;
 begin
@@ -199,7 +177,7 @@ end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ChainSlerp
 
-function ChainSlerp( const Ps_:TArray<TSingleW2S> ) :TSingleW2S;
+function ChainSlerp( const Ps_:TArray<TSingleW3S> ) :TSingleW3S;
 var
    I :Integer;
 begin
@@ -208,7 +186,7 @@ begin
      for I := 1 to High( Ps_ ) do Result := Slerp( Result, Ps_[ I ] );
 end;
 
-function ChainSlerp( const Ps_:TArray<TDoubleW2S> ) :TDoubleW2S;
+function ChainSlerp( const Ps_:TArray<TDoubleW3S> ) :TDoubleW3S;
 var
    I :Integer;
 begin

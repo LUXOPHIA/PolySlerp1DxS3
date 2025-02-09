@@ -1,116 +1,94 @@
-﻿unit LUX.S3.Bary.Glerp;
+﻿unit LUX.S2.Curve.Glerp;
 
 // Glerp :Gnomonic Linear Interpolation
 
 interface //#################################################################### ■
 
-uses LUX.S3,
-     LUX.S3.Bary;
+uses LUX.S2;
 
-type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 T Y P E 】
+//type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 T Y P E 】
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R E C O R D 】
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C L A S S 】
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TBaryGLerp3S
-
-     TBaryGLerp3S = class( TDoubleBary3S )
-     private
-     protected
-     public
-       ///// M E T H O D
-       function Center( const Ps_:TArray<TDoubleW3S> ) :TDouble3S; override;
-     end;
-
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Glerp
 
-function Glerp( const P1_,P2_:TSingle3S ) :TSingle3S; overload;
-function Glerp( const P1_,P2_:TDouble3S ) :TDouble3S; overload;
+function Glerp( const P1_,P2_:TSingle2S ) :TSingle2S; overload;
+function Glerp( const P1_,P2_:TDouble2S ) :TDouble2S; overload;
 
-function Glerp( const P1_,P2_:TSingle3S; const T_:Single ) :TSingle3S; overload;
-function Glerp( const P1_,P2_:TDouble3S; const T_:Double ) :TDouble3S; overload;
+function Glerp( const P1_,P2_:TSingle2S; const T_:Single ) :TSingle2S; overload;
+function Glerp( const P1_,P2_:TDouble2S; const T_:Double ) :TDouble2S; overload;
 
-function Glerp( const P1_,P2_:TSingle3S; const W1_,W2_:Single ) :TSingle3S; overload;
-function Glerp( const P1_,P2_:TDouble3S; const W1_,W2_:Double ) :TDouble3S; overload;
+function Glerp( const P1_,P2_:TSingle2S; const W1_,W2_:Single ) :TSingle2S; overload;
+function Glerp( const P1_,P2_:TDouble2S; const W1_,W2_:Double ) :TDouble2S; overload;
 
-function Glerp( const P1_,P2_:TSingleW3S ) :TSingleW3S; overload;
-function Glerp( const P1_,P2_:TDoubleW3S ) :TDoubleW3S; overload;
+function Glerp( const P1_,P2_:TSingleW2S ) :TSingleW2S; overload;
+function Glerp( const P1_,P2_:TDoubleW2S ) :TDoubleW2S; overload;
 
-function Glerp( const Ps_:TArray<TSingle3S> ) :TSingle3S; overload;
-function Glerp( const Ps_:TArray<TDouble3S> ) :TDouble3S; overload;
+function Glerp( const Ps_:TArray<TSingle2S> ) :TSingle2S; overload;
+function Glerp( const Ps_:TArray<TDouble2S> ) :TDouble2S; overload;
 
-function Glerp( const Ps_:TArray<TSingleW3S> ) :TSingleW3S; overload;
-function Glerp( const Ps_:TArray<TDoubleW3S> ) :TDoubleW3S; overload;
+function Glerp( const Ps_:TArray<TSingleW2S> ) :TSingleW2S; overload;
+function Glerp( const Ps_:TArray<TDoubleW2S> ) :TDoubleW2S; overload;
 
 implementation //############################################################### ■
 
-uses LUX, LUX.Curve.Linear.Q4;
+uses LUX, LUX.Curve.Linear.D3;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R E C O R D 】
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C L A S S 】
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TBaryGLerp3S
-
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
-
-//////////////////////////////////////////////////////////////////// M E T H O D
-
-function TBaryGLerp3S.Center( const Ps_:TArray<TDoubleW3S> ) :TDouble3S;
-begin
-     Result := Glerp( Ps_ ).v;
-end;
-
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Glerp
 
-function Glerp( const P1_,P2_:TSingle3S ) :TSingle3S;
+function Glerp( const P1_,P2_:TSingle2S ) :TSingle2S;
 begin
      Result := Lerp( P1_, P2_ ).Unitor;
 end;
 
-function Glerp( const P1_,P2_:TDouble3S ) :TDouble3S;
+function Glerp( const P1_,P2_:TDouble2S ) :TDouble2S;
 begin
      Result := Lerp( P1_, P2_ ).Unitor;
 end;
 
 //------------------------------------------------------------------------------
 
-function Glerp( const P1_,P2_:TSingle3S; const T_:Single ) :TSingle3S;
+function Glerp( const P1_,P2_:TSingle2S; const T_:Single ) :TSingle2S;
 begin
      Result := Lerp( P1_, P2_, T_ ).Unitor;
 end;
 
-function Glerp( const P1_,P2_:TDouble3S; const T_:Double ) :TDouble3S;
+function Glerp( const P1_,P2_:TDouble2S; const T_:Double ) :TDouble2S;
 begin
      Result := Lerp( P1_, P2_, T_ ).Unitor;
 end;
 
 //------------------------------------------------------------------------------
 
-function Glerp( const P1_,P2_:TSingle3S; const W1_,W2_:Single ) :TSingle3S;
+function Glerp( const P1_,P2_:TSingle2S; const W1_,W2_:Single ) :TSingle2S;
 begin
      Result := Lerp( P1_, P2_, W1_, W2_ ).Unitor;
 end;
 
-function Glerp( const P1_,P2_:TDouble3S; const W1_,W2_:Double ) :TDouble3S;
+function Glerp( const P1_,P2_:TDouble2S; const W1_,W2_:Double ) :TDouble2S;
 begin
      Result := Lerp( P1_, P2_, W1_, W2_ ).Unitor;
 end;
 
 //------------------------------------------------------------------------------
 
-function Glerp( const P1_,P2_:TSingleW3S ) :TSingleW3S;
+function Glerp( const P1_,P2_:TSingleW2S ) :TSingleW2S;
 begin
      Result.v := Glerp( P1_.v, P2_.v, P1_.w, P2_.w );
      Result.w := P1_.w + P2_.w;
 end;
 
-function Glerp( const P1_,P2_:TDoubleW3S ) :TDoubleW3S;
+function Glerp( const P1_,P2_:TDoubleW2S ) :TDoubleW2S;
 begin
      Result.v := Glerp( P1_.v, P2_.v, P1_.w, P2_.w );
      Result.w := P1_.w + P2_.w;
@@ -118,9 +96,9 @@ end;
 
 //------------------------------------------------------------------------------
 
-function Glerp( const Ps_:TArray<TSingle3S> ) :TSingle3S;
+function Glerp( const Ps_:TArray<TSingle2S> ) :TSingle2S;
 var
-   P :TSingle3S;
+   P :TSingle2S;
 begin
      Result := 0;
 
@@ -129,9 +107,9 @@ begin
      Result := Result.Unitor;
 end;
 
-function Glerp( const Ps_:TArray<TDouble3S> ) :TDouble3S;
+function Glerp( const Ps_:TArray<TDouble2S> ) :TDouble2S;
 var
-   P :TDouble3S;
+   P :TDouble2S;
 begin
      Result := 0;
 
@@ -142,11 +120,11 @@ end;
 
 //------------------------------------------------------------------------------
 
-function Glerp( const Ps_:TArray<TSingleW3S> ) :TSingleW3S;
+function Glerp( const Ps_:TArray<TSingleW2S> ) :TSingleW2S;
 var
-   P :TSingleW3S;
+   P :TSingleW2S;
 begin
-     Result := TSingleW3S.Create( 0, 0 );
+     Result := TSingleW2S.Create( 0, 0 );
 
      for P in Ps_ do Result.w := Result.w + P.w;
 
@@ -164,11 +142,11 @@ begin
      Result := Result.Unitor;
 end;
 
-function Glerp( const Ps_:TArray<TDoubleW3S> ) :TDoubleW3S;
+function Glerp( const Ps_:TArray<TDoubleW2S> ) :TDoubleW2S;
 var
-   P :TDoubleW3S;
+   P :TDoubleW2S;
 begin
-     Result := TDoubleW3S.Create( 0, 0 );
+     Result := TDoubleW2S.Create( 0, 0 );
 
      for P in Ps_ do Result.w := Result.w + P.w;
 

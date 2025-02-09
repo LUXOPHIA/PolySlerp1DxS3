@@ -1,27 +1,17 @@
-﻿unit LUX.S3.Bary.PowSlerp;
+﻿unit LUX.S3.Curve.PowSlerp;
 
 // Slerp :Sherical Linear Interpolation
 
 interface //#################################################################### ■
 
-uses LUX.S3,
-     LUX.S3.Bary;
+uses LUX,
+     LUX.S3;
 
-type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 T Y P E 】
+//type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 T Y P E 】
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R E C O R D 】
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C L A S S 】
-
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TBaryPowSlerp3S
-
-     TBaryPowSlerp3S = class( TDoubleBary3S )
-     private
-     protected
-     public
-       ///// M E T H O D
-       function Center( const Ps_:TArray<TDoubleW3S> ) :TDouble3S; override;
-     end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
 
@@ -40,25 +30,12 @@ function ChainPowSlerp( const Ps_:TArray<TDoubleW3S> ) :TDoubleW3S; overload;
 
 implementation //############################################################### ■
 
-uses System.Math,
-     LUX,
-     LUX.Quaternion,
-     LUX.S3.Bary.Glerp;
+uses LUX.Quaternion,
+     LUX.S3.Curve.Glerp;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R E C O R D 】
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C L A S S 】
-
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TBaryPowSlerp3S
-
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
-
-//////////////////////////////////////////////////////////////////// M E T H O D
-
-function TBaryPowSlerp3S.Center( const Ps_:TArray<TDoubleW3S> ) :TDouble3S;
-begin
-     Result := ChainPowSlerp( Ps_ ).v;
-end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R O U T I N E 】
 

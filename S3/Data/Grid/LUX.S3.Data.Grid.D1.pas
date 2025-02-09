@@ -97,7 +97,7 @@ uses System.Math,
      LUX,
      LUX.D3,
      LUX.Quaternion,
-     LUX.S3.Bary.Slerp;
+     LUX.S3.Curve.Slerp;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R E C O R D 】
 
