@@ -276,17 +276,12 @@
         <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\LUX.D3x3.pas"/>
         <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\LUX.D4.pas"/>
         <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\LUX.D4x4.pas"/>
-        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\LUX.Quaternion.pas"/>
         <DCCReference Include="_LIBRARY\LUXOPHIA\LUX.FMX.Graphics.D3\LUX.FMX.Graphics.D3.pas"/>
         <DCCReference Include="_LIBRARY\LUXOPHIA\LUX.FMX.Graphics.D3\LUX.FMX.Graphics.D3.Shaper.pas"/>
         <DCCReference Include="_LIBRARY\LUXOPHIA\LUX.Sphere\FMX\LUX.FMX.Sphere.pas"/>
         <DCCReference Include="_LIBRARY\LUXOPHIA\LUX.Sphere\S2\FMX\LUX.FMX.S2.pas"/>
         <DCCReference Include="_LIBRARY\LUXOPHIA\LUX.Sphere\S3\FMX\LUX.FMX.S3.pas"/>
         <DCCReference Include="_LIBRARY\LUXOPHIA\LUX.Sphere\LIB.pas"/>
-        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX.Sphere\LIB.D3.pas"/>
-        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX.Sphere\LIB.D4.pas"/>
-        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX.Sphere\Poins\LIB.Poins.pas"/>
-        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX.Sphere\Poins\LIB.Poins.Plots.pas"/>
         <DCCReference Include="_LIBRARY\LUXOPHIA\LUX.Sphere\Curve\LIB.Curve.pas"/>
         <DCCReference Include="_LIBRARY\LUXOPHIA\LUX.Sphere\Curve\LIB.Curve.Bezier.pas"/>
         <DCCReference Include="_LIBRARY\LUXOPHIA\LUX.Sphere\Curve\LIB.Curve.BSpline.pas"/>
@@ -298,8 +293,6 @@
         <DCCReference Include="_LIBRARY\LUXOPHIA\LUX.Sphere\S2\Bary\LUX.S2.Bary.Glerp.pas"/>
         <DCCReference Include="_LIBRARY\LUXOPHIA\LUX.Sphere\S2\Bary\LUX.S2.Bary.Slerp.pas"/>
         <DCCReference Include="_LIBRARY\LUXOPHIA\LUX.Sphere\S2\Bary\LUX.S2.Bary.PolySlerp.pas"/>
-        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX.Sphere\S2\Poins\LUX.Poins.S2.pas"/>
-        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX.Sphere\S2\Poins\LUX.Poins.Plots.S2.pas"/>
         <DCCReference Include="_LIBRARY\LUXOPHIA\LUX.Sphere\S2\Curve\LUX.Curve.S2.pas"/>
         <DCCReference Include="_LIBRARY\LUXOPHIA\LUX.Sphere\S2\Curve\LUX.Curve.S2.Linear.pas"/>
         <DCCReference Include="_LIBRARY\LUXOPHIA\LUX.Sphere\S2\Curve\LUX.Curve.S2.Bezier.pas"/>
@@ -314,8 +307,6 @@
         <DCCReference Include="_LIBRARY\LUXOPHIA\LUX.Sphere\S3\Bary\LUX.S3.Bary.PolySlerp.pas"/>
         <DCCReference Include="_LIBRARY\LUXOPHIA\LUX.Sphere\S3\Bary\LUX.S3.Bary.ExpMap.pas"/>
         <DCCReference Include="_LIBRARY\LUXOPHIA\LUX.Sphere\S3\Bary\LUX.S3.Bary.ModExpMap.pas"/>
-        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX.Sphere\S3\Poins\LUX.Poins.S3.pas"/>
-        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX.Sphere\S3\Poins\LUX.Poins.Plots.S3.pas"/>
         <DCCReference Include="_LIBRARY\LUXOPHIA\LUX.Sphere\S3\Curve\LUX.Curve.S3.pas"/>
         <DCCReference Include="_LIBRARY\LUXOPHIA\LUX.Sphere\S3\Curve\LUX.Curve.S3.Linear.pas"/>
         <DCCReference Include="_LIBRARY\LUXOPHIA\LUX.Sphere\S3\Curve\LUX.Curve.S3.Bezier.pas"/>
@@ -327,6 +318,22 @@
             <FormType>fmx</FormType>
         </DCCReference>
         <DCCReference Include="Scene.pas"/>
+        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Quaternion\LUX.Quaternion.pas"/>
+        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Curve\LUX.Curve.Linear.Q4.pas"/>
+        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Curve\LUX.Curve.pas"/>
+        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Data\Grid\LUX.Data.Grid.D1.pas"/>
+        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Curve\LUX.Curve.BSpline.pas"/>
+        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Curve\LUX.Curve.CatmullRom.pas"/>
+        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Curve\LUX.Curve.Lanczos.pas"/>
+        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Curve\LUX.Curve.Linear.pas"/>
+        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Curve\LUX.Curve.Bezier.pas"/>
+        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Curve\LUX.Curve.Linear.D3.pas"/>
+        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX.Sphere\S2\Data\Grid\LUX.S2.Data.Grid.D1.pas"/>
+        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX.Sphere\S2\Data\Grid\LUX.S2.Data.Grid.D1.Plots.pas"/>
+        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX.Sphere\S3\Data\Grid\LUX.S3.Data.Grid.D1.Plots.pas"/>
+        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX.Sphere\S3\Data\Grid\LUX.S3.Data.Grid.D1.pas"/>
+        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Curve\Data\Grid\LUX.Curve.Data.Grid.D1.pas"/>
+        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Curve\Data\Grid\LUX.Curve.Data.Grid.D1.Plot.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
