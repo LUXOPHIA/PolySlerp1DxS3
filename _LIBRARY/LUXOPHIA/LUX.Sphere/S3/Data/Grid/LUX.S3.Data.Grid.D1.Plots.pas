@@ -1,9 +1,9 @@
-﻿unit LUX.Poins.Plots.S3;
+﻿unit LUX.S3.Data.Grid.D1.Plots;
 
 interface //#################################################################### ■
 
-uses LUX.S3,
-     LIB.Poins.Plots;
+uses LUX.Curve.Data.Grid.D1.Plot,
+     LUX.S3;
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 T Y P E 】
 
