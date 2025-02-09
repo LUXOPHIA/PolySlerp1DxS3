@@ -171,7 +171,7 @@ begin
      if not Assigned( _Curve ) then Exit;
 
      Td := _Curve.Poins.CellsN / EdgesN;
-     T := 0;  P0 := _Curve.Value( T );
+     T  := 0                           ;  P0 := _Curve.Value( T );
      for J := 0 to EdgesN-1 do
      begin
           T := T + Td;  P1 := _Curve.Value( T );
