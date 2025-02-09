@@ -133,8 +133,8 @@ type
     _Plots3S0 :TPlots3S;
     _Plots3S1 :TPlots3S;
     ///// M E T H O D
-    procedure MakeObjects;
-    procedure InitObjects;
+    procedure MakeObject;
+    procedure InitObject;
   end;
 
 
@@ -147,16 +147,16 @@ implementation //###############################################################
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-procedure TForm1.MakeObjects;
+procedure TForm1.MakeObject;
 begin
-     ///// Point Sets
+     ///// Point Set
      _Poins3S.Add( TPolyPoins3S04.Create );  // 0: 04
      _Poins3S.Add( TPolyPoins3S06.Create );  // 1: 06
      _Poins3S.Add( TPolyPoins3S08.Create );  // 2: 08
      _Poins3S.Add( TPolyPoins3S12.Create );  // 3: 12
      _Poins3S.Add( TPolyPoins3S20.Create );  // 4: 20
 
-     ///// Barycenters
+     ///// Barycenter
      _Bary3S.Add( TBaryGLerp3S    .Create );  // 0: GLerp
      _Bary3S.Add( TBarySlerp3S    .Create );  // 1: Slerp
      _Bary3S.Add( TBaryPowSlerp3S .Create );  // 2: PowSlerp
@@ -164,7 +164,7 @@ begin
      _Bary3S.Add( TBaryExpMap3S   .Create );  // 4: ExpMap
      _Bary3S.Add( TBaryModExpMap3S.Create );  // 5: ModExpMap
 
-     ///// Curves
+     ///// Curve
      _Curve3S0.Add( TCurveLinear3S    .Create );  // 0: Linear
      _Curve3S0.Add( TCurveBezier3S    .Create );  // 1: Bezier
      _Curve3S0.Add( TCurveBSpline3S   .Create );  // 2: B-Spline
@@ -178,17 +178,17 @@ begin
      _Curve3S1.Add( TCurveLanczos3S   .Create );  // 4: Lanczos
 end;
 
-procedure TForm1.InitObjects;
+procedure TForm1.InitObject;
 begin
-     ///// Point Sets
+     ///// Point Set
      ComboBoxPNChange ( Self );
      ScrollBarPTChange( Self );
 
-     ///// Barycenters
+     ///// Barycenter
      ComboBoxUCBChange( Self );
      ComboBoxLCBChange( Self );
 
-     ///// Curves
+     ///// Curve
      ComboBoxUCKChange( Self );
      ComboBoxLCKChange( Self );
 
@@ -220,14 +220,14 @@ begin
      _Plots3S0 := TPlots3S                  .Create;
      _Plots3S1 := TPlots3S                  .Create;
 
-     MakeObjects;
-
-     _Plots3S0.PlotGap := 2 * ArcSin( 0.15 / 5 ){rad};
-     _Plots3S1.PlotGap := 2 * ArcSin( 0.15 / 5 ){rad};
+     MakeObject;
 
      MakeScene;
 
-     InitObjects;
+     _Plots3S0.PlotGap := 2 * ArcSin( _Plots3D0.DotSize.x / _Plots3D0.Radius ){rad};
+     _Plots3S1.PlotGap := 2 * ArcSin( _Plots3D1.DotSize.x / _Plots3D1.Radius ){rad};
+
+     InitObject;
 end;
 
 procedure TForm1.FormDestroy(Sender: TObject);
