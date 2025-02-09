@@ -2,15 +2,15 @@
 
 interface //#################################################################### ■
 
-uses LIB,
-     LUX.Quaternion;
+uses LUX.Quaternion,
+     LUX.Curve;
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 T Y P E 】
 
      TSingle3S = TSingleQ;
      TDouble3S = TDoubleQ;
 
-     TSingleW3S = TSIngleWector<TSingle3S>;
+     TSingleW3S = TSingleWector<TSingle3S>;
      TDoubleW3S = TDoubleWector<TDouble3S>;
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R E C O R D 】
