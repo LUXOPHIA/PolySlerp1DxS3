@@ -1,4 +1,4 @@
-﻿unit LUX.Curve.Linear.D3;
+﻿unit LUX.Curve.D3.Linear;
 
 interface //#################################################################### ■
 

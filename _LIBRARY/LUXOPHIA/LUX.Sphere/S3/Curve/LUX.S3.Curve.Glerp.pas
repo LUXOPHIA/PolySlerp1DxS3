@@ -44,7 +44,7 @@ function Glerp( const Ps_:TArray<TDouble3Sw> ) :TDouble3Sw; overload;
 
 implementation //############################################################### ■
 
-uses LUX.Curve.Linear.Q4;
+uses LUX.Curve.Q4.Linear;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R E C O R D 】
 

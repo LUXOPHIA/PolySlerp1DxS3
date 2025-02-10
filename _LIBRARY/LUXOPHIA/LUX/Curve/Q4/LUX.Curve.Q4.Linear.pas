@@ -1,4 +1,4 @@
-﻿unit LUX.Curve.Linear.Q4;
+﻿unit LUX.Curve.Q4.Linear;
 
 interface //#################################################################### ■
 
