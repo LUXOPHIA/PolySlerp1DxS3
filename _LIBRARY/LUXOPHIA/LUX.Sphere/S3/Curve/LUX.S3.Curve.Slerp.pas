@@ -5,7 +5,8 @@
 interface //#################################################################### ■
 
 uses LUX,
-     LUX.S3;
+     LUX.S3,
+     LUX.S3.Curve;
 
 //type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 T Y P E 】
 
@@ -25,6 +26,9 @@ function Slerp( const P1_,P2_:TDouble3S; const W1_,W2_:Double ) :TDouble3S; over
 
 function Slerp( const P1_,P2_:TSingleW3S ) :TSingleW3S; overload;
 function Slerp( const P1_,P2_:TDoubleW3S ) :TDoubleW3S; overload;
+
+function Slerp( const P1_,P2_:TSingle3Sw ) :TSingle3Sw; overload;
+function Slerp( const P1_,P2_:TDouble3Sw ) :TDouble3Sw; overload;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ChainSlerp
 
@@ -153,6 +157,54 @@ begin
 end;
 
 function Slerp( const P1_,P2_:TDoubleW3S ) :TDoubleW3S;
+var
+   C, A, S :Double;
+begin
+     C := DotProduct( P1_.v, P2_.v );
+
+     if 1-DOUBLE_EPS3 < Abs( C ) then Result := GLerp( P1_, P2_ )
+     else
+     begin
+          Result.w := P1_.w + P2_.w;
+
+          if Abs( Result.w ) < DOUBLE_EPS3 then Result.v := 0
+          else
+          begin
+               A := ArcCos( C ) / Result.w;
+               S := Sqrt( 1 - Sqr( C ) );  //= Sin( A )
+
+               Result.v := ( Sin( A * P1_.w ) * P1_.v
+                           + Sin( A * P2_.w ) * P2_.v ) / S;
+          end;
+     end;
+end;
+
+//------------------------------------------------------------------------------
+
+function Slerp( const P1_,P2_:TSingle3Sw ) :TSingle3Sw;
+var
+   C, A, S :Single;
+begin
+     C := DotProduct( P1_.v, P2_.v );
+
+     if 1-SINGLE_EPS3 < Abs( C ) then Result := GLerp( P1_, P2_ )
+     else
+     begin
+          Result.w := P1_.w + P2_.w;
+
+          if Abs( Result.w ) < SINGLE_EPS3 then Result.v := 0
+          else
+          begin
+               A := ArcCos( C ) / Result.w;
+               S := Sqrt( 1 - Sqr( C ) );  //= Sin( A )
+
+               Result.v := ( Sin( A * P1_.w ) * P1_.v
+                           + Sin( A * P2_.w ) * P2_.v ) / S;
+          end;
+     end;
+end;
+
+function Slerp( const P1_,P2_:TDouble3Sw ) :TDouble3Sw;
 var
    C, A, S :Double;
 begin
