@@ -2,11 +2,38 @@
 
 interface //#################################################################### ■
 
-uses LUX.S3;
+uses LUX,
+     LUX.Curve,
+     LUX.S3;
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 T Y P E 】
 
+     TSingleW3S = TSingleWector<TSingle3S>;
+     TDoubleW3S = TDoubleWector<TDouble3S>;
+
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R E C O R D 】
+
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TSingleW3S
+
+     HSingleW3S = record helper for TSingleW3S
+     private
+       ///// A C C E S S O R
+       function GetUnitor :TSingleW3S;
+     public
+       ///// P R O P E R T Y
+       property Unitor :TSingleW3S read GetUnitor;
+     end;
+
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TDoubleW3S
+
+     HDoubleW3S = record helper for TDoubleW3S
+     private
+       ///// A C C E S S O R
+       function GetUnitor :TDoubleW3S;
+     public
+       ///// P R O P E R T Y
+       property Unitor :TDoubleW3S read GetUnitor;
+     end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TSingle3Sw
 
@@ -65,6 +92,38 @@ implementation //###############################################################
 uses LUX.S3.Curve.Slerp;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R E C O R D 】
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TSingleW3S
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
+
+//////////////////////////////////////////////////////////////// A C C E S S O R
+
+function HSingleW3S.GetUnitor :TSingleW3S;
+var
+   L :Single;
+begin
+     L := v.Size;
+
+     if L < SINGLE_EPS3 then Result := TSingleW3S.Create( 0, 0 )
+                        else Result := TSingleW3S.Create( v / L, w );
+end;
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TDoubleW3S
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
+
+//////////////////////////////////////////////////////////////// A C C E S S O R
+
+function HDoubleW3S.GetUnitor :TDoubleW3S;
+var
+   L :Double;
+begin
+     L := v.Size;
+
+     if L < DOUBLE_EPS3 then Result := TDoubleW3S.Create( 0, 0 )
+                        else Result := TDoubleW3S.Create( v / L, w );
+end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TSingle3Sw
 
