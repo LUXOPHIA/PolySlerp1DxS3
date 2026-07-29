@@ -8,23 +8,40 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      TListChildr<TParent_:class> = class;
      TListParent<TChildr_:class> = class;
-     TListEnumer<TChildr_:class> = class;
 
      TListChildr<TOwnere_,TParent_:class> = class;
      TListParent<TOwnere_,TChildr_:class> = class;
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R E C O R D 】
 
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TListEnumer<TChildr_>
+
+     // 列挙子の型付け層。核のレコードを包んで転送する。
+     TListEnumer<TChildr_:class> = record
+     private
+       _Enumer :TListEnumer;
+       ///// A C C E S S O R
+       function GetCurrent :TChildr_; inline;
+     public
+       constructor Create( const Enumer_:TListEnumer );  // 派生リストが列挙子を型付けし直すために使う
+       ///// P R O P E R T Y
+       property Current :TChildr_ read GetCurrent;
+       ///// M E T H O D
+       function MoveNext :Boolean; inline;
+     end;
+
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C L A S S 】
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TListChildr<TParent_>
 
+     // 核（TListChildr）のアクセサは GetParent0 / SetParent0 なので、
+     // ここは reintroduce なしで素直に同名を名乗れる。
      TListChildr<TParent_:class> = class( TListChildr )
      private
      protected
        ///// A C C E S S O R
-       function GetParent :TParent_; reintroduce;
-       procedure SetParent( const Parent_:TParent_ ); reintroduce;
+       function GetParent :TParent_;
+       procedure SetParent( const Parent_:TParent_ );
      public
        constructor Create( const Parent_:TParent_ ); overload; virtual;
        ///// P R O P E R T Y
@@ -33,6 +50,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TListParent<TChildr_>
 
+     // TChildr_ には TListChildr の「真の派生クラス」を指定すること（基底そのものだと overload が衝突する）
      TListParent<TChildr_:class> = class( TListParent )
      private
      protected
@@ -42,10 +60,10 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        function GetChildrs( const I_:Integer ) :TChildr_; reintroduce; virtual;
        procedure SetChildrs( const I_:Integer; const Childr_:TChildr_ ); reintroduce; virtual;
        ///// E V E N T
-       procedure OnInsertChild( const Childr_:TListChildr ); override;
-       procedure OnRemoveChild( const Childr_:TListChildr ); override;
-       procedure OnInsertChild( const Childr_:TChildr_ ); overload; virtual;
-       procedure OnRemoveChild( const Childr_:TChildr_ ); overload; virtual;
+       procedure OnInsertChildr( const Childr_:TListChildr ); override;
+       procedure OnRemoveChildr( const Childr_:TListChildr ); override;
+       procedure OnInsertChildr( const Childr_:TChildr_ ); overload; virtual;
+       procedure OnRemoveChildr( const Childr_:TChildr_ ); overload; virtual;
      public
        ///// P R O P E R T Y
        property Header                      :TChildr_ read GetHeader                  ;
@@ -53,22 +71,10 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        property Childrs[ const I_:Integer ] :TChildr_ read GetChildrs write SetChildrs; default;
        property Items[ const I_:Integer ]   :TChildr_ read GetChildrs write SetChildrs;
        ///// M E T H O D
-       procedure InsertHead( const Childr_:TChildr_ ); overload;
-       procedure InsertTail( const Childr_:TChildr_ ); overload;
-       procedure Add( const Childr_:TChildr_ ); overload;
+       procedure InsertHead( const Childr_:TChildr_ ); overload; virtual;
+       procedure InsertTail( const Childr_:TChildr_ ); overload; virtual;
+       procedure Add( const Childr_:TChildr_ ); overload; virtual;
        function GetEnumerator: TListEnumer<TChildr_>;
-     end;
-
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TListEnumer<TChildr_>
-
-     TListEnumer<TChildr_:class> = class( TListEnumer )
-     private
-     protected
-       ///// A C C E S S O R
-       function GetCurrent: TChildr_; reintroduce; virtual;
-     public
-       ///// P R O P E R T Y
-       property Current :TChildr_ read GetCurrent;
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TListChildr<TOwnere_,TParent_>
@@ -77,9 +83,15 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      private
      protected
        ///// A C C E S S O R
+       // 上位と同じものを、この層でも名乗り直して転送する。派生クラスが
+       // `property Xxxs :T… read GetParent` と書けるようにするためであり、
+       // ジェネリックを 2 段またいで指名すると dcc64 が読み取りを見失う（E2130）。
+       function GetParent :TParent_; reintroduce;
+       procedure SetParent( const Parent_:TParent_ ); reintroduce;
        function GetOwnere :TOwnere_;
      public
        ///// P R O P E R T Y
+       property Parent :TParent_ read GetParent write SetParent;
        property Ownere :TOwnere_ read GetOwnere;
      end;
 
@@ -90,6 +102,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      protected
        _Ownere :TOwnere_;
        ///// A C C E S S O R
+       function GetOwnereObject :TObject; override;
        function GetOwnere :TOwnere_;
      public
        constructor Create; overload; override;
@@ -103,6 +116,31 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 implementation //############################################################### ■
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 R E C O R D 】
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TListEnumer<TChildr_>
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
+
+//////////////////////////////////////////////////////////////// A C C E S S O R
+
+function TListEnumer<TChildr_>.GetCurrent :TChildr_;
+begin
+     Result := TChildr_( _Enumer.Current );
+end;
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+
+constructor TListEnumer<TChildr_>.Create( const Enumer_:TListEnumer );
+begin
+     _Enumer := Enumer_;
+end;
+
+//////////////////////////////////////////////////////////////////// M E T H O D
+
+function TListEnumer<TChildr_>.MoveNext :Boolean;
+begin
+     Result := _Enumer.MoveNext;
+end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【 C L A S S 】
 
@@ -159,22 +197,22 @@ end;
 
 ////////////////////////////////////////////////////////////////////// E V E N T
 
-procedure TListParent<TChildr_>.OnInsertChild( const Childr_:TListChildr );
+procedure TListParent<TChildr_>.OnInsertChildr( const Childr_:TListChildr );
 begin
-     OnInsertChild( TChildr_( Childr_ ) );
+     OnInsertChildr( TChildr_( Childr_ ) );
 end;
 
-procedure TListParent<TChildr_>.OnRemoveChild( const Childr_:TListChildr );
+procedure TListParent<TChildr_>.OnRemoveChildr( const Childr_:TListChildr );
 begin
-     OnRemoveChild( TChildr_( Childr_ ) );
+     OnRemoveChildr( TChildr_( Childr_ ) );
 end;
 
-procedure TListParent<TChildr_>.OnInsertChild( const Childr_:TChildr_ );
+procedure TListParent<TChildr_>.OnInsertChildr( const Childr_:TChildr_ );
 begin
 
 end;
 
-procedure TListParent<TChildr_>.OnRemoveChild( const Childr_:TChildr_ );
+procedure TListParent<TChildr_>.OnRemoveChildr( const Childr_:TChildr_ );
 begin
 
 end;
@@ -202,21 +240,8 @@ end;
 
 function TListParent<TChildr_>.GetEnumerator: TListEnumer<TChildr_>;
 begin
-     Result := TListEnumer<TChildr_>.Create( Self );
+     Result._Enumer := inherited GetEnumerator;
 end;
-
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TListEnumer<TChildr_>
-
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
-
-//////////////////////////////////////////////////////////////// A C C E S S O R
-
-function TListEnumer<TChildr_>.GetCurrent: TChildr_;
-begin
-     Result := TChildr_( inherited Current );
-end;
-
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TListChildr<TOwnere_,TParent_>
 
@@ -224,12 +249,22 @@ end;
 
 //////////////////////////////////////////////////////////////// A C C E S S O R
 
-function TListChildr<TOwnere_,TParent_>.GetOwnere :TOwnere_;
-type
-    TListChildr_ = TListChildr<TOwnere_,TParent_>;
-    TListParent_ = TListParent<TOwnere_,TListChildr_>;
+function TListChildr<TOwnere_,TParent_>.GetParent :TParent_;
 begin
-     Result := TListParent_( Parent ).Ownere;
+     Result := inherited GetParent;
+end;
+
+procedure TListChildr<TOwnere_,TParent_>.SetParent( const Parent_:TParent_ );
+begin
+     inherited SetParent( Parent_ );
+end;
+
+//------------------------------------------------------------------------------
+
+function TListChildr<TOwnere_,TParent_>.GetOwnere :TOwnere_;
+begin
+     if Assigned( _Parent ) then Result := TOwnere_( _Parent.OwnereObject )  // 仮想メソッド経由のため、親のジェネリック実体に依存しない
+                            else Result := nil;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
@@ -239,6 +274,13 @@ end;
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
 
 //////////////////////////////////////////////////////////////// A C C E S S O R
+
+function TListParent<TOwnere_,TChildr_>.GetOwnereObject :TObject;
+begin
+     Result := _Ownere;
+end;
+
+//------------------------------------------------------------------------------
 
 function TListParent<TOwnere_,TChildr_>.GetOwnere :TOwnere_;
 begin
