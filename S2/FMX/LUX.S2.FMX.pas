@@ -226,7 +226,7 @@ begin
      J := 0;
      for N := 0 to Poins.PoinsN-1 do
      begin
-          M := TSingleM4( TSingleQ.Rotate( TSingle3D.IdentityY, Poins[ N ] ) ) * M0;
+          M := TSingleM4( TSingleQ.Rotate( TSingle3D.IdentityY, TSingle3D( Poins[ N ] ) ) ) * M0;
 
           AddSphereG( J, M, 0, 1 );
      end;
@@ -404,7 +404,7 @@ begin
      I := 0;
      for N := 0 to Poins.PoinsN-1 do
      begin
-          M := TSingleM4( TSingleQ.Rotate( TSingle3D.IdentityY, Poins[ N ] ) ) * M0;
+          M := TSingleM4( TSingleQ.Rotate( TSingle3D.IdentityY, TSingle3D( Poins[ N ] ) ) ) * M0;
 
           AddSphereG( I, M, 0.5, 1 );
           AddDiskG( I, M );
@@ -479,7 +479,7 @@ begin
      I := 0;
      for N := 0 to Poins.PoinsN-1 do
      begin
-          M := TSingleM4( TSingleQ.Rotate( TSingle3D.IdentityY, Poins[ N ] ) ) * M0;
+          M := TSingleM4( TSingleQ.Rotate( TSingle3D.IdentityY, TSingle3D( Poins[ N ] ) ) ) * M0;
 
           AddSphereG( I, M, 0.0, 0.5 );
           AddDiskG( I, M );
