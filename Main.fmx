@@ -1,7 +1,7 @@
 object Form1: TForm1
   Left = 0
   Top = 0
-  Caption = 'Quaternion Curve'
+  Caption = 'PolySlerp 1D on S3'
   ClientHeight = 532
   ClientWidth = 772
   Position = ScreenCenter

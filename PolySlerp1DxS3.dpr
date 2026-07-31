@@ -1,4 +1,4 @@
-program QuaternionCurve;
+program PolySlerp1DxS3;
 
 uses
   System.StartUpCopy,
