@@ -232,6 +232,10 @@ end;
 
 procedure TForm1.FormDestroy(Sender: TObject);
 begin
+     _Poins3D .Poins := nil;
+     _Plots3D0.Poins := nil;
+     _Plots3D1.Poins := nil;
+
      _Plots3S0.Free;
      _Plots3S1.Free;
      _Curve3S0.Free;
